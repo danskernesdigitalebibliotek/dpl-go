@@ -5,7 +5,7 @@ import goConfig from "./lib/config/goConfig"
 const { loadEnvConfig } = require("@next/env")
 
 loadEnvConfig(process.cwd())
-
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 const config: CodegenConfig = {
   overwrite: true,
   generates: {
@@ -15,7 +15,7 @@ const config: CodegenConfig = {
       schema: {
         [`${process.env.NEXT_PUBLIC_GRAPHQL_SCHEMA_ENDPOINT_DPL_CMS}`]: {
           headers: {
-            Authorization: `Basic ${process.env.GRAPHQL_SCHEMA_ENDPOINT_BASIC_TOKEN_DPL_CMS}`,
+            Authorization: `Basic Z3JhcGhxbF9jb25zdW1lcjp0ZXN0`,
           },
         },
       },

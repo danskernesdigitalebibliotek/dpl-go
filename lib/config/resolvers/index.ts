@@ -1,4 +1,5 @@
 import app from "./app"
+import cache from "./cache"
 import search from "./search"
 import serviceFbi from "./service.fbi"
 import serviceUnilogin from "./service.unilogin"
@@ -10,6 +11,7 @@ export const resolvers = {
   ...serviceUnilogin,
   ...search,
   ...token,
+  ...cache,
 }
 
 export type TResolvers = typeof resolvers

@@ -549,6 +549,10 @@ export type Query = {
   info: SchemaInformation;
   /** Load a NodeArticle entity by id */
   nodeArticle?: Maybe<NodeArticle>;
+  /** Load a Route by path. */
+  route?: Maybe<RouteUnion>;
+  /** NextJs SSG Node Information. */
+  ssgNodeInformation: SsgNodeInformation;
 };
 
 
@@ -558,6 +562,68 @@ export type QueryNodeArticleArgs = {
   langcode?: InputMaybe<Scalars['String']['input']>;
   revision?: InputMaybe<Scalars['ID']['input']>;
 };
+
+
+/** The schema's entry-point for queries. */
+export type QueryRouteArgs = {
+  langcode?: InputMaybe<Scalars['String']['input']>;
+  path: Scalars['String']['input'];
+};
+
+
+/** The schema's entry-point for queries. */
+export type QuerySsgNodeInformationArgs = {
+  type: Scalars['String']['input'];
+};
+
+/** Routes represent incoming requests that resolve to content. */
+export type Route = {
+  /** Whether this route is internal or external. */
+  internal: Scalars['Boolean']['output'];
+  /** URL of this route. */
+  url: Scalars['String']['output'];
+};
+
+/** A list of possible entities that can be returned by URL. */
+export type RouteEntityUnion = NodeArticle;
+
+/** Route outside of this website. */
+export type RouteExternal = Route & {
+  __typename?: 'RouteExternal';
+  /** Whether this route is internal or external. */
+  internal: Scalars['Boolean']['output'];
+  /** URL of this route. */
+  url: Scalars['String']['output'];
+};
+
+/** Route within this website. */
+export type RouteInternal = Route & {
+  __typename?: 'RouteInternal';
+  /** Breadcrumb links for this route. */
+  breadcrumbs?: Maybe<Array<Link>>;
+  /** Content assigned to this route. */
+  entity?: Maybe<RouteEntityUnion>;
+  /** Whether this route is internal or external. */
+  internal: Scalars['Boolean']['output'];
+  /** URL of this route. */
+  url: Scalars['String']['output'];
+};
+
+/** Redirect to another URL with status. */
+export type RouteRedirect = Route & {
+  __typename?: 'RouteRedirect';
+  /** Whether this route is internal or external. */
+  internal: Scalars['Boolean']['output'];
+  /** Utility prop. Always true for redirects. */
+  redirect: Scalars['Boolean']['output'];
+  /** Suggested status for redirect. Eg 301. */
+  status: Scalars['Int']['output'];
+  /** URL of this route. */
+  url: Scalars['String']['output'];
+};
+
+/** Route types that can exist in the system. */
+export type RouteUnion = RouteExternal | RouteInternal | RouteRedirect;
 
 /** Schema information provided by the system. */
 export type SchemaInformation = {
@@ -579,6 +645,15 @@ export enum SortDirection {
   /** Faldende */
   Desc = 'DESC'
 }
+
+/** Schema information provided by the system. */
+export type SsgNodeInformation = {
+  __typename?: 'SsgNodeInformation';
+  /** The connected cache tags. */
+  cacheTags?: Maybe<Scalars['String']['output']>;
+  /** The node UUID. */
+  nid?: Maybe<Scalars['String']['output']>;
+};
 
 /** The schema's entry-point for subscriptions. */
 export type Subscription = {
@@ -798,6 +873,13 @@ export type GetArticleQueryVariables = Exact<{
 
 export type GetArticleQuery = { __typename?: 'Query', nodeArticle?: { __typename?: 'NodeArticle', title: string, subtitle?: string | null, paragraphs?: Array<{ __typename: 'ParagraphAccordion' } | { __typename: 'ParagraphBanner' } | { __typename: 'ParagraphBreadcrumbChildren' } | { __typename: 'ParagraphCardGridAutomatic' } | { __typename: 'ParagraphCardGridManual' } | { __typename: 'ParagraphContentSlider' } | { __typename: 'ParagraphContentSliderAutomatic' } | { __typename: 'ParagraphFilteredEventList' } | { __typename: 'ParagraphManualEventList' } | { __typename: 'ParagraphTextBody', body?: { __typename?: 'Text', value?: string | null } | null }> | null } | null };
 
+export type GetArticleByRouteQueryVariables = Exact<{
+  path: Scalars['String']['input'];
+}>;
+
+
+export type GetArticleByRouteQuery = { __typename?: 'Query', route?: { __typename?: 'RouteExternal' } | { __typename?: 'RouteInternal', entity?: { __typename?: 'NodeArticle', title: string, subtitle?: string | null, paragraphs?: Array<{ __typename: 'ParagraphAccordion' } | { __typename: 'ParagraphBanner' } | { __typename: 'ParagraphBreadcrumbChildren' } | { __typename: 'ParagraphCardGridAutomatic' } | { __typename: 'ParagraphCardGridManual' } | { __typename: 'ParagraphContentSlider' } | { __typename: 'ParagraphContentSliderAutomatic' } | { __typename: 'ParagraphFilteredEventList' } | { __typename: 'ParagraphManualEventList' } | { __typename: 'ParagraphTextBody', body?: { __typename?: 'Text', value?: string | null } | null }> | null } | null } | { __typename?: 'RouteRedirect' } | null };
+
 export type GetDplCmsConfigurationQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -860,6 +942,68 @@ useSuspenseGetArticleQuery.getKey = (variables: GetArticleQueryVariables) => ['g
 
 
 useGetArticleQuery.fetcher = (variables: GetArticleQueryVariables, options?: RequestInit['headers']) => fetcher<GetArticleQuery, GetArticleQueryVariables>(GetArticleDocument, variables, options);
+
+export const GetArticleByRouteDocument = `
+    query getArticleByRoute($path: String!) {
+  route(path: $path) {
+    ... on RouteInternal {
+      entity {
+        ... on NodeArticle {
+          title
+          subtitle
+          paragraphs {
+            __typename
+            ... on ParagraphTextBody {
+              body {
+                value
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+export const useGetArticleByRouteQuery = <
+      TData = GetArticleByRouteQuery,
+      TError = unknown
+    >(
+      variables: GetArticleByRouteQueryVariables,
+      options?: Omit<UseQueryOptions<GetArticleByRouteQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetArticleByRouteQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<GetArticleByRouteQuery, TError, TData>(
+      {
+    queryKey: ['getArticleByRoute', variables],
+    queryFn: fetcher<GetArticleByRouteQuery, GetArticleByRouteQueryVariables>(GetArticleByRouteDocument, variables),
+    ...options
+  }
+    )};
+
+useGetArticleByRouteQuery.getKey = (variables: GetArticleByRouteQueryVariables) => ['getArticleByRoute', variables];
+
+export const useSuspenseGetArticleByRouteQuery = <
+      TData = GetArticleByRouteQuery,
+      TError = unknown
+    >(
+      variables: GetArticleByRouteQueryVariables,
+      options?: Omit<UseSuspenseQueryOptions<GetArticleByRouteQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetArticleByRouteQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useSuspenseQuery<GetArticleByRouteQuery, TError, TData>(
+      {
+    queryKey: ['getArticleByRouteSuspense', variables],
+    queryFn: fetcher<GetArticleByRouteQuery, GetArticleByRouteQueryVariables>(GetArticleByRouteDocument, variables),
+    ...options
+  }
+    )};
+
+useSuspenseGetArticleByRouteQuery.getKey = (variables: GetArticleByRouteQueryVariables) => ['getArticleByRouteSuspense', variables];
+
+
+useGetArticleByRouteQuery.fetcher = (variables: GetArticleByRouteQueryVariables, options?: RequestInit['headers']) => fetcher<GetArticleByRouteQuery, GetArticleByRouteQueryVariables>(GetArticleByRouteDocument, variables, options);
 
 export const GetDplCmsConfigurationDocument = `
     query getDplCmsConfiguration {

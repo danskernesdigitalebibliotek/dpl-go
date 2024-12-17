@@ -1,0 +1,35 @@
+query getArticle($id: ID!) {
+  nodeArticle(id: $id) {
+    title
+    subtitle
+    paragraphs {
+      __typename
+      ... on ParagraphTextBody {
+        body {
+          value
+        }
+      }
+    }
+  }
+}
+
+query getArticleByRoute($path: String!) {
+  route(path: $path) {
+    ... on RouteInternal {
+      entity {
+        ... on NodeArticle {
+          title
+          subtitle
+          paragraphs {
+            __typename
+            ... on ParagraphTextBody {
+              body {
+                value
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
