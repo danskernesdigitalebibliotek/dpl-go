@@ -138,6 +138,8 @@ export enum ComplexSearchFacetsEnum {
   Accesstype = 'ACCESSTYPE',
   Ages = 'AGES',
   Cataloguecode = 'CATALOGUECODE',
+  Chambermusictype = 'CHAMBERMUSICTYPE',
+  Choirtype = 'CHOIRTYPE',
   Contributor = 'CONTRIBUTOR',
   Contributorfunction = 'CONTRIBUTORFUNCTION',
   Creator = 'CREATOR',
@@ -151,6 +153,7 @@ export enum ComplexSearchFacetsEnum {
   Generalmaterialtype = 'GENERALMATERIALTYPE',
   Genreandform = 'GENREANDFORM',
   Hostpublication = 'HOSTPUBLICATION',
+  Instrument = 'INSTRUMENT',
   Issue = 'ISSUE',
   Language = 'LANGUAGE',
   Let = 'LET',
@@ -2502,3 +2505,31 @@ useSuspenseGetMaterialQuery.getKey = (variables: GetMaterialQueryVariables) => [
 
 
 useGetMaterialQuery.fetcher = (variables: GetMaterialQueryVariables, options?: RequestInit['headers']) => fetchData<GetMaterialQuery, GetMaterialQueryVariables>(GetMaterialDocument, variables, options);
+
+export const operationNames = {
+  Query: {
+    searchWithPagination: 'searchWithPagination' as const,
+    searchFacets: 'searchFacets' as const,
+    getMaterial: 'getMaterial' as const
+  },
+  Fragment: {
+    SearchFacet: 'SearchFacet' as const,
+    ManifestationCover: 'ManifestationCover' as const,
+    ManifestationIdentifiers: 'ManifestationIdentifiers' as const,
+    ManifestationAccess: 'ManifestationAccess' as const,
+    ManifestationTitles: 'ManifestationTitles' as const,
+    ManifestationLanguages: 'ManifestationLanguages' as const,
+    ManifestationDescription: 'ManifestationDescription' as const,
+    ManifestationDetails: 'ManifestationDetails' as const,
+    ManifestationSearchPageTeaser: 'ManifestationSearchPageTeaser' as const,
+    ManifestationWorkPage: 'ManifestationWorkPage' as const,
+    WorkAccess: 'WorkAccess' as const,
+    WorkMaterialTypes: 'WorkMaterialTypes' as const,
+    WorkTitles: 'WorkTitles' as const,
+    WorkCreators: 'WorkCreators' as const,
+    WorkPublicationYear: 'WorkPublicationYear' as const,
+    WorkDescription: 'WorkDescription' as const,
+    WorkTeaserSearchPage: 'WorkTeaserSearchPage' as const,
+    WorkFullWorkPage: 'WorkFullWorkPage' as const
+  }
+}
