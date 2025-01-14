@@ -220,11 +220,11 @@ To add a custom type, create a new file in the `lib/types` directory and define 
 
 ### xState
 
-TODO: write something if relevant
+Read about xState [here](architecture/adr-002-xstate.md).
 
 ### Config handling
 
-Read about configuration[here](architecture/adr-001-configuration.md).
+Read about configuration [here](architecture/adr-001-configuration.md).
 
 ### Storybook
 
