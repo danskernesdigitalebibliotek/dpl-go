@@ -55,7 +55,12 @@ const config: CodegenConfig = {
           },
         },
       ],
-      plugins: ["typescript", "typescript-operations", "typescript-react-query"],
+      plugins: [
+        "typescript",
+        "typescript-operations",
+        "typescript-react-query",
+        "named-operations-object",
+      ],
       config: {
         enumsAsTypes: true,
         withHooks: true,
@@ -69,6 +74,8 @@ const config: CodegenConfig = {
           transformUnderscore: true,
         },
         fetcher: "@/lib/graphql/fetchers/fbi.fetcher#fetchData",
+        identifierName: "operationNames",
+        useConsts: true,
       },
       hooks: {
         afterOneFileWrite: ["yarn eslint --fix"],
