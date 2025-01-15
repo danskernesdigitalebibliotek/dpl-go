@@ -5,6 +5,7 @@ import Link from "next/link"
 import React from "react"
 
 import { getIconNameFromMaterialType } from "@/components/pages/workPageLayout/helper"
+import { cyKeys } from "@/cypress/support/constants"
 import goConfig from "@/lib/config/goConfig"
 import { WorkTeaserSearchPageFragment } from "@/lib/graphql/generated/fbi/graphql"
 import { getCoverUrls, getLowResCoverUrl } from "@/lib/helpers/helper.covers"
@@ -131,7 +132,8 @@ const WorkCard = ({ work }: WorkCardProps) => {
       href={resolveUrl({
         routeParams: { work: "work", wid: work.workId },
         queryParams: { type: bestRepresentationManifestationMaterialTypeCode },
-      })}>
+      })}
+      data-cy={cyKeys["work-card"]}>
       <div>
         <div
           key={work.workId}
