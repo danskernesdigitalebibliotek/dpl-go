@@ -15,6 +15,7 @@ jobs:
     env:
       NEXT_PUBLIC_APP_URL: http://localhost:3000
       UNILOGIN_SESSION_SECRET: XXX
+      NEXT_PUBLIC_LIBRARY_TOKEN: XXX
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

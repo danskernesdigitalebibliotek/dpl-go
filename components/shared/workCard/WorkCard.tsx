@@ -1,6 +1,7 @@
 import Link from "next/link"
 import React from "react"
 
+import { cyKeys } from "@/cypress/support/constants"
 import { WorkTeaserSearchPageFragment } from "@/lib/graphql/generated/fbi/graphql"
 import { getCoverUrls, getLowResCoverUrl } from "@/lib/helpers/helper.covers"
 import { displayCreators } from "@/lib/helpers/helper.creators"
@@ -55,7 +56,8 @@ const WorkCard = ({ work }: WorkCardProps) => {
   return (
     <Link
       className="block space-y-3 lg:space-y-5"
-      href={resolveUrl({ routeParams: { work: "work", wid: work.workId } })}>
+      href={resolveUrl({ routeParams: { work: "work", wid: work.workId } })}
+      data-cy={cyKeys["work-card"]}>
       <div>
         <div
           key={work.workId}
