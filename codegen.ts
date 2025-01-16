@@ -21,7 +21,7 @@ const config: CodegenConfig = {
       },
       plugins: ["typescript", "typescript-operations", "typescript-react-query"],
       config: {
-        futureProofEnums: true,
+        enumsAsTypes: true,
         withHooks: true,
         defaultScalarType: "unknown",
         reactQueryVersion: 5,
@@ -61,7 +61,7 @@ const config: CodegenConfig = {
         "named-operations-object",
       ],
       config: {
-        futureProofEnums: true,
+        enumsAsTypes: true,
         withHooks: true,
         defaultScalarType: "unknown",
         reactQueryVersion: 5,
