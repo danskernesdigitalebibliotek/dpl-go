@@ -3,6 +3,7 @@ import type { CodegenConfig } from "@graphql-codegen/cli"
 import goConfig from "./lib/config/goConfig"
 
 const { loadEnvConfig } = require("@next/env")
+const isCI = process.env.CI === "true"
 
 loadEnvConfig(process.cwd())
 
@@ -15,7 +16,7 @@ const config: CodegenConfig = {
       schema: {
         [`${process.env.NEXT_PUBLIC_GRAPHQL_SCHEMA_ENDPOINT_DPL_CMS}`]: {
           headers: {
-            Authorization: `Basic ${process.env.GRAPHQL_SCHEMA_ENDPOINT_BASIC_TOKEN_DPL_CMS}`,
+            Authorization: `${isCI ? "Bearer" : "Basic"} ${process.env.NEXT_PUBLIC_GRAPHQL_BASIC_TOKEN_DPL_CMS}`,
           },
         },
       },

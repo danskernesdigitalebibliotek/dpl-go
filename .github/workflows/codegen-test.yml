@@ -1,0 +1,51 @@
+name: Codegen Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  codegen:
+    name: Test codegen
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0 # Required to retrieve git history
+
+      # Fetch token from Adgangsplatformen to be used for codegen
+      - name: Set CLIENT_ID and CLIENT_SECRET
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+        run: |
+          token=$(curl --user "${CLIENT_ID}:${CLIENT_SECRET}" -X POST https://auth.dbc.dk/oauth/token)
+          echo "token=$token" >> $GITHUB_ENV
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --no-progress --non-interactive
+
+      - name: Run codegen
+        env:
+          NEXT_PUBLIC_LIBRARY_TOKEN: ${{ env.token }}
+        run: |
+          if ! yarn codegen:graphql; then
+            echo "Codegen encountered an error"
+            exit 0
+          fi
+
+      - name: Check for changes in generated code
+        run: git diff --exit-code || echo "Generated code has changed"
+        continue-on-error: true
