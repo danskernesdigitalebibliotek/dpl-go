@@ -1,19 +1,18 @@
 import { head, uniqBy } from "lodash"
 
-import { SlideSelectOption } from "@/components/shared/slideSelect/SlideSelect"
 import { materialTypeCategories } from "@/components/shared/workCard/helper"
 import {
   GeneralMaterialTypeCodeEnum,
+  Manifestation,
   ManifestationWorkPageFragment,
+  Work,
   WorkFullWorkPageFragment,
   WorkMaterialTypesFragment,
 } from "@/lib/graphql/generated/fbi/graphql"
 
 export const getWorkMaterialTypes = (
-  materialTypes:
-    | WorkMaterialTypesFragment["materialTypes"]
-    | ManifestationWorkPageFragment["materialTypes"]
-): WorkMaterialTypesFragment["materialTypes"][0]["materialTypeGeneral"][] => {
+  materialTypes: Work["materialTypes"]
+): Manifestation["materialTypes"][0]["materialTypeGeneral"][] => {
   return materialTypes.map(materialType => materialType.materialTypeGeneral)
 }
 
@@ -32,55 +31,29 @@ export const getManifestationByMaterialType = (
   )
 }
 
-export const getBestRepresentation = (
-  work: WorkFullWorkPageFragment
-): ManifestationWorkPageFragment => {
-  // If best representation is found on "work" we return that
-  if (work.manifestations.bestRepresentation) {
-    return work.manifestations.bestRepresentation
-  }
-  // If best representation doesn't exist we choose in the following order:
-  // 1. Ebook / 2. Audiobook / 3. Book / 4. First in all manifestations (any)
-  const eBook = getManifestationByMaterialType(work, "EBOOKS")
-  if (eBook) {
-    return eBook
-  }
-  const audioBook = getManifestationByMaterialType(work, "AUDIO_BOOKS")
-  if (audioBook) {
-    return audioBook
-  }
-  const book = getManifestationByMaterialType(work, "BOOKS")
-  if (book) {
-    return book
-  }
-  return work.manifestations.all[0]
-}
-
-const isOfMaterialType = (
+const isManifestationOfMaterialType = (
   manifestation: ManifestationWorkPageFragment,
   materialType: GeneralMaterialTypeCodeEnum
 ) => {
   return manifestation.materialTypes.some(type => type.materialTypeGeneral.code === materialType)
 }
 
-export const isEbook = (manifestation: ManifestationWorkPageFragment | undefined | null) => {
+export const isManifestationEbook = (manifestation: ManifestationWorkPageFragment) => {
   if (!manifestation) return false
-  return isOfMaterialType(manifestation, "EBOOKS")
+  return isManifestationOfMaterialType(manifestation, "EBOOKS")
 }
 
-export const isAudioBook = (manifestation: ManifestationWorkPageFragment | undefined | null) => {
+export const isManifestationAudioBook = (manifestation: ManifestationWorkPageFragment) => {
   if (!manifestation) return false
-  return isOfMaterialType(manifestation, "AUDIO_BOOKS")
+  return isManifestationOfMaterialType(manifestation, "AUDIO_BOOKS")
 }
 
-export const isPodcast = (manifestation: ManifestationWorkPageFragment | undefined | null) => {
+export const isManifestationPodcast = (manifestation: ManifestationWorkPageFragment) => {
   if (!manifestation) return false
-  return isOfMaterialType(manifestation, "PODCASTS")
+  return isManifestationOfMaterialType(manifestation, "PODCASTS")
 }
 
-export const getManifestationLanguageIsoCode = (
-  manifestation: ManifestationWorkPageFragment | undefined | null
-) => {
+export const getManifestationLanguageIsoCode = (manifestation: ManifestationWorkPageFragment) => {
   if (!manifestation) return undefined
 
   const uniqueLanguagesWithIsoCode = uniqBy(manifestation.languages?.main, "isoCode")
@@ -95,6 +68,24 @@ export const getManifestationLanguageIsoCode = (
   // if there is no isoCode it return undefined so that the lang attribute is not set
   return undefined
 }
+
+export const materialTypeSortPriority: GeneralMaterialTypeCodeEnum[] = [
+  "BOOKS",
+  "EBOOKS",
+  "AUDIO_BOOKS",
+  "PODCASTS",
+  "BOARD_GAMES",
+  "ARTICLES",
+  "COMICS",
+  "COMPUTER_GAMES",
+  "FILMS",
+  "IMAGE_MATERIALS",
+  "MUSIC",
+  "NEWSPAPER_JOURNALS",
+  "OTHER",
+  "SHEET_MUSIC",
+  "TV_SERIES",
+]
 
 export const materialTypeTranslations: { [key in GeneralMaterialTypeCodeEnum]: string } = {
   ARTICLES: "Artikel",
@@ -114,46 +105,27 @@ export const materialTypeTranslations: { [key in GeneralMaterialTypeCodeEnum]: s
   OTHER: "Andet",
 }
 
-export const translateMaterialTypesForRender = (option: SlideSelectOption): SlideSelectOption => {
-  return {
-    ...option,
-    render: materialTypeTranslations[option.value as GeneralMaterialTypeCodeEnum],
-  }
+export const translateMaterialTypesStringForRender = (
+  code: GeneralMaterialTypeCodeEnum
+): string => {
+  return materialTypeTranslations[code]
 }
 
-export const findInitialSliderValue = (
-  sliderOptions: SlideSelectOption[] | undefined | null,
-  selectedManifestation: ManifestationWorkPageFragment | undefined | null,
-  searchParams: URLSearchParams
-) => {
-  // If we have a material type specified in the URL, we use that
-  if (
-    !!searchParams.get("type") &&
-    sliderOptions?.some(option => option.render === searchParams.get("type"))
-  ) {
-    return sliderOptions.find(option => option.render === searchParams.get("type"))
-  }
-  // Else select any
-  return sliderOptions?.find(option => {
-    return selectedManifestation?.materialTypes.find(materialType => {
-      return materialType.materialTypeGeneral.code.includes(option.value)
-    })
-  })
-}
-
-export const addMaterialTypeIconToSelectOption = (option: SlideSelectOption) => {
-  const code = option.value as GeneralMaterialTypeCodeEnum
+export const getIconNameFromMaterialType = (materialType: GeneralMaterialTypeCodeEnum) => {
+  const code = materialType
   if (materialTypeCategories.reading.includes(code)) {
-    return { ...option, icon: "book" }
+    return "book"
   }
   if (materialTypeCategories.listening.includes(code)) {
-    return { ...option, icon: "headphones" }
+    return "headphones"
   }
   if (materialTypeCategories.gaming.includes(code)) {
-    return { ...option, icon: "controller" }
+    return "controller"
   }
   if (materialTypeCategories.video.includes(code)) {
-    return { ...option, icon: "video" }
+    return "video"
   }
-  return option
+  if (materialTypeCategories.podcast.includes(code)) {
+    return "podcast"
+  }
 }

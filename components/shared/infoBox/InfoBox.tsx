@@ -1,17 +1,39 @@
 import { motion } from "framer-motion"
+import { useRouter } from "next/navigation"
 import React from "react"
 
 import InfoBoxItem from "@/components/shared/infoBox/InfoBoxItem"
-import { getSeriesInfo } from "@/components/shared/infoBox/helper"
-import { WorkFullWorkPageFragment } from "@/lib/graphql/generated/fbi/graphql"
-import { useSelectedManifestationStore } from "@/store/selectedManifestation.store"
+import {
+  ManifestationWorkPageFragment,
+  WorkFullWorkPageFragment,
+} from "@/lib/graphql/generated/fbi/graphql"
+import { resolveUrl } from "@/lib/helpers/helper.routes"
+
+import { Button } from "../button/Button"
 
 type InfoBoxProps = {
   work: WorkFullWorkPageFragment
+  selectedManifestation: ManifestationWorkPageFragment
 }
 
-const InfoBox = ({ work }: InfoBoxProps) => {
-  const { selectedManifestation } = useSelectedManifestationStore()
+const InfoBox = ({ work, selectedManifestation }: InfoBoxProps) => {
+  const router = useRouter()
+
+  const handleClick = (text: string) => {
+    const url = resolveUrl({ routeParams: { search: "search" }, queryParams: { q: text } })
+    router.push(url, {
+      scroll: true,
+    })
+  }
+
+  const ageString = selectedManifestation?.audience?.ages.map(age => age.display).join(", ") || "-"
+  const seriesString =
+    selectedManifestation?.series
+      .map(series => `${series.numberInSeries ? series.numberInSeries + " i " : ""}${series.title}`)
+      .join(", ") || "-"
+  const subjects = selectedManifestation?.subjects.all.map(subject => subject.display) || []
+  // Remove duplicates
+  const uniqueSubjects = [...new Set(subjects)]
 
   return (
     <motion.div
@@ -25,25 +47,25 @@ const InfoBox = ({ work }: InfoBoxProps) => {
             {!work.abstract?.length ? (
               <p>Værket har desværre ingen beskrivelse.</p>
             ) : (
-              work.abstract.map(abstract => <p key={abstract.substring(0, 30)}>{abstract}</p>)
+              work.abstract.map((abstract, index) => <p key={index}>{abstract}</p>)
             )}
           </div>
           <dl className="flex-1">
-            <InfoBoxItem
-              term="Alder"
-              description={selectedManifestation?.audience?.ages.map(age => age.display) || []}
-            />
-            <InfoBoxItem
-              term="Serie"
-              description={selectedManifestation ? getSeriesInfo(selectedManifestation) : []}
-            />
-            <InfoBoxItem
-              term="Emneord"
-              description={
-                selectedManifestation?.subjects.all.map(subject => subject.display) || []
-              }
-              isButtons
-            />
+            <InfoBoxItem term="Alder">{ageString}</InfoBoxItem>
+            <InfoBoxItem term="Serie">{seriesString}</InfoBoxItem>
+            <InfoBoxItem term="Emneord" classname="flex flex-row flex-wrap gap-2">
+              {uniqueSubjects
+                ? uniqueSubjects.map(subject => (
+                    <Button
+                      key={subject}
+                      size={"sm"}
+                      className="px-3"
+                      onClick={() => handleClick(subject)}>
+                      {subject}
+                    </Button>
+                  ))
+                : "-"}
+            </InfoBoxItem>
           </dl>
         </div>
       </section>
