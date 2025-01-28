@@ -17,8 +17,13 @@ export interface TIntrospectionResponse extends client.IntrospectionResponse {
 export async function GET(request: NextRequest) {
   const session = await getSession({ request, response: NextResponse.next() })
   const config = await getUniloginClientConfig()
+  const appUrl = String(goConfig("app.url"))
+
+  if (!config) {
+    return NextResponse.redirect(appUrl)
+  }
+
   const currentSearchParams = request.nextUrl.searchParams
-  const appUrl = goConfig("app.url")
   const redirectUri = new URL(`${appUrl}/auth/callback/unilogin`)
   currentSearchParams.forEach((value, key) => {
     redirectUri.searchParams.append(key, value)

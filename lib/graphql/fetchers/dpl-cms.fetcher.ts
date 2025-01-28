@@ -10,6 +10,9 @@ export function fetcher<TData, TVariables>(
     throw new Error("Missing DPL CMS GraphQL endpoint or basic token")
   }
 
+  // eslint-disable-next-line no-console
+  console.log({ dplCmsGraphqlEndpoint })
+
   return async (): Promise<TData> => {
     const res = await fetch(dplCmsGraphqlEndpoint, {
       method: "POST",

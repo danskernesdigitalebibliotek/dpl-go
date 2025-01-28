@@ -9,8 +9,9 @@ const queryDplCmsConfig = async (queryClient: QueryClient) => {
   const { dplConfiguration } = await queryClient.fetchQuery<GetDplCmsConfigurationQuery>({
     queryKey: useGetDplCmsConfigurationQuery.getKey(),
     queryFn: useGetDplCmsConfigurationQuery.fetcher(),
-    // Cache 5 minutes unless invalidated
-    staleTime: 5 * 60 * 1000, // 5 mins
+    // TODO: Set this when caching strategy is implemented.
+    // Choosing half a minute for now.
+    staleTime: 30000,
   })
 
   return dplConfiguration ?? null

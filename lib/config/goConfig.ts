@@ -21,10 +21,13 @@ export const retrieveValue = <
   return null
 }
 
-const goConfig = <K extends TConfigKey>(key: K) => {
+const goConfig = <K extends TConfigKey>(
+  key: K,
+  options: { ignoreMissingConfiguration: boolean } = { ignoreMissingConfiguration: false }
+) => {
   const value = retrieveValue(key, resolvers)
 
-  if (!value && value !== 0) {
+  if (!value && value !== 0 && !options.ignoreMissingConfiguration) {
     throw new MissingConfigurationError(`Missing configuration for ${key}`)
   }
 
