@@ -3,6 +3,7 @@ import materialTypes from "./materialTypes"
 import search from "./search"
 import serviceFbi from "./service.fbi"
 import token from "./token"
+import urls from "./urls"
 
 export const resolvers = {
   ...app,
@@ -10,6 +11,7 @@ export const resolvers = {
   ...search,
   ...token,
   ...materialTypes,
+  ...urls,
 }
 
 export type TResolvers = typeof resolvers
