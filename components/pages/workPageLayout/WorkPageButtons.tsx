@@ -1,19 +1,23 @@
 import React, { useState } from "react"
 
-import { isAudioBook, isEbook, isPodcast } from "@/components/pages/workPageLayout/helper"
+import {
+  isManifestationAudioBook,
+  isManifestationEbook,
+  isManifestationPodcast,
+} from "@/components/pages/workPageLayout/helper"
 import { Button } from "@/components/shared/button/Button"
 import Player from "@/components/shared/publizonPlayer/PublizonPlayer"
 import ResponsiveDialog from "@/components/shared/responsiveDialog/ResponsiveDialog"
 import SmartLink from "@/components/shared/smartLink/SmartLink"
+import { ManifestationWorkPageFragment } from "@/lib/graphql/generated/fbi/graphql"
 import { resolveUrl } from "@/lib/helpers/helper.routes"
-import { useSelectedManifestationStore } from "@/store/selectedManifestation.store"
 
 export type WorkPageButtonsProps = {
   workId: string
+  selectedManifestation: ManifestationWorkPageFragment
 }
 
-const WorkPageButtons = ({ workId }: WorkPageButtonsProps) => {
-  const { selectedManifestation } = useSelectedManifestationStore()
+const WorkPageButtons = ({ workId, selectedManifestation }: WorkPageButtonsProps) => {
   const identifier = selectedManifestation?.identifiers[0].value
   const url = resolveUrl({
     routeParams: { work: "work", ":wid": workId, read: "read" },
@@ -23,47 +27,47 @@ const WorkPageButtons = ({ workId }: WorkPageButtonsProps) => {
 
   return (
     <>
-      {isEbook(selectedManifestation) && (
+      {isManifestationEbook(selectedManifestation) && (
         <>
           <Button
-            ariaLabel="Prøv ebog"
+            ariaLabel="Prøv e-bog"
             size={"default"}
-            className="mb-grid-gap-half w-full lg:min-w-72 lg:max-w-80"
+            className="mb-grid-gap-half w-full lg:max-w-80 lg:min-w-72"
             asChild
             disabled={!!identifier}>
             <SmartLink linkType="external" href={url}>
-              Prøv ebog
+              Prøv e-bog
             </SmartLink>
           </Button>
-          <Button ariaLabel="Lån/reserver/læse ebog" className="w-full lg:min-w-72 lg:max-w-80">
+          <Button ariaLabel="Lån/reserver/læse ebog" className="w-full lg:max-w-80 lg:min-w-72">
             Not done yet
           </Button>
         </>
       )}
-      {isAudioBook(selectedManifestation) && (
+      {isManifestationAudioBook(selectedManifestation) && (
         <>
           <Button
             ariaLabel="Prøv lydbog"
             disabled={!!!identifier}
-            className="mb-grid-gap-half w-full lg:min-w-72 lg:max-w-80"
+            className="mb-grid-gap-half w-full lg:max-w-80 lg:min-w-72"
             onClick={() => setIsPlayerOpen(!isPlayerOpen)}>
             Prøv lydbog
           </Button>
-          <Button ariaLabel="Lån/reserver/læse lydbog" className="w-full lg:min-w-72 lg:max-w-80">
+          <Button ariaLabel="Lån/reserver/læse lydbog" className="w-full lg:max-w-80 lg:min-w-72">
             Not done yet
           </Button>
         </>
       )}
-      {isPodcast(selectedManifestation) && (
+      {isManifestationPodcast(selectedManifestation) && (
         <>
           <Button
             ariaLabel="Prøv podcast"
             disabled={!!!identifier}
-            className="mb-grid-gap-half w-full lg:min-w-72 lg:max-w-80"
+            className="mb-grid-gap-half w-full lg:max-w-80 lg:min-w-72"
             onClick={() => setIsPlayerOpen(!isPlayerOpen)}>
             Prøv podcast
           </Button>
-          <Button ariaLabel="Hør podcast" className="w-full lg:min-w-72 lg:max-w-80">
+          <Button ariaLabel="Hør podcast" className="w-full lg:max-w-80 lg:min-w-72">
             Not done yet
           </Button>
         </>
@@ -76,9 +80,9 @@ const WorkPageButtons = ({ workId }: WorkPageButtonsProps) => {
           onOpenChange={() => {
             setIsPlayerOpen(!isPlayerOpen)
           }}
-          title={`Prøv ${isPodcast(selectedManifestation) ? "Podcast" : "Lydbog"}`}
+          title={`Prøv ${isManifestationPodcast(selectedManifestation) ? "Podcast" : "Lydbog"}`}
           description={
-            isPodcast(selectedManifestation)
+            isManifestationPodcast(selectedManifestation)
               ? "For at høre podcast skal du være oprettet som bruger på GO."
               : "For at låne lydbogen skal du være oprettet som bruger på GO."
           }>

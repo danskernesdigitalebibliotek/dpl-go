@@ -36,11 +36,6 @@ export const fetcher = async <ResponseType>({
       body,
     })
 
-    if (!response.ok) {
-      // eslint-disable-next-line no-console
-      console.log(response.status, response.statusText, serviceUrl)
-    }
-
     try {
       return (await response.json()) as ResponseType
     } catch (e) {
@@ -55,7 +50,7 @@ export const fetcher = async <ResponseType>({
 
     const message = error instanceof Error ? error.message : "Unknown error"
     // eslint-disable-next-line no-console
-    console.log(message, serviceUrl)
+    console.error(message, serviceUrl)
   }
 
   // Do nothing. Some of our responses are intentionally empty and thus
