@@ -428,8 +428,6 @@ export type NodeGoArticle = NodeInterface & {
  */
 export type NodeGoCategory = NodeInterface & {
   __typename?: 'NodeGoCategory';
-  /** Category menu color */
-  categoryMenuColor: Color;
   /** The category image will be shown in the category menu as part of this category's menu element. */
   categoryMenuImage: MediaUnion;
   /** The category sound will be able to be played in the category menu as part of this category's menu element. */
@@ -440,6 +438,8 @@ export type NodeGoCategory = NodeInterface & {
   changed: DateTime;
   /** The date and time that the content was created. */
   created: DateTime;
+  /** Category menu color */
+  goColor?: Maybe<Scalars['String']['output']>;
   /** The Universally Unique IDentifier (UUID). */
   id: Scalars['ID']['output'];
   /** Language */
@@ -694,19 +694,42 @@ export type ParagraphFilteredEventList = ParagraphInterface & {
   title?: Maybe<Scalars['String']['output']>;
 };
 
+/**
+ * This link paragraph is used for links in GO, as it requires additional fields
+ * such as aria-label and ‘Open link in new window.’ These fields could not be
+ * exported in GraphQL when using a Linkit widget.
+ */
+export type ParagraphGoLink = ParagraphInterface & {
+  __typename?: 'ParagraphGoLink';
+  /** Aria Label */
+  ariaLabel?: Maybe<Scalars['String']['output']>;
+  /** The time that the Paragraph was created. */
+  created: DateTime;
+  /** The Universally Unique IDentifier (UUID). */
+  id: Scalars['ID']['output'];
+  /** The paragraphs entity language code. */
+  langcode: Language;
+  /** Link */
+  link: Array<Link>;
+  /** Published */
+  status: Scalars['Boolean']['output'];
+  /** Open link in a new window */
+  targetBlank?: Maybe<Scalars['Boolean']['output']>;
+};
+
 /** Entity type paragraph. */
 export type ParagraphGoLinkbox = ParagraphInterface & {
   __typename?: 'ParagraphGoLinkbox';
   /** The time that the Paragraph was created. */
   created: DateTime;
   /** Color */
-  goColor?: Maybe<Color>;
+  goColor?: Maybe<Scalars['String']['output']>;
   /** Description */
   goDescription: Scalars['String']['output'];
   /** Image */
   goImage?: Maybe<MediaUnion>;
-  /** LInk */
-  goLink: Link;
+  /** Link */
+  goLink: ParagraphUnion;
   /** The Universally Unique IDentifier (UUID). */
   id: Scalars['ID']['output'];
   /** The paragraphs entity language code. */
@@ -931,7 +954,7 @@ export type ParagraphTextBody = ParagraphInterface & {
 };
 
 /** Entity type paragraph. */
-export type ParagraphUnion = ParagraphAccordion | ParagraphBanner | ParagraphBreadcrumbChildren | ParagraphCardGridAutomatic | ParagraphCardGridManual | ParagraphContentSlider | ParagraphContentSliderAutomatic | ParagraphFilteredEventList | ParagraphGoLinkbox | ParagraphGoMaterialSliderAutomatic | ParagraphGoMaterialSliderManual | ParagraphGoVideo | ParagraphGoVideoBundleAutomatic | ParagraphGoVideoBundleManual | ParagraphManualEventList | ParagraphMaterialGridAutomatic | ParagraphMaterialGridManual | ParagraphTextBody | ParagraphVideo;
+export type ParagraphUnion = ParagraphAccordion | ParagraphBanner | ParagraphBreadcrumbChildren | ParagraphCardGridAutomatic | ParagraphCardGridManual | ParagraphContentSlider | ParagraphContentSliderAutomatic | ParagraphFilteredEventList | ParagraphGoLink | ParagraphGoLinkbox | ParagraphGoMaterialSliderAutomatic | ParagraphGoMaterialSliderManual | ParagraphGoVideo | ParagraphGoVideoBundleAutomatic | ParagraphGoVideoBundleManual | ParagraphManualEventList | ParagraphMaterialGridAutomatic | ParagraphMaterialGridManual | ParagraphTextBody | ParagraphVideo;
 
 /** Enter the URL for the video you want to include. */
 export type ParagraphVideo = ParagraphInterface & {
@@ -1328,7 +1351,7 @@ export type GetArticleQueryVariables = Exact<{
 }>;
 
 
-export type GetArticleQuery = { __typename?: 'Query', nodeArticle?: { __typename?: 'NodeArticle', title: string, subtitle?: string | null, paragraphs?: Array<{ __typename: 'ParagraphAccordion' } | { __typename: 'ParagraphBanner' } | { __typename: 'ParagraphBreadcrumbChildren' } | { __typename: 'ParagraphCardGridAutomatic' } | { __typename: 'ParagraphCardGridManual' } | { __typename: 'ParagraphContentSlider' } | { __typename: 'ParagraphContentSliderAutomatic' } | { __typename: 'ParagraphFilteredEventList' } | { __typename: 'ParagraphGoLinkbox' } | { __typename: 'ParagraphGoMaterialSliderAutomatic' } | { __typename: 'ParagraphGoMaterialSliderManual' } | { __typename: 'ParagraphGoVideo' } | { __typename: 'ParagraphGoVideoBundleAutomatic' } | { __typename: 'ParagraphGoVideoBundleManual' } | { __typename: 'ParagraphManualEventList' } | { __typename: 'ParagraphMaterialGridAutomatic' } | { __typename: 'ParagraphMaterialGridManual' } | { __typename: 'ParagraphTextBody', body?: { __typename?: 'Text', value?: string | null } | null } | { __typename: 'ParagraphVideo' }> | null } | null };
+export type GetArticleQuery = { __typename?: 'Query', nodeArticle?: { __typename?: 'NodeArticle', title: string, subtitle?: string | null, paragraphs?: Array<{ __typename: 'ParagraphAccordion' } | { __typename: 'ParagraphBanner' } | { __typename: 'ParagraphBreadcrumbChildren' } | { __typename: 'ParagraphCardGridAutomatic' } | { __typename: 'ParagraphCardGridManual' } | { __typename: 'ParagraphContentSlider' } | { __typename: 'ParagraphContentSliderAutomatic' } | { __typename: 'ParagraphFilteredEventList' } | { __typename: 'ParagraphGoLink' } | { __typename: 'ParagraphGoLinkbox' } | { __typename: 'ParagraphGoMaterialSliderAutomatic' } | { __typename: 'ParagraphGoMaterialSliderManual' } | { __typename: 'ParagraphGoVideo' } | { __typename: 'ParagraphGoVideoBundleAutomatic' } | { __typename: 'ParagraphGoVideoBundleManual' } | { __typename: 'ParagraphManualEventList' } | { __typename: 'ParagraphMaterialGridAutomatic' } | { __typename: 'ParagraphMaterialGridManual' } | { __typename: 'ParagraphTextBody', body?: { __typename?: 'Text', value?: string | null } | null } | { __typename: 'ParagraphVideo' }> | null } | null };
 
 export type GetDplCmsConfigurationQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1340,7 +1363,7 @@ export type GetPageByPathQueryVariables = Exact<{
 }>;
 
 
-export type GetPageByPathQuery = { __typename?: 'Query', route?: { __typename: 'RouteExternal' } | { __typename: 'RouteInternal', url: string, entity?: { __typename?: 'NodeGoArticle' } | { __typename?: 'NodeGoCategory' } | { __typename?: 'NodeGoPage', paragraphs?: Array<{ __typename?: 'ParagraphAccordion' } | { __typename?: 'ParagraphBanner' } | { __typename?: 'ParagraphBreadcrumbChildren' } | { __typename?: 'ParagraphCardGridAutomatic' } | { __typename?: 'ParagraphCardGridManual' } | { __typename?: 'ParagraphContentSlider' } | { __typename?: 'ParagraphContentSliderAutomatic' } | { __typename?: 'ParagraphFilteredEventList' } | { __typename?: 'ParagraphGoLinkbox' } | { __typename?: 'ParagraphGoMaterialSliderAutomatic' } | { __typename?: 'ParagraphGoMaterialSliderManual' } | { __typename: 'ParagraphGoVideo', id: string, title: string, created: { __typename?: 'DateTime', timestamp: unknown }, embedVideo: { __typename?: 'MediaAudio' } | { __typename?: 'MediaDocument' } | { __typename?: 'MediaImage' } | { __typename?: 'MediaVideo' } | { __typename?: 'MediaVideotool', id: string, name: string, mediaVideotool: string } } | { __typename?: 'ParagraphGoVideoBundleAutomatic' } | { __typename?: 'ParagraphGoVideoBundleManual' } | { __typename?: 'ParagraphManualEventList' } | { __typename?: 'ParagraphMaterialGridAutomatic' } | { __typename?: 'ParagraphMaterialGridManual' } | { __typename?: 'ParagraphTextBody' } | { __typename?: 'ParagraphVideo' }> | null } | null } | { __typename: 'RouteRedirect' } | null };
+export type GetPageByPathQuery = { __typename?: 'Query', route?: { __typename: 'RouteExternal' } | { __typename: 'RouteInternal', url: string, entity?: { __typename?: 'NodeGoArticle' } | { __typename?: 'NodeGoCategory' } | { __typename?: 'NodeGoPage', paragraphs?: Array<{ __typename?: 'ParagraphAccordion' } | { __typename?: 'ParagraphBanner' } | { __typename?: 'ParagraphBreadcrumbChildren' } | { __typename?: 'ParagraphCardGridAutomatic' } | { __typename?: 'ParagraphCardGridManual' } | { __typename?: 'ParagraphContentSlider' } | { __typename?: 'ParagraphContentSliderAutomatic' } | { __typename?: 'ParagraphFilteredEventList' } | { __typename?: 'ParagraphGoLink' } | { __typename?: 'ParagraphGoLinkbox' } | { __typename?: 'ParagraphGoMaterialSliderAutomatic' } | { __typename?: 'ParagraphGoMaterialSliderManual' } | { __typename: 'ParagraphGoVideo', id: string, title: string, created: { __typename?: 'DateTime', timestamp: unknown }, embedVideo: { __typename?: 'MediaAudio' } | { __typename?: 'MediaDocument' } | { __typename?: 'MediaImage' } | { __typename?: 'MediaVideo' } | { __typename?: 'MediaVideotool', id: string, name: string, mediaVideotool: string } } | { __typename?: 'ParagraphGoVideoBundleAutomatic' } | { __typename?: 'ParagraphGoVideoBundleManual' } | { __typename?: 'ParagraphManualEventList' } | { __typename?: 'ParagraphMaterialGridAutomatic' } | { __typename?: 'ParagraphMaterialGridManual' } | { __typename?: 'ParagraphTextBody' } | { __typename?: 'ParagraphVideo' }> | null } | null } | { __typename: 'RouteRedirect' } | null };
 
 export type GetAdgangsplatformenTokensQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1631,3 +1654,13 @@ useSuspenseGetAdgangsplatformenUserTokenQuery.getKey = (variables?: GetAdgangspl
 
 
 useGetAdgangsplatformenUserTokenQuery.fetcher = (variables?: GetAdgangsplatformenUserTokenQueryVariables, options?: RequestInit['headers']) => fetcher<GetAdgangsplatformenUserTokenQuery, GetAdgangsplatformenUserTokenQueryVariables>(GetAdgangsplatformenUserTokenDocument, variables, options);
+
+export const operationNames = {
+  Query: {
+    getArticle: 'getArticle',
+    getDplCmsConfiguration: 'getDplCmsConfiguration',
+    getPageByPath: 'getPageByPath',
+    getAdgangsplatformenTokens: 'getAdgangsplatformenTokens',
+    getAdgangsplatformenUserToken: 'getAdgangsplatformenUserToken'
+  }
+}
