@@ -7,6 +7,7 @@ import React from "react"
 import { getIconNameFromMaterialType } from "@/components/pages/workPageLayout/helper"
 import goConfig from "@/lib/config/goConfig"
 import { WorkTeaserSearchPageFragment } from "@/lib/graphql/generated/fbi/graphql"
+import { cn } from "@/lib/helpers/helper.cn"
 import { getCoverUrls, getLowResCoverUrl } from "@/lib/helpers/helper.covers"
 import { displayCreators } from "@/lib/helpers/helper.creators"
 import { resolveUrl } from "@/lib/helpers/helper.routes"
@@ -22,14 +23,27 @@ import { CoverPicture } from "../coverPicture/CoverPicture"
 import MaterialTypeIconWrapper from "./MaterialTypeIconWrapper"
 import { getAllWorkPids } from "./helper"
 
-type WorkCardProps = {
+export type WorkCardProps = {
   work: WorkTeaserSearchPageFragment
+  classNameWrapper?: string
+  className?: string
+  isHidden?: boolean
+  zIndex?: number
+  stackPosition?: number
+  isWithTilt?: boolean
 }
 
-const WorkCard = ({ work }: WorkCardProps) => {
+const WorkCard = ({
+  work,
+  classNameWrapper,
+  className,
+  isHidden,
+  zIndex,
+  stackPosition,
+  isWithTilt = false,
+}: WorkCardProps) => {
   const manifestations = work.manifestations.all
   const bestRepresentationManifestation = work.manifestations.bestRepresentation
-
   const { data: dataCovers, isLoading: isLoadingCovers } = useGetCoverCollection({
     type: "pid",
     identifiers: [bestRepresentationManifestation.pid],
@@ -127,15 +141,21 @@ const WorkCard = ({ work }: WorkCardProps) => {
 
   return (
     <Link
-      className="block space-y-3 lg:space-y-5"
+      className={cn("block space-y-3 lg:space-y-5", classNameWrapper)}
       href={resolveUrl({
         routeParams: { work: "work", wid: work.workId },
         queryParams: { type: bestRepresentationManifestationMaterialTypeCode },
-      })}>
-      <div>
+      })}
+      aria-hidden={isHidden}
+      tabIndex={isHidden ? -1 : 0}
+      style={{ zIndex }}>
+      <div className={cn({ "relative mb-6": !!stackPosition })}>
         <div
           key={work.workId}
-          className="rounded-base bg-background-overlay relative flex aspect-4/5 h-auto w-full flex-col px-[15%] pt-[15%]">
+          className={cn(
+            "rounded-base bg-background-overlay relative flex aspect-4/5 h-auto w-full flex-col px-[15%] pt-[15%]",
+            className
+          )}>
           {isSomeManifestationTypeCostFree || isSomeMaterialTypePodcast ? (
             <Badge variant={"blue-title"} className="absolute top-4 left-4 md:top-4 md:left-4">
               BLÅ
@@ -147,7 +167,7 @@ const WorkCard = ({ work }: WorkCardProps) => {
                 lowResSrc={lowResCover || ""}
                 src={coverSrc?.[0] || ""}
                 alt={`${work.titles.full[0]} cover billede`}
-                withTilt
+                withTilt={isWithTilt}
                 className="select-none"
               />
             )}
@@ -177,8 +197,11 @@ const WorkCard = ({ work }: WorkCardProps) => {
         </div>
       </div>
 
-      <div className="space-y-2">
-        <p className="mr-grid-column-half text-typo-subtitle-lg break-words">
+      <div className={cn("space-y-2", { hidden: stackPosition && stackPosition !== 0 })}>
+        <p
+          className={cn("mr-grid-column-half text-typo-subtitle-lg break-words", {
+            "overflow-scroll lg:max-h-[72px]": !!stackPosition,
+          })}>
           {work.titles.full[0]}
         </p>
         <p className="text-typo-caption opacity-60">{displayCreators(work.creators, 2)}</p>
