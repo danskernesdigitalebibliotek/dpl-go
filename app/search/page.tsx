@@ -1,5 +1,4 @@
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query"
-import { Suspense } from "react"
 
 import SearchPageLayout from "@/components/pages/searchPageLayout/SearchPageLayout"
 import getQueryClient from "@/lib/getQueryClient"
@@ -17,9 +16,7 @@ const Page = async (props: { searchParams: Promise<{ q: string }> }) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense fallback={<p>Loading...</p>}>
-        <SearchPageLayout />
-      </Suspense>
+      <SearchPageLayout />
     </HydrationBoundary>
   )
 }
