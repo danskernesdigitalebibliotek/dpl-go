@@ -42,7 +42,7 @@ export type Address = {
   sortingCode?: Maybe<Scalars['String']['output']>;
 };
 
-/** Address country. */
+/** Kommune. */
 export type AddressCountry = {
   __typename?: 'AddressCountry';
   /** The code of the country. */
@@ -122,9 +122,9 @@ export type File = {
   __typename?: 'File';
   /** The description of the file. */
   description?: Maybe<Scalars['String']['output']>;
-  /** The mime type of the file. */
+  /** Filens mime-type. */
   mime?: Maybe<Scalars['String']['output']>;
-  /** The name of the file. */
+  /** Filens navn. */
   name?: Maybe<Scalars['String']['output']>;
   /** Filens størrelse i bytes. */
   size: Scalars['Int']['output'];
@@ -184,9 +184,9 @@ export type Link = {
   __typename?: 'Link';
   /** Whether the link is internal to this website. */
   internal: Scalars['Boolean']['output'];
-  /** The title of the link. */
+  /** Linkets titel */
   title?: Maybe<Scalars['String']['output']>;
-  /** The URL of the link. */
+  /** Linkets URL */
   url?: Maybe<Scalars['String']['output']>;
 };
 
@@ -206,7 +206,7 @@ export type MediaAudio = MediaInterface & {
   /** Name */
   name: Scalars['String']['output'];
   /** Alternativ URL */
-  path: Scalars['String']['output'];
+  path?: Maybe<Scalars['String']['output']>;
   /** Published */
   status: Scalars['Boolean']['output'];
 };
@@ -227,7 +227,7 @@ export type MediaDocument = MediaInterface & {
   /** Name */
   name: Scalars['String']['output'];
   /** Alternativ URL */
-  path: Scalars['String']['output'];
+  path?: Maybe<Scalars['String']['output']>;
   /** Published */
   status: Scalars['Boolean']['output'];
 };
@@ -255,7 +255,7 @@ export type MediaImage = MediaInterface & {
   /** Name */
   name: Scalars['String']['output'];
   /** Alternativ URL */
-  path: Scalars['String']['output'];
+  path?: Maybe<Scalars['String']['output']>;
   /** Published */
   status: Scalars['Boolean']['output'];
 };
@@ -273,7 +273,7 @@ export type MediaInterface = {
   /** Name */
   name: Scalars['String']['output'];
   /** Alternativ URL */
-  path: Scalars['String']['output'];
+  path?: Maybe<Scalars['String']['output']>;
   /** Published */
   status: Scalars['Boolean']['output'];
 };
@@ -297,7 +297,7 @@ export type MediaVideo = MediaInterface & {
   /** Name */
   name: Scalars['String']['output'];
   /** Alternativ URL */
-  path: Scalars['String']['output'];
+  path?: Maybe<Scalars['String']['output']>;
   /** Published */
   status: Scalars['Boolean']['output'];
 };
@@ -318,7 +318,7 @@ export type MediaVideotool = MediaInterface & {
   /** Name */
   name: Scalars['String']['output'];
   /** Alternativ URL */
-  path: Scalars['String']['output'];
+  path?: Maybe<Scalars['String']['output']>;
   /** Published */
   status: Scalars['Boolean']['output'];
 };
@@ -357,7 +357,7 @@ export type NodeArticle = NodeInterface & {
   /** Paragraphs */
   paragraphs?: Maybe<Array<ParagraphUnion>>;
   /** Alternativ URL */
-  path: Scalars['String']['output'];
+  path?: Maybe<Scalars['String']['output']>;
   /** Forfremmet til forside */
   promote: Scalars['Boolean']['output'];
   /** Publication date */
@@ -405,7 +405,7 @@ export type NodeGoArticle = NodeInterface & {
   /** Paragraphs */
   paragraphs?: Maybe<Array<ParagraphUnion>>;
   /** Alternativ URL */
-  path: Scalars['String']['output'];
+  path?: Maybe<Scalars['String']['output']>;
   /** Forfremmet til forside */
   promote: Scalars['Boolean']['output'];
   /** Publication date */
@@ -458,7 +458,7 @@ export type NodeGoCategory = NodeInterface & {
   /** Paragraphs */
   paragraphs?: Maybe<Array<ParagraphUnion>>;
   /** Alternativ URL */
-  path: Scalars['String']['output'];
+  path?: Maybe<Scalars['String']['output']>;
   /** Forfremmet til forside */
   promote: Scalars['Boolean']['output'];
   /** Publication date */
@@ -489,7 +489,7 @@ export type NodeGoPage = NodeInterface & {
   /** Paragraphs */
   paragraphs?: Maybe<Array<ParagraphUnion>>;
   /** Alternativ URL */
-  path: Scalars['String']['output'];
+  path?: Maybe<Scalars['String']['output']>;
   /** Forfremmet til forside */
   promote: Scalars['Boolean']['output'];
   /** Publication date */
@@ -513,7 +513,7 @@ export type NodeInterface = {
   /** Language */
   langcode: Language;
   /** Alternativ URL */
-  path: Scalars['String']['output'];
+  path?: Maybe<Scalars['String']['output']>;
   /** Forfremmet til forside */
   promote: Scalars['Boolean']['output'];
   /** Published */
@@ -755,12 +755,12 @@ export type ParagraphGoLink = ParagraphInterface & {
   ariaLabel?: Maybe<Scalars['String']['output']>;
   /** The time that the Paragraph was created. */
   created: DateTime;
-  /** Link */
-  goLink: Link;
   /** The Universally Unique IDentifier (UUID). */
   id: Scalars['ID']['output'];
   /** The paragraphs entity language code. */
   langcode: Language;
+  /** Link */
+  link: Link;
   /** Published */
   status: Scalars['Boolean']['output'];
   /** Open link in a new window */
@@ -1229,6 +1229,7 @@ export type QueryNodeArgs = {
 export type QueryRouteArgs = {
   langcode?: InputMaybe<Scalars['String']['input']>;
   path: Scalars['String']['input'];
+  revision?: InputMaybe<Scalars['ID']['input']>;
 };
 
 /** Routes represent incoming requests that resolve to content. */
@@ -1330,7 +1331,7 @@ export type TermBreadcrumbStructure = TermInterface & {
   /** Denne terms overordnede termer. */
   parent?: Maybe<TermUnion>;
   /** Alternativ URL */
-  path: Scalars['String']['output'];
+  path?: Maybe<Scalars['String']['output']>;
   /** Should a list of contents that reference this breadcrumb, be shown automatically on this page? */
   showChildren?: Maybe<Scalars['Boolean']['output']>;
   /** If this is checked, the children teasers will be expanded with possible subtitle descriptions. */
@@ -1357,7 +1358,7 @@ export type TermCategories = TermInterface & {
   /** Denne terms overordnede termer. */
   parent?: Maybe<TermUnion>;
   /** Alternativ URL */
-  path: Scalars['String']['output'];
+  path?: Maybe<Scalars['String']['output']>;
   /** Published */
   status: Scalars['Boolean']['output'];
   /** Vægten af denne term i forhold til andre termer. */
@@ -1379,7 +1380,7 @@ export type TermInterface = {
   /** Denne terms overordnede termer. */
   parent?: Maybe<TermUnion>;
   /** Alternativ URL */
-  path: Scalars['String']['output'];
+  path?: Maybe<Scalars['String']['output']>;
   /** Published */
   status: Scalars['Boolean']['output'];
   /** Vægten af denne term i forhold til andre termer. */
@@ -1402,7 +1403,7 @@ export type TermOpeningHoursCategories = TermInterface & {
   /** Denne terms overordnede termer. */
   parent?: Maybe<TermUnion>;
   /** Alternativ URL */
-  path: Scalars['String']['output'];
+  path?: Maybe<Scalars['String']['output']>;
   /** Published */
   status: Scalars['Boolean']['output'];
   /** Vægten af denne term i forhold til andre termer. */
@@ -1425,7 +1426,7 @@ export type TermScreenName = TermInterface & {
   /** Denne terms overordnede termer. */
   parent?: Maybe<TermUnion>;
   /** Alternativ URL */
-  path: Scalars['String']['output'];
+  path?: Maybe<Scalars['String']['output']>;
   /** Published */
   status: Scalars['Boolean']['output'];
   /** Vægten af denne term i forhold til andre termer. */
@@ -1448,7 +1449,7 @@ export type TermTags = TermInterface & {
   /** Denne terms overordnede termer. */
   parent?: Maybe<TermUnion>;
   /** Alternativ URL */
-  path: Scalars['String']['output'];
+  path?: Maybe<Scalars['String']['output']>;
   /** Published */
   status: Scalars['Boolean']['output'];
   /** Vægten af denne term i forhold til andre termer. */
@@ -1476,7 +1477,7 @@ export type TermWebformEmailCategories = TermInterface & {
   /** Denne terms overordnede termer. */
   parent?: Maybe<TermUnion>;
   /** Alternativ URL */
-  path: Scalars['String']['output'];
+  path?: Maybe<Scalars['String']['output']>;
   /** Published */
   status: Scalars['Boolean']['output'];
   /** Vægten af denne term i forhold til andre termer. */
@@ -1561,7 +1562,7 @@ export type GetPageByPathQueryVariables = Exact<{
 }>;
 
 
-export type GetPageByPathQuery = { __typename?: 'Query', route?: { __typename: 'RouteExternal' } | { __typename: 'RouteInternal', url: string, entity?: { __typename?: 'NodeGoArticle' } | { __typename?: 'NodeGoCategory' } | { __typename?: 'NodeGoPage', paragraphs?: Array<{ __typename?: 'ParagraphAccordion' } | { __typename?: 'ParagraphBanner' } | { __typename?: 'ParagraphBreadcrumbChildren' } | { __typename?: 'ParagraphCampaignRule' } | { __typename?: 'ParagraphCardGridAutomatic' } | { __typename?: 'ParagraphCardGridManual' } | { __typename?: 'ParagraphContentSlider' } | { __typename?: 'ParagraphContentSliderAutomatic' } | { __typename?: 'ParagraphEventTicketCategory' } | { __typename?: 'ParagraphFiles' } | { __typename?: 'ParagraphFilteredEventList' } | { __typename?: 'ParagraphGoLink' } | { __typename?: 'ParagraphGoLinkbox' } | { __typename: 'ParagraphGoMaterialSliderAutomatic', sliderAmountOfMaterials: number, titleOptional?: string | null, cqlSearch: { __typename?: 'CQLSearch', value?: string | null } } | { __typename: 'ParagraphGoMaterialSliderManual', titleOptional?: string | null, materialSliderWorkIds: Array<{ __typename?: 'WorkId', material_type?: string | null, work_id?: string | null }> } | { __typename: 'ParagraphGoVideo', id: string, title: string, created: { __typename?: 'DateTime', timestamp: unknown }, embedVideo: { __typename?: 'MediaAudio' } | { __typename?: 'MediaDocument' } | { __typename?: 'MediaImage' } | { __typename?: 'MediaVideo' } | { __typename?: 'MediaVideotool', id: string, name: string, mediaVideotool: string } } | { __typename: 'ParagraphGoVideoBundleAutomatic', goVideoTitle: string, videoAmountOfMaterials: number, id: string, cqlSearch: { __typename?: 'CQLSearch', value?: string | null }, embedVideo: { __typename?: 'MediaAudio' } | { __typename?: 'MediaDocument' } | { __typename?: 'MediaImage' } | { __typename?: 'MediaVideo' } | { __typename?: 'MediaVideotool', id: string, name: string, mediaVideotool: string } } | { __typename: 'ParagraphGoVideoBundleManual', id: string, goVideoTitle: string, embedVideo: { __typename?: 'MediaAudio' } | { __typename?: 'MediaDocument' } | { __typename?: 'MediaImage' } | { __typename?: 'MediaVideo' } | { __typename?: 'MediaVideotool', id: string, name: string, mediaVideotool: string }, videoBundleWorkIds?: Array<{ __typename?: 'WorkId', material_type?: string | null, work_id?: string | null }> | null } | { __typename?: 'ParagraphHero' } | { __typename?: 'ParagraphLanguageSelector' } | { __typename?: 'ParagraphLinks' } | { __typename?: 'ParagraphManualEventList' } | { __typename?: 'ParagraphMaterialGridAutomatic' } | { __typename?: 'ParagraphMaterialGridManual' } | { __typename?: 'ParagraphMedias' } | { __typename?: 'ParagraphNavGridManual' } | { __typename?: 'ParagraphNavSpotsManual' } | { __typename?: 'ParagraphOpeningHours' } | { __typename?: 'ParagraphRecommendation' } | { __typename?: 'ParagraphSimpleLinks' } | { __typename?: 'ParagraphTextBody' } | { __typename?: 'ParagraphUserRegistrationItem' } | { __typename?: 'ParagraphUserRegistrationLinklist' } | { __typename?: 'ParagraphUserRegistrationSection' } | { __typename?: 'ParagraphVideo' } | { __typename?: 'ParagraphWebform' }> | null } | null } | { __typename: 'RouteRedirect' } | null };
+export type GetPageByPathQuery = { __typename?: 'Query', route?: { __typename: 'RouteExternal' } | { __typename: 'RouteInternal', url: string, entity?: { __typename?: 'NodeGoArticle' } | { __typename?: 'NodeGoCategory' } | { __typename?: 'NodeGoPage', paragraphs?: Array<{ __typename?: 'ParagraphAccordion' } | { __typename?: 'ParagraphBanner' } | { __typename?: 'ParagraphBreadcrumbChildren' } | { __typename?: 'ParagraphCampaignRule' } | { __typename?: 'ParagraphCardGridAutomatic' } | { __typename?: 'ParagraphCardGridManual' } | { __typename?: 'ParagraphContentSlider' } | { __typename?: 'ParagraphContentSliderAutomatic' } | { __typename?: 'ParagraphEventTicketCategory' } | { __typename?: 'ParagraphFiles' } | { __typename?: 'ParagraphFilteredEventList' } | { __typename?: 'ParagraphGoLink' } | { __typename: 'ParagraphGoLinkbox', title: string, goColor?: string | null, goDescription: string, goImage?: { __typename?: 'MediaAudio' } | { __typename?: 'MediaDocument' } | { __typename?: 'MediaImage', name: string, byline?: string | null, mediaImage: { __typename?: 'Image', url: string, alt?: string | null, height: number, mime?: string | null, size: number, title?: string | null, width: number } } | { __typename?: 'MediaVideo' } | { __typename?: 'MediaVideotool' } | null, goLinkParagraph: { __typename?: 'ParagraphAccordion' } | { __typename?: 'ParagraphBanner' } | { __typename?: 'ParagraphBreadcrumbChildren' } | { __typename?: 'ParagraphCampaignRule' } | { __typename?: 'ParagraphCardGridAutomatic' } | { __typename?: 'ParagraphCardGridManual' } | { __typename?: 'ParagraphContentSlider' } | { __typename?: 'ParagraphContentSliderAutomatic' } | { __typename?: 'ParagraphEventTicketCategory' } | { __typename?: 'ParagraphFiles' } | { __typename?: 'ParagraphFilteredEventList' } | { __typename?: 'ParagraphGoLink', targetBlank?: boolean | null, ariaLabel?: string | null, link: { __typename?: 'Link', title?: string | null, url?: string | null } } | { __typename?: 'ParagraphGoLinkbox' } | { __typename?: 'ParagraphGoMaterialSliderAutomatic' } | { __typename?: 'ParagraphGoMaterialSliderManual' } | { __typename?: 'ParagraphGoVideo' } | { __typename?: 'ParagraphGoVideoBundleAutomatic' } | { __typename?: 'ParagraphGoVideoBundleManual' } | { __typename?: 'ParagraphHero' } | { __typename?: 'ParagraphLanguageSelector' } | { __typename?: 'ParagraphLinks' } | { __typename?: 'ParagraphManualEventList' } | { __typename?: 'ParagraphMaterialGridAutomatic' } | { __typename?: 'ParagraphMaterialGridManual' } | { __typename?: 'ParagraphMedias' } | { __typename?: 'ParagraphNavGridManual' } | { __typename?: 'ParagraphNavSpotsManual' } | { __typename?: 'ParagraphOpeningHours' } | { __typename?: 'ParagraphRecommendation' } | { __typename?: 'ParagraphSimpleLinks' } | { __typename?: 'ParagraphTextBody' } | { __typename?: 'ParagraphUserRegistrationItem' } | { __typename?: 'ParagraphUserRegistrationLinklist' } | { __typename?: 'ParagraphUserRegistrationSection' } | { __typename?: 'ParagraphVideo' } | { __typename?: 'ParagraphWebform' } } | { __typename: 'ParagraphGoMaterialSliderAutomatic', sliderAmountOfMaterials: number, titleOptional?: string | null, cqlSearch: { __typename?: 'CQLSearch', value?: string | null } } | { __typename: 'ParagraphGoMaterialSliderManual', titleOptional?: string | null, materialSliderWorkIds: Array<{ __typename?: 'WorkId', material_type?: string | null, work_id?: string | null }> } | { __typename: 'ParagraphGoVideo', id: string, title: string, created: { __typename?: 'DateTime', timestamp: unknown }, embedVideo: { __typename?: 'MediaAudio' } | { __typename?: 'MediaDocument' } | { __typename?: 'MediaImage' } | { __typename?: 'MediaVideo' } | { __typename?: 'MediaVideotool', id: string, name: string, mediaVideotool: string } } | { __typename: 'ParagraphGoVideoBundleAutomatic', goVideoTitle: string, videoAmountOfMaterials: number, id: string, cqlSearch: { __typename?: 'CQLSearch', value?: string | null }, embedVideo: { __typename?: 'MediaAudio' } | { __typename?: 'MediaDocument' } | { __typename?: 'MediaImage' } | { __typename?: 'MediaVideo' } | { __typename?: 'MediaVideotool', id: string, name: string, mediaVideotool: string } } | { __typename: 'ParagraphGoVideoBundleManual', id: string, goVideoTitle: string, embedVideo: { __typename?: 'MediaAudio' } | { __typename?: 'MediaDocument' } | { __typename?: 'MediaImage' } | { __typename?: 'MediaVideo' } | { __typename?: 'MediaVideotool', id: string, name: string, mediaVideotool: string }, videoBundleWorkIds?: Array<{ __typename?: 'WorkId', material_type?: string | null, work_id?: string | null }> | null } | { __typename?: 'ParagraphHero' } | { __typename?: 'ParagraphLanguageSelector' } | { __typename?: 'ParagraphLinks' } | { __typename?: 'ParagraphManualEventList' } | { __typename?: 'ParagraphMaterialGridAutomatic' } | { __typename?: 'ParagraphMaterialGridManual' } | { __typename?: 'ParagraphMedias' } | { __typename?: 'ParagraphNavGridManual' } | { __typename?: 'ParagraphNavSpotsManual' } | { __typename?: 'ParagraphOpeningHours' } | { __typename?: 'ParagraphRecommendation' } | { __typename?: 'ParagraphSimpleLinks' } | { __typename?: 'ParagraphTextBody' } | { __typename?: 'ParagraphUserRegistrationItem' } | { __typename?: 'ParagraphUserRegistrationLinklist' } | { __typename?: 'ParagraphUserRegistrationSection' } | { __typename?: 'ParagraphVideo' } | { __typename?: 'ParagraphWebform' }> | null } | null } | { __typename: 'RouteRedirect' } | null };
 
 export type GetAdgangsplatformenTokensQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1595,7 +1596,7 @@ export const useGetDplCmsConfigurationQuery = <
       variables?: GetDplCmsConfigurationQueryVariables,
       options?: Omit<UseQueryOptions<GetDplCmsConfigurationQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetDplCmsConfigurationQuery, TError, TData>['queryKey'] }
     ) => {
-
+    
     return useQuery<GetDplCmsConfigurationQuery, TError, TData>(
       {
     queryKey: variables === undefined ? ['getDplCmsConfiguration'] : ['getDplCmsConfiguration', variables],
@@ -1613,7 +1614,7 @@ export const useSuspenseGetDplCmsConfigurationQuery = <
       variables?: GetDplCmsConfigurationQueryVariables,
       options?: Omit<UseSuspenseQueryOptions<GetDplCmsConfigurationQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetDplCmsConfigurationQuery, TError, TData>['queryKey'] }
     ) => {
-
+    
     return useSuspenseQuery<GetDplCmsConfigurationQuery, TError, TData>(
       {
     queryKey: variables === undefined ? ['getDplCmsConfigurationSuspense'] : ['getDplCmsConfigurationSuspense', variables],
@@ -1644,7 +1645,7 @@ export const useGetLoginUrlsQuery = <
       variables?: GetLoginUrlsQueryVariables,
       options?: Omit<UseQueryOptions<GetLoginUrlsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetLoginUrlsQuery, TError, TData>['queryKey'] }
     ) => {
-
+    
     return useQuery<GetLoginUrlsQuery, TError, TData>(
       {
     queryKey: variables === undefined ? ['getLoginUrls'] : ['getLoginUrls', variables],
@@ -1662,7 +1663,7 @@ export const useSuspenseGetLoginUrlsQuery = <
       variables?: GetLoginUrlsQueryVariables,
       options?: Omit<UseSuspenseQueryOptions<GetLoginUrlsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetLoginUrlsQuery, TError, TData>['queryKey'] }
     ) => {
-
+    
     return useSuspenseQuery<GetLoginUrlsQuery, TError, TData>(
       {
     queryKey: variables === undefined ? ['getLoginUrlsSuspense'] : ['getLoginUrlsSuspense', variables],
@@ -1697,6 +1698,37 @@ export const GetPageByPathDocument = `
                   id
                   name
                   mediaVideotool
+                }
+              }
+            }
+            ... on ParagraphGoLinkbox {
+              __typename
+              title
+              goImage {
+                ... on MediaImage {
+                  name
+                  mediaImage {
+                    url
+                    alt
+                    height
+                    mime
+                    size
+                    title
+                    width
+                  }
+                  byline
+                }
+              }
+              goColor
+              goDescription
+              goLinkParagraph {
+                ... on ParagraphGoLink {
+                  link {
+                    title
+                    url
+                  }
+                  targetBlank
+                  ariaLabel
                 }
               }
             }
@@ -1763,7 +1795,7 @@ export const useGetPageByPathQuery = <
       variables: GetPageByPathQueryVariables,
       options?: Omit<UseQueryOptions<GetPageByPathQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetPageByPathQuery, TError, TData>['queryKey'] }
     ) => {
-
+    
     return useQuery<GetPageByPathQuery, TError, TData>(
       {
     queryKey: ['getPageByPath', variables],
@@ -1781,7 +1813,7 @@ export const useSuspenseGetPageByPathQuery = <
       variables: GetPageByPathQueryVariables,
       options?: Omit<UseSuspenseQueryOptions<GetPageByPathQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetPageByPathQuery, TError, TData>['queryKey'] }
     ) => {
-
+    
     return useSuspenseQuery<GetPageByPathQuery, TError, TData>(
       {
     queryKey: ['getPageByPathSuspense', variables],
@@ -1818,7 +1850,7 @@ export const useGetAdgangsplatformenTokensQuery = <
       variables?: GetAdgangsplatformenTokensQueryVariables,
       options?: Omit<UseQueryOptions<GetAdgangsplatformenTokensQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetAdgangsplatformenTokensQuery, TError, TData>['queryKey'] }
     ) => {
-
+    
     return useQuery<GetAdgangsplatformenTokensQuery, TError, TData>(
       {
     queryKey: variables === undefined ? ['getAdgangsplatformenTokens'] : ['getAdgangsplatformenTokens', variables],
@@ -1836,7 +1868,7 @@ export const useSuspenseGetAdgangsplatformenTokensQuery = <
       variables?: GetAdgangsplatformenTokensQueryVariables,
       options?: Omit<UseSuspenseQueryOptions<GetAdgangsplatformenTokensQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetAdgangsplatformenTokensQuery, TError, TData>['queryKey'] }
     ) => {
-
+    
     return useSuspenseQuery<GetAdgangsplatformenTokensQuery, TError, TData>(
       {
     queryKey: variables === undefined ? ['getAdgangsplatformenTokensSuspense'] : ['getAdgangsplatformenTokensSuspense', variables],
@@ -1870,7 +1902,7 @@ export const useGetAdgangsplatformenUserTokenQuery = <
       variables?: GetAdgangsplatformenUserTokenQueryVariables,
       options?: Omit<UseQueryOptions<GetAdgangsplatformenUserTokenQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetAdgangsplatformenUserTokenQuery, TError, TData>['queryKey'] }
     ) => {
-
+    
     return useQuery<GetAdgangsplatformenUserTokenQuery, TError, TData>(
       {
     queryKey: variables === undefined ? ['getAdgangsplatformenUserToken'] : ['getAdgangsplatformenUserToken', variables],
@@ -1888,7 +1920,7 @@ export const useSuspenseGetAdgangsplatformenUserTokenQuery = <
       variables?: GetAdgangsplatformenUserTokenQueryVariables,
       options?: Omit<UseSuspenseQueryOptions<GetAdgangsplatformenUserTokenQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetAdgangsplatformenUserTokenQuery, TError, TData>['queryKey'] }
     ) => {
-
+    
     return useSuspenseQuery<GetAdgangsplatformenUserTokenQuery, TError, TData>(
       {
     queryKey: variables === undefined ? ['getAdgangsplatformenUserTokenSuspense'] : ['getAdgangsplatformenUserTokenSuspense', variables],
