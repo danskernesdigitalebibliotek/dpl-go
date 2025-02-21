@@ -9,6 +9,7 @@ import { CoverPicture } from "@/components/shared/coverPicture/CoverPicture"
 import Icon from "@/components/shared/icon/Icon"
 import MaterialTypeIconWrapper from "@/components/shared/workCard/MaterialTypeIconWrapper"
 import { getAllWorkPids } from "@/components/shared/workCard/helper"
+import { cyKeys } from "@/cypress/support/constants"
 import goConfig from "@/lib/config/goConfig"
 import { WorkTeaserSearchPageFragment } from "@/lib/graphql/generated/fbi/graphql"
 import { cn } from "@/lib/helpers/helper.cn"
@@ -121,6 +122,7 @@ const WorkCard = ({ work, className, isWithTilt = false }: WorkCardProps) => {
   return (
     <div
       key={work.workId}
+      data-cy={cyKeys["work-card"]}
       className={cn(
         `rounded-base bg-background-overlay relative mb-6 flex aspect-4/5 h-auto w-full flex-col px-[15%]
         pt-[15%]`,

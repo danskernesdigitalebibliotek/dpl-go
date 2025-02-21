@@ -8,7 +8,7 @@ loadEnvConfig(process.cwd())
 const config: CodegenConfig = {
   overwrite: true,
   generates: {
-    "lib/graphql/generated/dpl-cms/graphql.tsx": {
+    "lib/graphql/generated/dpl-cms/graphql.ts": {
       documents: "**/*.dpl-cms.graphql",
       // TODO: Make this configurable
       schema: {
@@ -18,7 +18,12 @@ const config: CodegenConfig = {
           },
         },
       },
-      plugins: ["typescript", "typescript-operations", "typescript-react-query"],
+      plugins: [
+        "typescript",
+        "typescript-operations",
+        "typescript-react-query",
+        "named-operations-object",
+      ],
       config: {
         enumsAsTypes: true,
         withHooks: true,
@@ -32,6 +37,7 @@ const config: CodegenConfig = {
           transformUnderscore: true,
         },
         fetcher: "@/lib/graphql/fetchers/dpl-cms.fetcher#fetcher",
+        identifierName: "operationNames",
       },
       hooks: {
         // Correcting the codegen output.
@@ -44,7 +50,7 @@ const config: CodegenConfig = {
     //   schema: "http://dapple-cms.docker/graphql",
     //   plugins: ["introspection"],
     // },
-    "lib/graphql/generated/fbi/graphql.tsx": {
+    "lib/graphql/generated/fbi/graphql.ts": {
       documents: "**/*.fbi.graphql",
       schema: [
         {
@@ -55,7 +61,12 @@ const config: CodegenConfig = {
           },
         },
       ],
-      plugins: ["typescript", "typescript-operations", "typescript-react-query"],
+      plugins: [
+        "typescript",
+        "typescript-operations",
+        "typescript-react-query",
+        "named-operations-object",
+      ],
       config: {
         enumsAsTypes: true,
         withHooks: true,
@@ -69,6 +80,8 @@ const config: CodegenConfig = {
           transformUnderscore: true,
         },
         fetcher: "@/lib/graphql/fetchers/fbi.fetcher#fetchData",
+        identifierName: "operationNames",
+        useConsts: true,
       },
       hooks: {
         afterOneFileWrite: ["yarn eslint --fix"],

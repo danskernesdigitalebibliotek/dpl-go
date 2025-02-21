@@ -36,11 +36,6 @@ export const fetcher = async <ResponseType>({
       body,
     })
 
-    if (!response.ok) {
-      // eslint-disable-next-line no-console
-      console.error(response.status, response.statusText, serviceUrl)
-    }
-
     try {
       return (await response.json()) as ResponseType
     } catch (e) {

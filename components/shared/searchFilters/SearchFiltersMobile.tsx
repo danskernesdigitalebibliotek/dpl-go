@@ -21,6 +21,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/shared/sheet/Sheet"
+import { cyKeys } from "@/cypress/support/constants"
 import { SearchFacetFragment } from "@/lib/graphql/generated/fbi/graphql"
 import { TFilters } from "@/lib/machines/search/types"
 import useSearchMachineActor from "@/lib/machines/search/useSearchMachineActor"
@@ -45,11 +46,11 @@ const SearchFiltersMobile = ({ facets }: SearchFiltersMobileProps) => {
           aria-label="Vis filtreringsmuligheder"
           onClick={() => setIsSheetOpen(!isSheetOpen)}
           className="text-typo-link flex flex-row items-center gap-1">
-          <Button asChild ariaLabel="VIS FILTRE">
-            <div>
+          <Button asChild ariaLabel="VIS FILTRE" data-cy={cyKeys["filters-button"]}>
+            <span>
               <Icon name="adjust" className="h-[40px]" />
               VIS FILTRE
-            </div>
+            </span>
           </Button>
         </SheetTrigger>
 
@@ -65,7 +66,8 @@ const SearchFiltersMobile = ({ facets }: SearchFiltersMobileProps) => {
                     key={value}
                     ariaLabel={value}
                     isActive
-                    classNames="flex flex-row items-center pr-1">
+                    classNames="flex flex-row items-center pr-1"
+                    data-cy={cyKeys["filter-button"]}>
                     {value}
                     <Icon name="close" className="w-[25px]" />
                   </BadgeButton>
@@ -95,7 +97,8 @@ const SearchFiltersMobile = ({ facets }: SearchFiltersMobileProps) => {
                           }}
                           isActive={!!searchParams.getAll(facet.name).includes(value.term)}
                           key={index}
-                          ariaLabel={value.term}>
+                          ariaLabel={value.term}
+                          data-cy={cyKeys["filter-button"]}>
                           {value.term}
                         </BadgeButton>
                       ))}

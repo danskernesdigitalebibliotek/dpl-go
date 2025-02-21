@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import React from "react"
 import { useEffect, useRef } from "react"
 
+import { cyKeys } from "@/cypress/support/constants"
 import { cn } from "@/lib/helpers/helper.cn"
 import { resolveUrl } from "@/lib/helpers/helper.routes"
 import useSearchMachineActor from "@/lib/machines/search/useSearchMachineActor"
@@ -64,6 +65,7 @@ const SearchInput = ({ className, placeholder }: SearchInputProps) => {
         value={currentQuery}
         onChange={({ target: { value } }) => actor.send({ type: "TYPING", q: value })}
         placeholder={placeholder}
+        data-cy={cyKeys["search-input"]}
       />
       <button
         className="focus-visible absolute top-[50%] right-3 translate-y-[-50%] rounded-full md:right-[24px]"
