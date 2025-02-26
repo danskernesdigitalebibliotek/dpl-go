@@ -6,16 +6,16 @@
 Orders/loans created in test environment will not be invoiced. Please request a new license key for the production environment when you're ready to go live.
  * OpenAPI spec version: 1
  */
-import type { FileExtensionType } from "./fileExtensionType"
-import type { LibraryBook } from "./libraryBook"
+import type { FileExtensionType } from './fileExtensionType';
+import type { LibraryBook } from './libraryBook';
 
 export interface Loan {
-  fileExtensionType?: FileExtensionType
-  isSubscriptionLoan?: boolean
-  libraryBook?: LibraryBook
-  loanExpireDateUtc?: string
-  orderDateUtc?: string
-  orderId?: string
+  fileExtensionType?: FileExtensionType;
+  isSubscriptionLoan?: boolean;
+  libraryBook?: LibraryBook;
+  loanExpireDateUtc?: string;
+  orderDateUtc?: string;
+  orderId?: string;
   /** @nullable */
-  orderNumber?: string | null
+  orderNumber?: string | null;
 }

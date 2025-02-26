@@ -9,5 +9,5 @@ Orders/loans created in test environment will not be invoiced. Please request a 
 
 export interface TestCard {
   /** @nullable */
-  testCardNumber?: string | null
+  testCardNumber?: string | null;
 }

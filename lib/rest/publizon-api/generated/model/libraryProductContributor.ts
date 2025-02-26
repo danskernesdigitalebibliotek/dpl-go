@@ -9,9 +9,9 @@ Orders/loans created in test environment will not be invoiced. Please request a 
 
 export interface LibraryProductContributor {
   /** @nullable */
-  firstName?: string | null
+  firstName?: string | null;
   /** @nullable */
-  lastName?: string | null
+  lastName?: string | null;
   /** @nullable */
-  type?: string | null
+  type?: string | null;
 }

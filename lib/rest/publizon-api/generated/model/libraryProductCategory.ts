@@ -9,7 +9,7 @@ Orders/loans created in test environment will not be invoiced. Please request a 
 
 export interface LibraryProductCategory {
   /** @nullable */
-  code?: string | null
+  code?: string | null;
   /** @nullable */
-  description?: string | null
+  description?: string | null;
 }

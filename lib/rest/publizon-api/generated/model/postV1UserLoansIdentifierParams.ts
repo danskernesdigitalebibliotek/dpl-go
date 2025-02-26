@@ -8,6 +8,6 @@ Orders/loans created in test environment will not be invoiced. Please request a 
  */
 
 export type PostV1UserLoansIdentifierParams = {
-  countryCode?: string
-  institutionId?: string
-}
+countryCode?: string;
+institutionId?: string;
+};

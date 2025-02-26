@@ -6,28 +6,28 @@
 Orders/loans created in test environment will not be invoiced. Please request a new license key for the production environment when you're ready to go live.
  * OpenAPI spec version: 1
  */
-import type { TestCard } from "./testCard"
+import type { TestCard } from './testCard';
 
 export interface LibraryProfile {
-  audioLoanDurationInDays?: number
-  ebookLoanDurationInDays?: number
-  id?: number
+  audioLoanDurationInDays?: number;
+  ebookLoanDurationInDays?: number;
+  id?: number;
   /** @nullable */
-  isilNumber?: string | null
-  maxAudioAmountPerMonth?: number
+  isilNumber?: string | null;
+  maxAudioAmountPerMonth?: number;
   /** @nullable */
-  maxAudioAmountPerMonthNotificationThreshold?: number | null
-  maxAudioCancellationsPerMonth?: number
-  maxConcurrentAudioLoansPerBorrower?: number
-  maxConcurrentAudioReservationsPerBorrower?: number
-  maxConcurrentEbookLoansPerBorrower?: number
-  maxConcurrentEbookReservationsPerBorrower?: number
-  maxEbookAmountPerMonth?: number
+  maxAudioAmountPerMonthNotificationThreshold?: number | null;
+  maxAudioCancellationsPerMonth?: number;
+  maxConcurrentAudioLoansPerBorrower?: number;
+  maxConcurrentAudioReservationsPerBorrower?: number;
+  maxConcurrentEbookLoansPerBorrower?: number;
+  maxConcurrentEbookReservationsPerBorrower?: number;
+  maxEbookAmountPerMonth?: number;
   /** @nullable */
-  maxEbookAmountPerMonthNotificationThreshold?: number | null
-  maxEbookCancellationsPerMonth?: number
+  maxEbookAmountPerMonthNotificationThreshold?: number | null;
+  maxEbookCancellationsPerMonth?: number;
   /** @nullable */
-  name?: string | null
+  name?: string | null;
   /** @nullable */
-  testCards?: TestCard[] | null
+  testCards?: TestCard[] | null;
 }

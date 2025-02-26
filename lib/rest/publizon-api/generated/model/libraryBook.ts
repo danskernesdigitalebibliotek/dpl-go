@@ -6,14 +6,14 @@
 Orders/loans created in test environment will not be invoiced. Please request a new license key for the production environment when you're ready to go live.
  * OpenAPI spec version: 1
  */
-import type { IdentifierTypeEnum } from "./identifierTypeEnum"
+import type { IdentifierTypeEnum } from './identifierTypeEnum';
 
 export interface LibraryBook {
   /** @nullable */
-  identifier?: string | null
-  identifierType?: IdentifierTypeEnum
+  identifier?: string | null;
+  identifierType?: IdentifierTypeEnum;
   /** @nullable */
-  publishersName?: string | null
+  publishersName?: string | null;
   /** @nullable */
-  title?: string | null
+  title?: string | null;
 }

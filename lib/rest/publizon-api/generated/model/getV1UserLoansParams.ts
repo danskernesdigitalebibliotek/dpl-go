@@ -6,11 +6,11 @@
 Orders/loans created in test environment will not be invoiced. Please request a new license key for the production environment when you're ready to go live.
  * OpenAPI spec version: 1
  */
-import type { BookTypes } from "./bookTypes"
+import type { BookTypes } from './bookTypes';
 
 export type GetV1UserLoansParams = {
-  /**
-   * 0 = Ebook, 1 = Audio
-   */
-  bookType?: BookTypes
-}
+/**
+ * 0 = Ebook, 1 = Audio
+ */
+bookType?: BookTypes;
+};

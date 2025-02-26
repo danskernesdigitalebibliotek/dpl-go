@@ -8,8 +8,8 @@ Orders/loans created in test environment will not be invoiced. Please request a 
  */
 
 export interface LibraryData {
-  loanDurationDays?: number
-  maxAmountPerMonth?: number
-  maxConcurrentAudiobookLoansPerBorrower?: number
-  maxConcurrentEbookLoansPerBorrower?: number
+  loanDurationDays?: number;
+  maxAmountPerMonth?: number;
+  maxConcurrentAudiobookLoansPerBorrower?: number;
+  maxConcurrentEbookLoansPerBorrower?: number;
 }

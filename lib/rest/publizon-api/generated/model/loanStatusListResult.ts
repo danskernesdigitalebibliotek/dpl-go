@@ -6,13 +6,13 @@
 Orders/loans created in test environment will not be invoiced. Please request a new license key for the production environment when you're ready to go live.
  * OpenAPI spec version: 1
  */
-import type { ApiResponseCode } from "./apiResponseCode"
-import type { LoanStatusItem } from "./loanStatusItem"
+import type { ApiResponseCode } from './apiResponseCode';
+import type { LoanStatusItem } from './loanStatusItem';
 
 export interface LoanStatusListResult {
-  code?: ApiResponseCode
+  code?: ApiResponseCode;
   /** @nullable */
-  items?: LoanStatusItem[] | null
+  items?: LoanStatusItem[] | null;
   /** @nullable */
-  message?: string | null
+  message?: string | null;
 }

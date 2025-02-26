@@ -10,10 +10,11 @@ Orders/loans created in test environment will not be invoiced. Please request a 
 /**
  * 0 = Ebook, 1 = Audio
  */
-export type BookTypes = (typeof BookTypes)[keyof typeof BookTypes]
+export type BookTypes = typeof BookTypes[keyof typeof BookTypes];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const BookTypes = {
   NUMBER_0: 0,
   NUMBER_1: 1,
-} as const
+} as const;

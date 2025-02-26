@@ -11,15 +11,15 @@ Orders/loans created in test environment will not be invoiced. Please request a 
  * Reservation item.
  */
 export interface Reservation {
-  createdDateUtc?: string
+  createdDateUtc?: string;
   /** @nullable */
-  expectedRedeemDateUtc?: string | null
+  expectedRedeemDateUtc?: string | null;
   /** @nullable */
-  expireDateUtc?: string | null
+  expireDateUtc?: string | null;
   /** @nullable */
-  identifier?: string | null
-  productId?: string
+  identifier?: string | null;
+  productId?: string;
   /** @nullable */
-  productTitle?: string | null
-  status?: number
+  productTitle?: string | null;
+  status?: number;
 }

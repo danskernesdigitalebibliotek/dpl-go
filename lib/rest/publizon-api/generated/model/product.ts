@@ -6,41 +6,41 @@
 Orders/loans created in test environment will not be invoiced. Please request a new license key for the production environment when you're ready to go live.
  * OpenAPI spec version: 1
  */
-import type { LibraryProductCategory } from "./libraryProductCategory"
-import type { LibraryProductContributor } from "./libraryProductContributor"
-import type { LibraryProductExternalId } from "./libraryProductExternalId"
+import type { LibraryProductContributor } from './libraryProductContributor';
+import type { LibraryProductExternalId } from './libraryProductExternalId';
+import type { LibraryProductCategory } from './libraryProductCategory';
 
 export interface Product {
   /** @nullable */
-  contributors?: LibraryProductContributor[] | null
-  costFree?: boolean
+  contributors?: LibraryProductContributor[] | null;
+  costFree?: boolean;
   /** @nullable */
-  coverUri?: string | null
-  createdUtc?: string
+  coverUri?: string | null;
+  createdUtc?: string;
   /** @nullable */
-  description?: string | null
+  description?: string | null;
   /** @nullable */
-  durationInSeconds?: number | null
-  externalProductId?: LibraryProductExternalId
-  fileSizeInBytes?: number
+  durationInSeconds?: number | null;
+  externalProductId?: LibraryProductExternalId;
+  fileSizeInBytes?: number;
   /** @nullable */
-  format?: string | null
+  format?: string | null;
   /** @nullable */
-  internalProductId?: string | null
-  isActive?: boolean
+  internalProductId?: string | null;
+  isActive?: boolean;
   /** @nullable */
-  languageCode?: string | null
+  languageCode?: string | null;
   /** @nullable */
-  productCategories?: LibraryProductCategory[] | null
-  productType?: number
-  publicationDate?: string
+  productCategories?: LibraryProductCategory[] | null;
+  productType?: number;
+  publicationDate?: string;
   /** @nullable */
-  publisher?: string | null
+  publisher?: string | null;
   /** @nullable */
-  sampleUri?: string | null
+  sampleUri?: string | null;
   /** @nullable */
-  thumbnailUri?: string | null
+  thumbnailUri?: string | null;
   /** @nullable */
-  title?: string | null
-  updatedUtc?: string
+  title?: string | null;
+  updatedUtc?: string;
 }

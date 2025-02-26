@@ -7,7 +7,8 @@ Orders/loans created in test environment will not be invoiced. Please request a 
  * OpenAPI spec version: 1
  */
 
-export type FileExtensionType = (typeof FileExtensionType)[keyof typeof FileExtensionType]
+export type FileExtensionType = typeof FileExtensionType[keyof typeof FileExtensionType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const FileExtensionType = {
@@ -15,4 +16,4 @@ export const FileExtensionType = {
   NUMBER_2: 2,
   NUMBER_3: 3,
   NUMBER_4: 4,
-} as const
+} as const;
