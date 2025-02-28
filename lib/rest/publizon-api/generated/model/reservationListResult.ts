@@ -6,8 +6,8 @@
 Orders/loans created in test environment will not be invoiced. Please request a new license key for the production environment when you're ready to go live.
  * OpenAPI spec version: 1
  */
-import type { ApiResponseCode } from "./apiResponseCode"
-import type { Reservation } from "./reservation"
+import type { ApiResponseCode } from './apiResponseCode';
+import type { Reservation } from './reservation';
 
 /**
  * Reservation list result. Reservation items are found in
@@ -15,9 +15,9 @@ import type { Reservation } from "./reservation"
 .
  */
 export interface ReservationListResult {
-  code?: ApiResponseCode
+  code?: ApiResponseCode;
   /** @nullable */
-  message?: string | null
+  message?: string | null;
   /** @nullable */
-  reservations?: Reservation[] | null
+  reservations?: Reservation[] | null;
 }

@@ -7,8 +7,8 @@ Orders/loans created in test environment will not be invoiced. Please request a 
  * OpenAPI spec version: 1
  */
 
-export type ContentLoanStatusEnum =
-  (typeof ContentLoanStatusEnum)[keyof typeof ContentLoanStatusEnum]
+export type ContentLoanStatusEnum = typeof ContentLoanStatusEnum[keyof typeof ContentLoanStatusEnum];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ContentLoanStatusEnum = {
@@ -19,4 +19,4 @@ export const ContentLoanStatusEnum = {
   NUMBER_4: 4,
   NUMBER_5: 5,
   NUMBER_6: 6,
-} as const
+} as const;

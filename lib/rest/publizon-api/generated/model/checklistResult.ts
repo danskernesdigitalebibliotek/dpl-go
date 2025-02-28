@@ -6,8 +6,8 @@
 Orders/loans created in test environment will not be invoiced. Please request a new license key for the production environment when you're ready to go live.
  * OpenAPI spec version: 1
  */
-import type { ApiResponseCode } from "./apiResponseCode"
-import type { ChecklistItem } from "./checklistItem"
+import type { ApiResponseCode } from './apiResponseCode';
+import type { ChecklistItem } from './checklistItem';
 
 /**
  * Get checklist result. Checklist items are found in
@@ -15,9 +15,9 @@ import type { ChecklistItem } from "./checklistItem"
 .
  */
 export interface ChecklistResult {
-  code?: ApiResponseCode
+  code?: ApiResponseCode;
   /** @nullable */
-  items?: ChecklistItem[] | null
+  items?: ChecklistItem[] | null;
   /** @nullable */
-  message?: string | null
+  message?: string | null;
 }

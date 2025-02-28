@@ -11,9 +11,9 @@ Orders/loans created in test environment will not be invoiced. Please request a 
  * Checklist item.
  */
 export interface ChecklistItem {
-  createdDateUtc?: string
+  createdDateUtc?: string;
   /** @nullable */
-  identifier?: string | null
+  identifier?: string | null;
   /** @nullable */
-  productTitle?: string | null
+  productTitle?: string | null;
 }

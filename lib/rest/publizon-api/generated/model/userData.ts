@@ -8,13 +8,13 @@ Orders/loans created in test environment will not be invoiced. Please request a 
  */
 
 export interface UserData {
-  audiobookLoansRemaining?: number
-  audioLoanAvailableUtc?: string
-  ebookLoanAvailableUtc?: string
-  ebookLoansRemaining?: number
+  audiobookLoansRemaining?: number;
+  audioLoanAvailableUtc?: string;
+  ebookLoanAvailableUtc?: string;
+  ebookLoansRemaining?: number;
   /** @nullable */
-  friendlyCardNumber?: string | null
-  totalAudioLoans?: number
-  totalEbookLoans?: number
-  totalLoans?: number
+  friendlyCardNumber?: string | null;
+  totalAudioLoans?: number;
+  totalEbookLoans?: number;
+  totalLoans?: number;
 }

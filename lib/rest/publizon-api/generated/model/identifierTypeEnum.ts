@@ -7,11 +7,12 @@ Orders/loans created in test environment will not be invoiced. Please request a 
  * OpenAPI spec version: 1
  */
 
-export type IdentifierTypeEnum = (typeof IdentifierTypeEnum)[keyof typeof IdentifierTypeEnum]
+export type IdentifierTypeEnum = typeof IdentifierTypeEnum[keyof typeof IdentifierTypeEnum];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const IdentifierTypeEnum = {
   NUMBER_2: 2,
   NUMBER_3: 3,
   NUMBER_15: 15,
-} as const
+} as const;

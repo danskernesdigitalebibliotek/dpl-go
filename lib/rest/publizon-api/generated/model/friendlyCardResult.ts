@@ -6,12 +6,12 @@
 Orders/loans created in test environment will not be invoiced. Please request a new license key for the production environment when you're ready to go live.
  * OpenAPI spec version: 1
  */
-import type { ApiResponseCode } from "./apiResponseCode"
+import type { ApiResponseCode } from './apiResponseCode';
 
 export interface FriendlyCardResult {
-  code?: ApiResponseCode
+  code?: ApiResponseCode;
   /** @nullable */
-  friendlyCardNumber?: string | null
+  friendlyCardNumber?: string | null;
   /** @nullable */
-  message?: string | null
+  message?: string | null;
 }

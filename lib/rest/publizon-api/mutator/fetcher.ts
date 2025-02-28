@@ -20,8 +20,16 @@ export const fetcher = async <ResponseType>({
   } as object
 
   const body = data ? JSON.stringify(data) : null
+
+  const baseUrl = process.env.NEXT_PUBLIC_PUBHUB_BASE_URL
+
+  // Check if the environment variables are set
+  if (!baseUrl) {
+    throw new Error("Missing baseUrl in publizon fetcher")
+  }
+
   const serviceUrl = getRestServiceUrlWithParams({
-    baseUrl: "https://pubhub-openplatform.test.dbc.dk",
+    baseUrl: process.env.NEXT_PUBLIC_PUBHUB_BASE_URL || "",
     url,
     params,
   })

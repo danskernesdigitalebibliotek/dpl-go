@@ -12,7 +12,7 @@ Orders/loans created in test environment will not be invoiced. Please request a 
  */
 export interface ReservationInput {
   /** @nullable */
-  email?: string | null
+  email?: string | null;
   /** @nullable */
-  phoneNumber?: string | null
+  phoneNumber?: string | null;
 }

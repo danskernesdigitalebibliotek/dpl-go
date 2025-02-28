@@ -68,10 +68,10 @@ export type AdgangsplatformenUserToken = {
   token?: Maybe<Scalars['String']['output']>;
 };
 
-/** A CQL search string. */
+/** En CQL søgestreng. */
 export type CqlSearch = {
   __typename?: 'CQLSearch';
-  /** The CQL search string. */
+  /** CQL søgestrengen. */
   value?: Maybe<Scalars['String']['output']>;
 };
 
@@ -1544,7 +1544,7 @@ export type UnsupportedType = {
   unsupported?: Maybe<Scalars['Boolean']['output']>;
 };
 
-/** A WorkID field. */
+/** Et WorkID-felt. */
 export type WorkId = {
   __typename?: 'WorkId';
   /** The material type (e.g., bog, e-bog). */
