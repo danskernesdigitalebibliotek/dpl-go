@@ -1,8 +1,7 @@
 import React from "react"
 
-import goConfig from "@/lib/config/goConfig"
-
 import ImageBase, { TImageBaseProps } from "./ImageBase"
+import { getBase64 } from "./helper"
 
 type TImageWrapperProps = Omit<TImageBaseProps, "base64">
 
@@ -12,11 +11,7 @@ export default async function ImageBaseWithPlaceholder(props: TImageWrapperProps
   if (!src) return null
 
   // Get base64 image
-  const response = await fetch(
-    `${goConfig("app.url")}/api/getBase64?url=${encodeURIComponent(src)}`
-  )
-  const { data } = await response.json()
-  const base64 = data?.base64
+  const base64 = await getBase64(src)
 
   if (!base64) {
     return null
