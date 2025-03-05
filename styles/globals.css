@@ -118,7 +118,7 @@
     --background-overlay: var(--beige-overlay);
     --background-overlay-solid: var(--beige-overlay-solid);
     --background-skeleton: var(--beige-skeleton);
-    --foreground: var(--black);
+    --foreground: #e5e5e5;
 
     /* TRANSITION DURATIONS */
     --dark-mode-transition: 1000ms;
