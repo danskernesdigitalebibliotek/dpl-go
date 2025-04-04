@@ -4,7 +4,6 @@ import { IronSession } from "iron-session"
 import { cookies } from "next/headers"
 import { z } from "zod"
 
-import { getEnv } from "../config/env"
 import goConfig from "../config/goConfig"
 import getQueryClient from "../getQueryClient"
 import {
@@ -58,7 +57,7 @@ export const loadUserToken = async () => {
       .safeParse(data?.dplTokens?.adgangsplatformen?.user)
 
     if (validateUserToken.error) {
-      console.error(validateUserToken.error.flatten)
+      console.error(validateUserToken.error)
       return null
     }
 
@@ -71,12 +70,6 @@ export const loadUserToken = async () => {
 
 export const loadLibraryToken = async () => {
   const queryClient = getQueryClient()
-
-  // If we are in test mode, we can't load the library token
-  // TODO: Mock library token while testing
-  if (getEnv("TEST_MODE")) {
-    return null
-  }
 
   try {
     const data = await queryClient.fetchQuery<GetAdgangsplatformenLibraryTokenQuery>({
@@ -95,7 +88,7 @@ export const loadLibraryToken = async () => {
       .safeParse(data?.dplTokens?.adgangsplatformen?.library)
 
     if (validateLibraryToken.error) {
-      console.error(validateLibraryToken.error.flatten)
+      console.error(validateLibraryToken.error)
       return null
     }
     return validateLibraryToken.data
