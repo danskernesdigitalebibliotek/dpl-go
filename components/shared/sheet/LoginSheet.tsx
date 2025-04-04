@@ -6,6 +6,7 @@ import { sheetStore } from "@/store/sheet.store"
 
 import { Button } from "../button/Button"
 import Icon from "../icon/Icon"
+import LoginButton from "./LoginButton"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "./Sheet"
 
 function LoginSheet({ open }: { open: boolean }) {
@@ -27,12 +28,7 @@ function LoginSheet({ open }: { open: boolean }) {
                 Log ind med UNI•Login
               </div>
               <div>
-                <Button
-                  theme="primary"
-                  onClick={() => router.push("/auth/login/unilogin")}
-                  ariaLabel="Log ind">
-                  LOG IND
-                </Button>
+                <LoginButton url="/auth/login/unilogin" />
               </div>
             </div>
 
@@ -46,12 +42,7 @@ function LoginSheet({ open }: { open: boolean }) {
                   Login via Biblotekernes fælles loginside
                 </div>
                 <div>
-                  <Button
-                    theme="primary"
-                    onClick={() => router.push(adgangsplatformenLoginUrl || "")}
-                    ariaLabel="Log ind med Adgangsplatformen">
-                    LOG IND
-                  </Button>
+                  <LoginButton url={adgangsplatformenLoginUrl || ""} />
                 </div>
               </div>
             </>
