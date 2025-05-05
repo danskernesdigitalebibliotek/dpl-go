@@ -31,12 +31,12 @@ type InterceptCoversParams = {
 }
 
 export type MockGraphQLQueryParams = {
-  operationName: string
+  operationName: Operations
   data: object
 }
 
 export type MockGraphQLMutationParams = {
-  operationName: string
+  operationName: Operations
   data: object
 }
 
@@ -123,7 +123,7 @@ Cypress.Commands.add("expectError", (errorMessage: string) => {
 Cypress.Commands.add(
   "interceptGraphql",
   ({ operationName, data, statusCode = 200 }: InterceptGraphqlParams) => {
-    cy.intercept("POST", "**/ap-service/**", req => {
+    cy.intercept("POST", /(ap-service|graphql)/, req => {
       if (hasOperationName(req, operationName)) {
         if (data) {
           req.reply({ body: { data }, statusCode })

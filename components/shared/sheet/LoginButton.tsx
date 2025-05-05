@@ -1,18 +1,18 @@
 import { useRouter } from "next/navigation"
 
-import { Button } from "@/components/shared/button/Button"
+import { Button, ButtonProps } from "@/components/shared/button/Button"
 import ButtonWithLoadingStateHoc from "@/components/shared/button/ButtonWithLoadingStateHoc"
 
 type TFindBookButtonProps = {
   isLoading?: boolean
   onClick?: () => void
   url: string
-}
+} & ButtonProps
 
 const className = "min-w-40"
 const theme = "primary"
 
-const LoginButton = ({ onClick, url }: TFindBookButtonProps) => {
+const LoginButton = ({ onClick, url, ...props }: TFindBookButtonProps) => {
   const router = useRouter()
 
   return (
@@ -24,7 +24,8 @@ const LoginButton = ({ onClick, url }: TFindBookButtonProps) => {
         }
         router.push(url)
       }}
-      ariaLabel="Log ind">
+      ariaLabel="Log ind"
+      {...props}>
       LOG IND
     </Button>
   )
