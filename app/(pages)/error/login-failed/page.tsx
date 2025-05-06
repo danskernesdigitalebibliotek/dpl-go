@@ -16,3 +16,5 @@ const LoginNotAuthorized = () => (
 )
 
 export default LoginNotAuthorized
+
+export const dynamic = "force-dynamic"
