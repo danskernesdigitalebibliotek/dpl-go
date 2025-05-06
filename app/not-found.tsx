@@ -14,3 +14,5 @@ export default function NotFound() {
     </DefaultLayout>
   )
 }
+
+export const dynamic = "force-dynamic"
