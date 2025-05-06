@@ -41,17 +41,17 @@ export default async function RootLayout({
     <html lang="da">
       <body className={`${GTFlexa.variable} duration-dark-mode antialiased transition-all`}>
         <GridHelper hideInProduction />
-        <DplCmsConfigContextProvider config={dplCmsConfig}>
-          <Theme>
-            <ReactQueryProvider>
-              <Header />
+        <Theme>
+          <ReactQueryProvider>
+            <Header />
+            <DplCmsConfigContextProvider config={dplCmsConfig}>
               <DynamicSheet />
-              <DynamicModal />
-              {children}
-              <Footer />
-            </ReactQueryProvider>
-          </Theme>
-        </DplCmsConfigContextProvider>
+            </DplCmsConfigContextProvider>
+            <DynamicModal />
+            {children}
+            <Footer />
+          </ReactQueryProvider>
+        </Theme>
       </body>
     </html>
   )
