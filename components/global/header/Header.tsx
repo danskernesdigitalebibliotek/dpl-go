@@ -13,7 +13,7 @@ function Header() {
   return (
     <header>
       <div className="h-navigation-top-height bg-background-overlay flex items-center justify-center">
-        <p className="text-typo-caption">Biblioterernes ebøger og lydbøger</p>
+        <p className="text-typo-caption">Biblioterernes test ebøger og lydbøger</p>
       </div>
       <div className="content-container h-navigation-height grid grid-cols-3 items-center">
         <div className="flex flex-0 items-center" data-cy={cyKeys["go-logo"]}>
