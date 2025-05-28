@@ -28,17 +28,13 @@ function Header() {
           <DarkModeToggle />
         </div>
         <div className="flex flex-0 justify-end gap-x-4">
-          <Suspense fallback={<p>Loading...</p>}>
-            <ProfileButton />
-          </Suspense>
+          <ProfileButton />
         </div>
       </div>
       <div className="h-navigation-search-height">
         <div className="content-container">
           <div className="flex h-full w-full items-center">
-            <Suspense fallback={<p>Loading...</p>}>
-              <SearchInput placeholder="Søg" />
-            </Suspense>
+            <SearchInput placeholder="Søg" />
           </div>
         </div>
       </div>
