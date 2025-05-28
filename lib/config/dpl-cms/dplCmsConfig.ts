@@ -48,14 +48,14 @@ export const getDplCmsPrivateConfig = async () => {
     ...(getServerEnv("UNILOGIN_CLIENT_SECRET")
       ? { clientSecret: getServerEnv("UNILOGIN_CLIENT_SECRET") }
       : {}),
-    ...(getServerEnv("UNLILOGIN_SERVICES_WS_USER")
-      ? { webServiceUsername: getServerEnv("UNLILOGIN_SERVICES_WS_USER") }
+    ...(getServerEnv("UNILOGIN_SERVICES_WS_USER")
+      ? { webServiceUsername: getServerEnv("UNILOGIN_SERVICES_WS_USER") }
       : {}),
-    ...(getServerEnv("UNLILOGIN_SERVICES_WS_PASSWORD")
-      ? { webServicePassword: getServerEnv("UNLILOGIN_SERVICES_WS_PASSWORD") }
+    ...(getServerEnv("UNILOGIN_SERVICES_WS_PASSWORD")
+      ? { webServicePassword: getServerEnv("UNILOGIN_SERVICES_WS_PASSWORD") }
       : {}),
-    ...(getServerEnv("UNLILOGIN_PUBHUB_RETAILER_KEY_CODE")
-      ? { pubHubRetailerKeyCode: getServerEnv("UNLILOGIN_PUBHUB_RETAILER_KEY_CODE") }
+    ...(getServerEnv("UNILOGIN_PUBHUB_RETAILER_KEY_CODE")
+      ? { pubHubRetailerKeyCode: getServerEnv("UNILOGIN_PUBHUB_RETAILER_KEY_CODE") }
       : {}),
   }
 
