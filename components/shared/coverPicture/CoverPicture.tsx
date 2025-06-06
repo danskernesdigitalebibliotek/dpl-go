@@ -62,7 +62,7 @@ export const CoverPicture = ({
               height={imageHeight}
               width={imageWidth}
               sizes="20px"
-              loading="eager"
+              loading="lazy"
               className={cn(
                 `absolute inset-0 h-auto w-full overflow-hidden rounded-sm object-contain transition-all duration-500
                   will-change-transform`,
@@ -84,7 +84,7 @@ export const CoverPicture = ({
               height={imageHeight}
               width={imageWidth}
               sizes="100vw"
-              loading="eager"
+              loading="lazy"
               className={cn(
                 `shadow-cover-picture absolute inset-0 h-auto w-full overflow-hidden rounded-sm object-contain
                   transition-all duration-500 will-change-transform`,
