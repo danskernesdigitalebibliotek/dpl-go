@@ -1,22 +1,33 @@
-FROM uselagoon/node-20-builder:latest as builder
-COPY package.json /app/
-RUN yarn
-
-FROM uselagoon/node-20:latest
-COPY --from=builder /app/node_modules /app/node_modules
-COPY . /app/
-
-EXPOSE 3000
-
-# Desperate I know.
-# This was introduced after continuously getting an error
-# about the .next/trace directory not being writable.
-# TODO: We should investigate how to set proper user/group permissions
-RUN mkdir -p /app/.next/trace
-RUN chmod -R 777 /app/.next
-
-# Vercel does it. So let's try it.
+# syntax=docker.io/docker/dockerfile:1
+# Based on this example:
 # https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
-ENV NODE_ENV=production
 
-CMD ["/app/lagoon/start.sh"]
+FROM uselagoon/node-20-builder:latest AS base
+
+# Install dependencies only when needed
+FROM base AS deps
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+
+# Install dependencies based on the preferred package manager
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
+RUN \
+  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+  elif [ -f package-lock.json ]; then npm ci; \
+  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
+
+
+# Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+# Next.js collects completely anonymous telemetry data about general usage.
+# Learn more here: https://nextjs.org/telemetry
+# Uncomment the following line in case you want to disable telemetry during the build.
+# ENV NEXT_TELEMETRY_DISABLED=1
+
