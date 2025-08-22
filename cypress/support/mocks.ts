@@ -16,6 +16,18 @@ export const mockConfig = () => {
     operationName: "getAdgangsplatformenLibraryToken",
     data: GetAdgangsplatformenLibraryToken.build(),
   })
+  cy.mockServerGraphQLQuery({
+    operationName: "getLogoutUrls",
+    data: {
+      goConfiguration: {
+        public: {
+          logoutUrls: {
+            adgangsplatformen: "https://login.bib.dk/logout?redirect_uri=http://localhost:3000",
+          },
+        },
+      },
+    },
+  })
 
   cy.mockServerGraphQLQuery({
     operationName: "getDplCmsPublicConfiguration",
