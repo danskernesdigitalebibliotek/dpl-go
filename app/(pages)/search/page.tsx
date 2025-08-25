@@ -17,10 +17,11 @@ const SearchPage = async (props: TSearchPageProps) => {
   const searchParams = await props.searchParams
   const headersList = await headers()
   const { q } = searchParams
-
+  const headersData = Object.fromEntries(headersList.entries())
   const queryClient = getQueryClient()
-  prefetchSearchResult(q, queryClient, headersList)
-  prefetchSearchFacets(q, queryClient, headersList)
+
+  prefetchSearchResult(q, queryClient, headersData)
+  prefetchSearchFacets(q, queryClient, headersData)
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

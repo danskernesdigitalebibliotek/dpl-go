@@ -19,15 +19,16 @@ const prefetchSearchResult = async (
       // TODO: This should match the query on search page and be configurable.
       limit: goConfig("search.item.limit"),
     }),
-    queryFn: useSearchWithPaginationQuery.fetcher(
-      {
-        q: { all: q },
-        offset: goConfig("search.offset.initial"),
-        // TODO: This should match the query on search page and be configurable.
-        limit: goConfig("search.item.limit"),
-      },
-      headers
-    ),
+    queryFn: () =>
+      useSearchWithPaginationQuery.fetcher(
+        {
+          q: { all: q },
+          offset: goConfig("search.offset.initial"),
+          // TODO: This should match the query on search page and be configurable.
+          limit: goConfig("search.item.limit"),
+        },
+        headers
+      ),
   })
 
   return queryClient
@@ -45,14 +46,15 @@ const prefetchSearchFacets = async (
       facetLimit: goConfig("search.facet.limit"),
       facets,
     }),
-    queryFn: useSearchFacetsQuery.fetcher(
-      {
-        q: { all: q },
-        facetLimit: goConfig("search.facet.limit"),
-        facets,
-      },
-      headers
-    ),
+    queryFn: () =>
+      useSearchFacetsQuery.fetcher(
+        {
+          q: { all: q },
+          facetLimit: goConfig("search.facet.limit"),
+          facets,
+        },
+        headers
+      ),
   })
 
   return queryClient

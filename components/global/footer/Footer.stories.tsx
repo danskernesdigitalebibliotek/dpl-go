@@ -2,13 +2,18 @@ import type { Meta, StoryObj } from "@storybook/react"
 
 import { darkModeDecorator } from "@/.storybook/decorators"
 
+import LinkToParentLibraryContent from "../header/LinkToParentLibraryContent"
 import Footer from "./Footer"
 
 const meta = {
   title: "components/Footer",
   component: Footer,
   parameters: { layout: "centered" },
-  args: {},
+  args: {
+    libraryLink: (
+      <LinkToParentLibraryContent parentLibraryUrl="https://www.detdigitalefolkebibliotek.dk" />
+    ),
+  },
 } satisfies Meta<typeof Footer>
 
 export default meta

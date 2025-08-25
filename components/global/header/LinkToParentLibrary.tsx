@@ -1,36 +1,25 @@
-"use client"
+import React from "react"
 
-import React, { useContext } from "react"
-
-import SmartLink from "@/components/shared/smartLink/SmartLink"
+import { getDplCmsPublicConfig } from "@/lib/config/dpl-cms/dplCmsConfig"
 import { getEnv } from "@/lib/config/env"
-import { cn } from "@/lib/helpers/helper.cn"
-import { DplCmsConfigContext } from "@/lib/providers/DplCmsConfigContextProvider"
+
+import LinkToParentLibraryContent from "./LinkToParentLibraryContent"
 
 export type LinkToParentLibraryProps = {
   className?: string
 }
 
-const LinkToParentLibrary = ({ className }: LinkToParentLibraryProps) => {
-  const dplCmsConfig = useContext(DplCmsConfigContext)
+const LinkToParentLibrary = async ({ className }: LinkToParentLibraryProps) => {
+  const { libraryInfo } = await getDplCmsPublicConfig()
+  const libraryName = libraryInfo?.name || "dit lokale bibliotek"
   const parentLibraryUrl = getEnv("DPL_CMS_HOSTNAME")
-  const libraryName = dplCmsConfig?.libraryInfo.name || "dit lokale bibliotek"
 
   return (
-    <p className={cn("text-typo-caption", className)}>
-      En del af{" "}
-      {parentLibraryUrl ? (
-        <SmartLink
-          className="animate-text-underline"
-          linkType="external"
-          href={parentLibraryUrl}
-          target="_blank">
-          {libraryName}
-        </SmartLink>
-      ) : (
-        libraryName
-      )}
-    </p>
+    <LinkToParentLibraryContent
+      className={className}
+      libraryName={libraryName}
+      parentLibraryUrl={parentLibraryUrl}
+    />
   )
 }
 

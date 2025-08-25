@@ -14,7 +14,9 @@ function Header() {
   return (
     <header>
       <div className="h-navigation-top-height bg-background-overlay flex items-center justify-center">
-        <LinkToParentLibrary />
+        <Suspense>
+          <LinkToParentLibrary />
+        </Suspense>
       </div>
       <div className="content-container h-navigation-height grid grid-cols-3 items-center">
         <div className="flex flex-0 items-center" data-cy={cyKeys["go-logo"]}>
@@ -28,7 +30,9 @@ function Header() {
           <DarkModeToggle />
         </div>
         <div className="flex flex-0 justify-end gap-x-4">
-          <ProfileButton />
+          <Suspense>
+            <ProfileButton />
+          </Suspense>
         </div>
       </div>
       <div className="h-navigation-search-height">

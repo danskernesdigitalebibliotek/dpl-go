@@ -1,3 +1,5 @@
+import { Suspense } from "react"
+
 import CategorySlider from "@/components/shared/categorySlider/CategorySlider"
 import "@/styles/globals.css"
 
@@ -13,7 +15,9 @@ export default function Layout({
           <div
             className="lg:w-[calc(100%+48px) w-[calc(100%+24px) relative -mx-[24px] !overflow-visible px-[12px]
               lg:-mx-[48px] lg:px-[24px]">
-            <CategorySlider />
+            <Suspense>
+              <CategorySlider />
+            </Suspense>
           </div>
         </div>
       </div>

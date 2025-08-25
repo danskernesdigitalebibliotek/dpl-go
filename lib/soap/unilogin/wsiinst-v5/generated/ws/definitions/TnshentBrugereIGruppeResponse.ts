@@ -1,4 +1,4 @@
-import { Brugertilknytning } from "./Brugertilknytning";
+import type { Brugertilknytning } from "./Brugertilknytning";
 
 /** tns:HentBrugereIGruppeResponse */
 export interface TnshentBrugereIGruppeResponse {

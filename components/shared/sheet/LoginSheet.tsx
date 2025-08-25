@@ -1,19 +1,22 @@
 "use client"
 
-import React, { useContext } from "react"
+import React from "react"
 
 import { cyKeys } from "@/cypress/support/constants"
 import routes from "@/lib/config/resolvers/routes"
-import { DplCmsConfigContext } from "@/lib/providers/DplCmsConfigContextProvider"
 import { sheetStore } from "@/store/sheet.store"
 
 import Icon from "../icon/Icon"
 import LoginButton from "./LoginButton"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "./Sheet"
 
-function LoginSheet({ open }: { open: boolean }) {
-  const dplCmsConfig = useContext(DplCmsConfigContext)
-  const loginUrlAdgangsplatformen = dplCmsConfig?.loginUrls?.adgangsplatformen
+function LoginSheet({
+  open,
+  loginUrlAdgangsplatformen,
+}: {
+  open: boolean
+  loginUrlAdgangsplatformen?: string
+}) {
   const { closeSheet } = sheetStore.trigger
 
   return (

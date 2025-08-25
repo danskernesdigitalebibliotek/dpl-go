@@ -3,24 +3,28 @@
 import { useSelector } from "@xstate/react"
 import React from "react"
 
+import useDplCmsPublicConfig from "@/lib/config/dpl-cms/useDplCmsPublicConfig"
 import { sheetStore } from "@/store/sheet.store"
 
 import LoginSheet from "../sheet/LoginSheet"
 import SearchFilterSheet from "../sheet/SearchFilterSheet"
 
-export const SheetContentComponentTypes = {
-  LoginSheet,
-  SearchFilterSheet,
-}
-
 export function DynamicSheet() {
+  const { config: dplCmsConfig, isLoading: configIsLoading } = useDplCmsPublicConfig()
+  const loginUrlAdgangsplatformen =
+    (!configIsLoading && dplCmsConfig?.loginUrls?.adgangsplatformen) || undefined
+
   const open = useSelector(sheetStore, state => state.context.open)
   const sheetType = useSelector(sheetStore, state => state.context.sheetType)
-  const props = useSelector(sheetStore, state => state.context.props)
+  const storeProps = useSelector(sheetStore, state => state.context.props)
+  const props = { ...storeProps, open }
 
-  const DynamicSheetContentType =
-    SheetContentComponentTypes[sheetType as keyof typeof SheetContentComponentTypes] || null
-  if (DynamicSheetContentType === null) return null
+  if (sheetType === "LoginSheet") {
+    return <LoginSheet {...props} loginUrlAdgangsplatformen={loginUrlAdgangsplatformen} />
+  }
+  if (sheetType === "SearchFilterSheet") {
+    return <SearchFilterSheet {...props} facets={[]} />
+  }
 
-  return <DynamicSheetContentType facets={[]} open={open} {...props} />
+  return null
 }

@@ -1,8 +1,6 @@
 import { createStore } from "@xstate/store"
 
-import { SheetContentComponentTypes } from "@/components/shared/dynamicSheet/DynamicSheet"
-
-type TSheetTypes = keyof typeof SheetContentComponentTypes | null
+type TSheetTypes = "LoginSheet" | "SearchFilterSheet" | null
 type TPropsObject = object | null
 
 type TContext = {
