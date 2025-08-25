@@ -33,7 +33,9 @@ async function WorkPage({ params }: TWorkPageProps) {
   const dehydratedState = dehydrate(queryClient)
   return (
     <HydrationBoundary state={dehydratedState}>
-      <WorkPageLayout workId={workId} />
+      <Suspense>
+        <WorkPageLayout workId={workId} />
+      </Suspense>
     </HydrationBoundary>
   )
 }
