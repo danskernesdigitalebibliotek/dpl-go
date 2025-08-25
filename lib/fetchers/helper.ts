@@ -1,3 +1,6 @@
+import { fetchToCurl } from "fetch-to-curl"
+import { RequestInit } from "next/dist/server/web/spec-extension/request"
+
 import { FetchParams, RequestOptions } from "./types"
 
 /**
@@ -49,4 +52,9 @@ export const getRestServiceUrlWithParams = ({
 }) => {
   const urlParams = params ? `?${buildParams(params as FetchParams)}` : ""
   return `${baseUrl}${url}${urlParams}`
+}
+
+export const debugFetch = (url: string, options: RequestInit, label?: string) => {
+  // eslint-disable-next-line no-console
+  console.log(`[Fetch Debug${label ? ` | ${label}` : ""}]`, fetchToCurl(url, options))
 }
