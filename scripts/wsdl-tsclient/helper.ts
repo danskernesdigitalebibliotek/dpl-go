@@ -1,4 +1,4 @@
-import { parseAndGenerate } from "wsdl-tsclient"
+import { parseAndGenerate } from "@reloaddk/wsdl-tsclient"
 
 export const generateWsdlFiles = (wsdlFiles: string[]) => {
   wsdlFiles.forEach(wsdlFile => {

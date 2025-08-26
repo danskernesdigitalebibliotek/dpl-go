@@ -1,7 +1,7 @@
 import type { Brugertilknytning } from "./Brugertilknytning";
 
 /** tns:HentBrugereIGruppeResponse */
-export interface TnshentBrugereIGruppeResponse {
+export interface TnshentBrugereIgruppeResponse {
     /** brugertilknytning[] */
     brugertilknytning?: Array<Brugertilknytning>;
 }

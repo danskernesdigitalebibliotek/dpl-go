@@ -7,8 +7,8 @@ export type { TnshelloWorldResponse2 } from "./definitions/TnshelloWorldResponse
 export type { TnshentGrupper } from "./definitions/TnshentGrupper";
 export type { TnshentGrupperResponse } from "./definitions/TnshentGrupperResponse";
 export type { Gruppe } from "./definitions/Gruppe";
-export type { TnshentBrugereIGruppe } from "./definitions/TnshentBrugereIGruppe";
-export type { TnshentBrugereIGruppeResponse } from "./definitions/TnshentBrugereIGruppeResponse";
+export type { TnshentBrugereIgruppe } from "./definitions/TnshentBrugereIgruppe";
+export type { TnshentBrugereIgruppeResponse } from "./definitions/TnshentBrugereIgruppeResponse";
 export type { Brugertilknytning } from "./definitions/Brugertilknytning";
 export type { Elev } from "./definitions/Elev";
 export type { Ansat } from "./definitions/Ansat";
