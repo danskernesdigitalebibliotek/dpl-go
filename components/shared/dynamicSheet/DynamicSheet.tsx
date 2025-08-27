@@ -20,10 +20,10 @@ export function DynamicSheet() {
   const props = { ...storeProps, open }
 
   if (sheetType === "LoginSheet") {
-    return <LoginSheet {...props} loginUrlAdgangsplatformen={loginUrlAdgangsplatformen} />
+    return <LoginSheet loginUrlAdgangsplatformen={loginUrlAdgangsplatformen} {...props} />
   }
   if (sheetType === "SearchFilterSheet") {
-    return <SearchFilterSheet {...props} facets={[]} />
+    return <SearchFilterSheet facets={[]} {...props} />
   }
 
   return null
