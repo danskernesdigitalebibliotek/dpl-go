@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 import { Cover } from "@/lib/rest/cover-service-api/generated/model"
+import { TSessionType } from "@/lib/types/session"
 
 import { CyKey, ViewportType, viewports } from "./constants"
 import { Operations, hasOperationName } from "./utils"
@@ -119,6 +120,16 @@ declare global {
       resetServerMocks(): void
 
       /**
+       * Gets the value of a mocked the go-session cookie
+       *
+       * @param type - The session type to retrieve ("unilogin", "adgangsplatformen", etc.)
+       * @example  cy.task("getMockedGoSessionCookieValue", { type: "unilogin" }).then((encodedSession: string) => {
+       *   // Do something with the encoded session
+       * })
+       */
+      getMockedGoSessionCookieValue({ type }: { type: TSessionType }): Chainable<string>
+
+      /**
        * Checks if the current viewport is mobile
        * @example cy.isViewport("mobile")
        */
@@ -215,4 +226,8 @@ Cypress.Commands.add("isViewport", (viewport: ViewportType) => {
 
 Cypress.Commands.add("setViewport", (viewport: ViewportType) => {
   cy.viewport(viewports[viewport].width, viewports[viewport].height)
+})
+
+Cypress.Commands.add("getMockedGoSessionCookieValue", ({ type }: { type: TSessionType }) => {
+  return cy.task("getMockedGoSessionCookieValue", { type })
 })

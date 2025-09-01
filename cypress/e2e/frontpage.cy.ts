@@ -93,4 +93,11 @@ describe("Front Page Tests", () => {
     cy.dataCy("search-input").should("exist").focus().type("harry potter{enter}")
     cy.url().should("include", "/search")
   })
+
+  it.only("Should be able to navigate to the user profile page (/user/profile) if a session cookie has been set", () => {
+    cy.getMockedGoSessionCookieValue({ type: "unilogin" }).then(encodedSession => {
+      cy.setCookie("go-session", encodedSession)
+      cy.visit("/user/profile")
+    })
+  })
 })
