@@ -95,9 +95,7 @@ describe("Front Page Tests", () => {
   })
 
   it.only("Should be able to navigate to the user profile page (/user/profile) if a session cookie has been set", () => {
-    cy.getMockedGoSessionCookieValue({ type: "unilogin" }).then(encodedSession => {
-      cy.setCookie("go-session", encodedSession)
-      cy.visit("/user/profile")
-    })
+    cy.createGoSession({ type: "unilogin" })
+    cy.visit("/user/profile")
   })
 })

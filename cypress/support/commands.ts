@@ -120,14 +120,17 @@ declare global {
       resetServerMocks(): void
 
       /**
-       * Gets the value of a mocked the go-session cookie
+       * Creates a new GO session of the specified type.
+       * This custom Cypress command initializes a session for testing purposes,
+       * allowing you to simulate different user session types within your tests.
        *
-       * @param type - The session type to retrieve ("unilogin", "adgangsplatformen", etc.)
-       * @example  cy.task("getMockedGoSessionCookieValue", { type: "unilogin" }).then((encodedSession: string) => {
-       *   // Do something with the encoded session
-       * })
+       * @param params - An object containing the session details.
+       * @param params.type - The type of session to create (e.g., "unilogin", "adgangsplatformen", etc.).
+       * @returns A Cypress Chainable that resolves when the session has been created.
+       * @example
+       * cy.createGoSession({ type: "unilogin" })
        */
-      getMockedGoSessionCookieValue({ type }: { type: TSessionType }): Chainable<string>
+      createGoSession({ type }: { type: TSessionType }): Chainable<void>
 
       /**
        * Checks if the current viewport is mobile
@@ -228,6 +231,8 @@ Cypress.Commands.add("setViewport", (viewport: ViewportType) => {
   cy.viewport(viewports[viewport].width, viewports[viewport].height)
 })
 
-Cypress.Commands.add("getMockedGoSessionCookieValue", ({ type }: { type: TSessionType }) => {
-  return cy.task("getMockedGoSessionCookieValue", { type })
+Cypress.Commands.add("createGoSession", ({ type }: { type: TSessionType }) => {
+  cy.task("getMockedGoSessionCookieValue", { type }).then(encodedSession => {
+    cy.setCookie("go-session", encodedSession as string)
+  })
 })
