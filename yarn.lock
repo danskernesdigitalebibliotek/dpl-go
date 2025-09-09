@@ -13840,22 +13840,24 @@ prepend-file@^2.0.1:
   dependencies:
     temp-write "^4.0.0"
 
-prettier-plugin-classnames@^0.7.3:
-  version "0.7.3"
-  resolved "https://registry.npmjs.org/prettier-plugin-classnames/-/prettier-plugin-classnames-0.7.3.tgz"
-  integrity sha512-pl7RENikiCq0FpjyO/7XayLV49VXPGyBkbPnEmEkaicGweOnO0GrUaCeo2GvqB/rzERGvBRurB6/yQPF70WPTQ==
+prettier-plugin-classnames@^0.8.2:
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/prettier-plugin-classnames/-/prettier-plugin-classnames-0.8.2.tgz#0a0f4f2f403e3ac05489472fdb111c4212aab78e"
+  integrity sha512-fmYMIIuahJKn7uy8DxMoG1LsB0WOWee1mB6PpHI8SFKSMD5QJEeJx7DppczEKRAtSTHVa58ze/DU+Xq2mLbMVQ==
+  dependencies:
+    zod "3.22.4"
 
-prettier-plugin-merge@^0.7.1:
-  version "0.7.1"
-  resolved "https://registry.npmjs.org/prettier-plugin-merge/-/prettier-plugin-merge-0.7.1.tgz"
-  integrity sha512-R3dSlv3kAlScjd/liWjTkGHcUrE4MBhPKKBxVOvHK7+FY2P5SEmLarZiD11VUEuaMRK0L7zqIurX6JcRYS9Y5Q==
+prettier-plugin-merge@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/prettier-plugin-merge/-/prettier-plugin-merge-0.8.0.tgz#2d59550baba1ca726cf0ed23595409c107277a71"
+  integrity sha512-4ovlPwwsuKB+NyQNlXrt2P4I/4dx0P2w2iBkYpgjJHFqglMndYbzYWyY5hHTQj0WFhZYeUjsHKRGKxWsf6tvag==
   dependencies:
     diff "5.1.0"
 
-prettier-plugin-tailwindcss@^0.6.11:
-  version "0.6.11"
-  resolved "https://registry.npmjs.org/prettier-plugin-tailwindcss/-/prettier-plugin-tailwindcss-0.6.11.tgz"
-  integrity sha512-YxaYSIvZPAqhrrEpRtonnrXdghZg1irNg4qrjboCXrpybLWVs55cW2N3juhspVJiO0JBvYJT8SYsJpc8OQSnsA==
+prettier-plugin-tailwindcss@^0.6.14:
+  version "0.6.14"
+  resolved "https://registry.yarnpkg.com/prettier-plugin-tailwindcss/-/prettier-plugin-tailwindcss-0.6.14.tgz#06701a580f7104c034ae3b699dbd17a80d67f0cd"
+  integrity sha512-pi2e/+ZygeIqntN+vC573BcW5Cve8zUB0SSAGxqpB4f96boZF4M3phPVoOFCeypwkpRYdi7+jQ5YJJUwrkGUAg==
 
 prettier@^3.6.2:
   version "3.6.2"
@@ -15625,10 +15627,10 @@ symbol-tree@^3.2.4:
   resolved "https://registry.npmjs.org/symbol-tree/-/symbol-tree-3.2.4.tgz"
   integrity sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==
 
-tailwind-merge@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/tailwind-merge/-/tailwind-merge-3.0.2.tgz#567eff76de12211e24dd909da0f5ed6f4f422b0c"
-  integrity sha512-l7z+OYZ7mu3DTqrL88RiKrKIqO3NcpEO8V/Od04bNpvk0kiIFndGEoqfuzvj4yuhRkHKjRkII2z+KS2HfPcSxw==
+tailwind-merge@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/tailwind-merge/-/tailwind-merge-3.3.1.tgz#a7e7db7c714f6020319e626ecfb7e7dac8393a4b"
+  integrity sha512-gBXpgUm/3rp1lMZZrM/w7D8GKqshif0zAymAhbCyIt8KMe+0v9DQ7cdYLR4FHH/cKpdTXb+A/tKKU3eolfsI+g==
 
 tailwindcss-animate@^1.0.7:
   version "1.0.7"
@@ -16941,6 +16943,11 @@ yocto-queue@^1.0.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-1.2.1.tgz#36d7c4739f775b3cbc28e6136e21aa057adec418"
   integrity sha512-AyeEbWOu/TAXdxlV9wmGcR0+yh2j3vYPGOECcIj2S7MkrLyC7ne+oye2BKTItt0ii2PHk4cDy+95+LshzbXnGg==
+
+zod@3.22.4:
+  version "3.22.4"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.22.4.tgz#f31c3a9386f61b1f228af56faa9255e845cf3fff"
+  integrity sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==
 
 zod@^3.23.8:
   version "3.23.8"
