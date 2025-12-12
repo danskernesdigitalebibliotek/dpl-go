@@ -15,6 +15,7 @@
     "jsx": "preserve",
     "target": "es6",
     "incremental": true,
+    "noUncheckedIndexedAccess": true,
     "plugins": [
       {
         "name": "next"
