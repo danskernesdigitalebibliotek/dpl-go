@@ -34,6 +34,12 @@ const GTFlexa = localFont({
   display: "swap",
 })
 
+const inter = localFont({
+  src: "../public/fonts/InterVariable.woff2",
+  variable: "--font-body",
+  display: "swap",
+})
+
 async function RootLayout({
   children,
 }: Readonly<{
@@ -62,7 +68,8 @@ export default function Layout({
 }>) {
   return (
     <html lang="da">
-      <body className={`${GTFlexa.variable} duration-dark-mode antialiased transition-all`}>
+      <body
+        className={`${GTFlexa.variable} ${inter.variable} font-body duration-dark-mode antialiased transition-all`}>
         <GridHelper hideInProduction />
         <Suspense>
           <RootLayout>

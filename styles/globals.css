@@ -141,7 +141,7 @@
     --dark-mode-transition: 1000ms;
 
     --font-headline: "GT Flexa", sans-serif;
-    --font-body: helvetica, sans-serif;
+    --font-body: "Inter", system-ui, sans-serif;
 
     /* FONTS MOBILE */
     --typo-huge-size: 42px;

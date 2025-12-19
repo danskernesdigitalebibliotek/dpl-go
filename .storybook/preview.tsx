@@ -22,6 +22,12 @@ const GTFlexa = localFont({
   display: "swap",
 })
 
+const inter = localFont({
+  src: "../fonts/InterVariable.woff2",
+  variable: "--font-body",
+  display: "swap",
+})
+
 const preview: Preview = {
   parameters: {
     controls: {
@@ -85,7 +91,7 @@ const preview: Preview = {
       const params = { useDarkMode, ...parameters }
 
       return (
-        <div className={`${GTFlexa.variable} antialiased`}>
+        <div className={`${GTFlexa.variable} ${inter.variable} font-body antialiased`}>
           <Story {...params} />
         </div>
       )
