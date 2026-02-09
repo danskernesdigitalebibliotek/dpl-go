@@ -2,7 +2,7 @@
 # Based on this example:
 # https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
 
-FROM uselagoon/node-20-builder:latest AS base
+FROM uselagoon/node-22-builder:latest AS base
 
 # Install dependencies only when needed
 FROM base AS deps
