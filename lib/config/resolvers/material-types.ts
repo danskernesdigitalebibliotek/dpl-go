@@ -1,58 +1,63 @@
-import { GeneralMaterialTypeCodeEnum } from "@/lib/graphql/generated/fbi/graphql"
-
 export type TMaterialTypeCategories = {
-  reading: GeneralMaterialTypeCodeEnum[]
-  listening: GeneralMaterialTypeCodeEnum[]
-  gaming: GeneralMaterialTypeCodeEnum[]
-  video: GeneralMaterialTypeCodeEnum[]
-  ebook: GeneralMaterialTypeCodeEnum[]
-  podcast: GeneralMaterialTypeCodeEnum[]
+  reading: string[]
+  listening: string[]
+  gaming: string[]
+  video: string[]
+  ebook: string[]
+  podcast: string[]
 }
 
 const materialTypes = {
   "materialtypes.sortpriority": [
-    "BOOKS",
-    "EBOOKS",
-    "AUDIO_BOOKS",
-    "PODCASTS",
-    "BOARD_GAMES",
-    "ARTICLES",
-    "COMICS",
-    "COMPUTER_GAMES",
-    "FILMS",
-    "IMAGE_MATERIALS",
-    "MUSIC",
-    "NEWSPAPER_JOURNALS",
-    "OTHER",
-    "SHEET_MUSIC",
-    "TV_SERIES",
-  ] as GeneralMaterialTypeCodeEnum[],
+    "BOOK",
+    "EBOOK",
+    "BOOK_ELECTRONIC",
+    "GRAPHIC_NOVEL",
+    "GRAPHIC_NOVEL_ELECTRONIC",
+    "GRAPHIC_NOVEL_ONLINE",
+    "COMIC",
+    "COMIC_ELECTRONIC",
+    "COMIC_ONLINE",
+    "PICTURE_BOOK",
+    "PICTURE_BOOK_ELECTRONIC",
+    "PICTURE_BOOK_ONLINE",
+    "AUDIO_BOOK_ONLINE",
+    "PODCAST",
+  ] as string[],
 
   "materialtypes.translations": {
-    ARTICLES: "Artikel",
-    BOOKS: "Bog",
-    COMICS: "Tegneserie",
-    EBOOKS: "E-bog",
-    IMAGE_MATERIALS: "Billedmateriale",
-    NEWSPAPER_JOURNALS: "Avis",
-    AUDIO_BOOKS: "Lydbog",
-    MUSIC: "Musik",
-    PODCASTS: "Podcast",
-    SHEET_MUSIC: "Noder",
-    BOARD_GAMES: "Brætspil",
-    COMPUTER_GAMES: "Computerspil",
-    FILMS: "Film",
-    TV_SERIES: "Tv-serie",
-    OTHER: "Andet",
-  } as { [key in GeneralMaterialTypeCodeEnum]: string },
+    BOOK: "Bog",
+    EBOOK: "E-bog",
+    BOOK_ELECTRONIC: "E-bog",
+    GRAPHIC_NOVEL: "Graphic novel",
+    GRAPHIC_NOVEL_ELECTRONIC: "Graphic novel (e-bog)",
+    GRAPHIC_NOVEL_ONLINE: "Graphic novel (online)",
+    COMIC: "Tegneserie",
+    COMIC_ELECTRONIC: "Tegneserie (e-bog)",
+    COMIC_ONLINE: "Tegneserie (online)",
+    PICTURE_BOOK: "Billedbog",
+    PICTURE_BOOK_ELECTRONIC: "Billedbog (e-bog)",
+    PICTURE_BOOK_ONLINE: "Billedbog (online)",
+    AUDIO_BOOK_ONLINE: "Lydbog (online)",
+    PODCAST: "Podcast",
+  } as { [key: string]: string },
 
   "materialtypes.categories": {
-    reading: ["ARTICLES", "BOOKS", "COMICS", "IMAGE_MATERIALS", "NEWSPAPER_JOURNALS"],
-    listening: ["AUDIO_BOOKS", "MUSIC", "SHEET_MUSIC"],
-    gaming: ["BOARD_GAMES", "COMPUTER_GAMES"],
-    video: ["FILMS", "TV_SERIES"],
-    ebook: ["EBOOKS"],
-    podcast: ["PODCASTS"],
+    reading: ["BOOK", "GRAPHIC_NOVEL", "COMIC", "PICTURE_BOOK"],
+    listening: ["AUDIO_BOOK_ONLINE"],
+    gaming: [] as string[],
+    video: [] as string[],
+    ebook: [
+      "EBOOK",
+      "BOOK_ELECTRONIC",
+      "GRAPHIC_NOVEL_ELECTRONIC",
+      "GRAPHIC_NOVEL_ONLINE",
+      "COMIC_ELECTRONIC",
+      "COMIC_ONLINE",
+      "PICTURE_BOOK_ELECTRONIC",
+      "PICTURE_BOOK_ONLINE",
+    ],
+    podcast: ["PODCAST"],
   },
 }
 
