@@ -11,6 +11,7 @@ import {
   sortByActiveFacets,
 } from "@/components/shared/searchFilters/helper"
 import { cyKeys } from "@/cypress/support/constants"
+import goConfig from "@/lib/config/goConfig"
 import { SearchFacetFragment } from "@/lib/graphql/generated/fbi/graphql"
 import { cn } from "@/lib/helpers/helper.cn"
 import { TFilters } from "@/lib/machines/search/types"
@@ -21,7 +22,12 @@ type SearchFiltersColumnProps = {
   isLast: boolean
 }
 
-const allowedFacetValues = ["bøger", "podcasts", "e-bøger", "lydbøger"]
+// Derive allowed facet display values from the sort priority config
+const sortPriority: string[] = goConfig("materialtypes.sortpriority")
+const translations: Record<string, string> = goConfig("materialtypes.translations")
+const allowedFacetValues = sortPriority
+  .map(code => translations[code]?.toLowerCase())
+  .filter(Boolean)
 
 const SearchFiltersColumn = ({ facet, isLast }: SearchFiltersColumnProps) => {
   const actor = useSearchMachineActor()
@@ -33,9 +39,11 @@ const SearchFiltersColumn = ({ facet, isLast }: SearchFiltersColumnProps) => {
   const toggleFilter = createToggleFilterCallback(actor)
   const facetData = actor.getSnapshot().context.facetData
 
-  // Filter out the facet values that are not allowed if the facet is materialTypesGeneral
-  if (facet.name === "materialTypesGeneral") {
-    facet.values = facet.values.filter(value => allowedFacetValues.includes(value.term))
+  // Filter and sort facet values by sortpriority if the facet is materialTypesSpecific
+  if (facet.name === "materialTypesSpecific") {
+    facet.values = facet.values
+      .filter(value => allowedFacetValues.includes(value.term))
+      .sort((a, b) => allowedFacetValues.indexOf(a.term) - allowedFacetValues.indexOf(b.term))
   }
 
   // We show the selected values first in the list
