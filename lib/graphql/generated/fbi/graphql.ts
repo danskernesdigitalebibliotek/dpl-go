@@ -29,7 +29,7 @@ export type AccessTypeCodeEnum =
   | 'PHYSICAL'
   | 'UNKNOWN';
 
-export type AccessUnion = AccessUrl | DigitalArticleService | Ereol | InfomediaService | InterLibraryLoan;
+export type AccessUnion = AccessUrl | DigitalArticleService | Ereol | InfomediaService | InterLibraryLoan | Publizon;
 
 export type AccessUrl = {
   __typename?: 'AccessUrl';
@@ -59,11 +59,6 @@ export type AccessUrlTypeEnum =
 
 export type Audience = {
   __typename?: 'Audience';
-  /**
-   * PEGI age rating for games
-   * @deprecated Use 'Audience.pegi' instead expires: 01/06-2025
-   */
-  PEGI?: Maybe<Pegi>;
   /** Range of numbers with either beginning of range or end of range or both e.g. 6-10, 1980-1999 */
   ages: Array<Range>;
   /** Is this material for children or adults */
@@ -167,6 +162,7 @@ export type ComplexSearchFacetsEnum =
   | 'CREATORCONTRIBUTOR'
   | 'CREATORCONTRIBUTORFUNCTION'
   | 'CREATORFUNCTION'
+  | 'DATEFIRSTEDITION'
   | 'FICTIONALCHARACTER'
   | 'FILMNATIONALITY'
   | 'GAMEPLATFORM'
@@ -174,6 +170,7 @@ export type ComplexSearchFacetsEnum =
   | 'GENERALMATERIALTYPE'
   | 'GENREANDFORM'
   | 'HOSTPUBLICATION'
+  | 'HOSTPUBLICATIONTYPE'
   | 'INSTRUMENT'
   | 'ISSUE'
   | 'LANGUAGE'
@@ -305,6 +302,76 @@ export type Complexity = {
   value: Scalars['Int']['output'];
 };
 
+export type ContentEntry = {
+  __typename?: 'ContentEntry';
+  /** Additional 'authors' (lyricists, arrangers, performers/soloists etc.), quoted as strings (including possible author's statement) from the record */
+  contributors?: Maybe<Array<Scalars['String']['output']>>;
+  /** Main creator(s) of the entry i.e. composer (classical music), artist/band (rhythmic music), author (fiction, articles). For music and sheet music always only 1 creator, for articles and fiction possibly more than 1 */
+  creators?: Maybe<ContentEntryCreators>;
+  /** Playing time for music tracks, quoted from the record */
+  playingTime?: Maybe<Scalars['String']['output']>;
+  /** Possible entry data (title, creators, contributors, playingtime) subordinate to the entry's top level */
+  sublevel?: Maybe<Array<ContentSublevel>>;
+  /** Top level title of the entry */
+  title: ContentEntryTitle;
+};
+
+export type ContentEntryCreators = {
+  __typename?: 'ContentEntryCreators';
+  /** Details about a corporation or conference, name, role, etc. */
+  corporations?: Maybe<Array<Corporation>>;
+  /** Details about a person, name, role etc. */
+  persons?: Maybe<Array<Person>>;
+};
+
+export type ContentEntryTitle = {
+  __typename?: 'ContentEntryTitle';
+  /** Title of the content entry */
+  display: Scalars['String']['output'];
+};
+
+export type ContentSublevel = {
+  __typename?: 'ContentSublevel';
+  /** Additional 'authors' (lyricists, arrangers, performers/soloists etc.) related to the title on sublevel 1, quoted as strings (including possible author's statement) from the record */
+  contributors?: Maybe<Array<Scalars['String']['output']>>;
+  /** Playing time for music tracks */
+  playingTime?: Maybe<Scalars['String']['output']>;
+  /** Possible entry data (title, contributors, playingtime) subordinate to the entry's sublevel 1 */
+  sublevel?: Maybe<Array<ContentSublevelLast>>;
+  /** Title subordinate to the title in the entry's top level */
+  title: ContentEntryTitle;
+};
+
+export type ContentSublevelLast = {
+  __typename?: 'ContentSublevelLast';
+  /** Additional 'authors' (lyricists, arrangers, performers/soloists etc.) related to the title on sublevel 1, quoted as strings (including possible author's statement) from the record */
+  contributors?: Maybe<Array<Scalars['String']['output']>>;
+  /** Playing time for music tracks */
+  playingTime?: Maybe<Scalars['String']['output']>;
+  /** Title subordinate to the title in the entry's top level */
+  title: ContentEntryTitle;
+};
+
+export type ContentsEntity = {
+  __typename?: 'ContentsEntity';
+  /** Content entry with title and possible creator(s), contributors and (for some music and movies) playing time */
+  entries?: Maybe<Array<ContentEntry>>;
+  /** Heading for the contents of this entity */
+  heading: Scalars['String']['output'];
+  /** Contents text note quoted as it is from the marc field. Used for non-machine-decipherable content notes (un)formatted in only 1 subfield) */
+  raw?: Maybe<Scalars['String']['output']>;
+  /** ENUM for type of content entries (music tracks, articles, fiction etc.) in this entity */
+  type: ContentsEntityEnum;
+};
+
+export type ContentsEntityEnum =
+  | 'ARTICLES'
+  | 'CHAPTERS'
+  | 'FICTION'
+  | 'MUSIC_TRACKS'
+  | 'NOT_SPECIFIED'
+  | 'SHEET_MUSIC';
+
 export type CopyRequestInput = {
   authorOfComponent?: InputMaybe<Scalars['String']['input']>;
   issueOfComponent?: InputMaybe<Scalars['String']['input']>;
@@ -364,6 +431,8 @@ export type Corporation = CreatorInterface & SubjectInterface & {
   /** Sub corporation or conference/meeting */
   sub?: Maybe<Scalars['String']['output']>;
   type: SubjectTypeEnum;
+  /** VIAF identifier of the creator */
+  viafid?: Maybe<Scalars['String']['output']>;
   /** Year of the conference */
   year?: Maybe<Scalars['String']['output']>;
 };
@@ -378,6 +447,7 @@ export type Cover = {
   large?: Maybe<CoverDetails>;
   medium?: Maybe<CoverDetails>;
   origin?: Maybe<Scalars['String']['output']>;
+  original?: Maybe<CoverDetails>;
   small?: Maybe<CoverDetails>;
   thumbnail?: Maybe<Scalars['String']['output']>;
   xSmall?: Maybe<CoverDetails>;
@@ -397,6 +467,8 @@ export type CreatorInterface = {
   nameSort: Scalars['String']['output'];
   /** A list of which kinds of contributions this creator made to this creation */
   roles: Array<Role>;
+  /** VIAF identifier of the creator */
+  viafid?: Maybe<Scalars['String']['output']>;
 };
 
 export type Dk5MainEntry = {
@@ -635,6 +707,14 @@ export type IdentifierTypeEnum =
   | 'UPC'
   | 'URI';
 
+export type IllAutomationMaterialGroup = {
+  __typename?: 'IllAutomationMaterialGroup';
+  /** The material group (1-9) */
+  id: Scalars['Int']['output'];
+  /** The name of the material group */
+  name: Scalars['String']['output'];
+};
+
 export type InfomediaArticle = {
   __typename?: 'InfomediaArticle';
   byLine?: Maybe<Scalars['String']['output']>;
@@ -784,6 +864,8 @@ export type Manifestation = {
   cataloguedPublicationStatus?: Maybe<CataloguedPublicationStatus>;
   /** Classification codes for this manifestation from any classification system */
   classifications: Array<Classification>;
+  /** Content title entries with possible creators, contributors and playing time for music tracks, sheet music titles, articles, poems, short stories etc. */
+  contents?: Maybe<Array<ContentsEntity>>;
   /** Contributors to the manifestation, actors, illustrators etc */
   contributors: Array<CreatorInterface>;
   /** Additional contributors of this manifestation as described on the publication. E.g. 'på dansk ved Vivi Berendt' */
@@ -806,16 +888,14 @@ export type Manifestation = {
   hostPublication?: Maybe<HostPublication>;
   /** Identifiers for this manifestation - often used for search indexes */
   identifiers: Array<Identifier>;
+  /** automation material group info */
+  illAutomationMaterialGroup?: Maybe<IllAutomationMaterialGroup>;
   /** Languages in this manifestation */
   languages?: Maybe<Languages>;
   /** Details about the latest printing of this manifestation */
   latestPrinting?: Maybe<Printing>;
   /** Identification of the local id of this manifestation */
   localId?: Maybe<Scalars['String']['output']>;
-  /** Tracks on music album, sheet music content, or articles/short stories etc. in this manifestation */
-  manifestationParts?: Maybe<ManifestationParts>;
-  /** Field for presenting bibliographic records in MARC format */
-  marc?: Maybe<MarcRecord>;
   /** The type of material of the manifestation based on bibliotek.dk types */
   materialTypes: Array<MaterialType>;
   /** Notes about the manifestation */
@@ -826,6 +906,8 @@ export type Manifestation = {
   physicalDescription?: Maybe<PhysicalUnitDescription>;
   /** Unique identification of the manifestation e.g 870970-basis:54029519 */
   pid: Scalars['String']['output'];
+  /** The city or place where the item was published */
+  placeOfPublication: Array<Scalars['String']['output']>;
   /** Publisher of this manifestion */
   publisher: Array<Scalars['String']['output']>;
   /** The creation date of the record describing this manifestation in the format YYYYMMDD */
@@ -846,8 +928,6 @@ export type Manifestation = {
   source: Array<Scalars['String']['output']>;
   /** Subjects for this manifestation */
   subjects: SubjectContainer;
-  /** Quotation of the manifestation's table of contents or a similar content list */
-  tableOfContents?: Maybe<TableOfContent>;
   /** Different kinds of titles for this work */
   titles: ManifestationTitles;
   /**
@@ -866,40 +946,6 @@ export type Manifestation = {
   workTypes: Array<WorkTypeEnum>;
   /** The year this manifestation was originally published or produced */
   workYear?: Maybe<PublicationYear>;
-};
-
-export type ManifestationPart = {
-  __typename?: 'ManifestationPart';
-  /** Classification of this entry (music track or literary analysis) */
-  classifications: Array<Classification>;
-  /** Contributors from description - additional contributor to this entry */
-  contributorsFromDescription: Array<Scalars['String']['output']>;
-  /** The creator of the music track or literary analysis */
-  creators: Array<CreatorInterface>;
-  /** Additional creator or contributor to this entry (music track or literary analysis) as described on the publication. E.g. 'arr.: H. Cornell' */
-  creatorsFromDescription: Array<Scalars['String']['output']>;
-  /** The playing time for this specific part (i.e. the duration of a music track)  */
-  playingTime?: Maybe<Scalars['String']['output']>;
-  /** Subjects of this entry (music track or literary analysis) */
-  subjects?: Maybe<Array<SubjectInterface>>;
-  /** The title of the entry (music track or title of a literary analysis) */
-  title: Scalars['String']['output'];
-};
-
-export type ManifestationPartTypeEnum =
-  | 'MUSIC_TRACKS'
-  | 'NOT_SPECIFIED'
-  | 'PARTS_OF_BOOK'
-  | 'SHEET_MUSIC_CONTENT';
-
-export type ManifestationParts = {
-  __typename?: 'ManifestationParts';
-  /** Heading for the music content note */
-  heading?: Maybe<Scalars['String']['output']>;
-  /** The creator and title etc of the individual parts */
-  parts: Array<ManifestationPart>;
-  /** The type of manifestation parts, is this music tracks, book parts etc. */
-  type: ManifestationPartTypeEnum;
 };
 
 export type ManifestationReview = {
@@ -937,7 +983,9 @@ export type ManifestationTitles = {
 export type Manifestations = {
   __typename?: 'Manifestations';
   all: Array<Manifestation>;
+  /** The best representation of all manifestations. Corresponds to the first element in the bestRepresentations list. */
   bestRepresentation: Manifestation;
+  /** All manifestations sorted after best representation. Newer is better. Records from DBC or KB are considered better. MaterialType.specific 'bog', 'music (cd)', and 'film (dvd)' are also considered better */
   bestRepresentations: Array<Manifestation>;
   first: Manifestation;
   latest: Manifestation;
@@ -950,22 +998,6 @@ export type Manifestations = {
    * Only one manifestation per unit is returned.
    */
   searchHits?: Maybe<Array<SearchHit>>;
-};
-
-export type MarcRecord = {
-  __typename?: 'MarcRecord';
-  /** The library agency */
-  agencyId: Scalars['String']['output'];
-  /** The bibliographic record identifier */
-  bibliographicRecordId: Scalars['String']['output'];
-  /** The MARC record collection content as marcXchange XML string */
-  content: Scalars['String']['output'];
-  /** The serialization format of the MARC record content. Defaults to 'marcXchange' */
-  contentSerializationFormat: Scalars['String']['output'];
-  /** Flag indicating whether or not the record is deleted */
-  deleted: Scalars['Boolean']['output'];
-  /** The marc record identifier */
-  id: Scalars['String']['output'];
 };
 
 export type MaterialType = {
@@ -1223,6 +1255,8 @@ export type Person = CreatorInterface & SubjectInterface & {
   /** A roman numeral added to the person, like Christian IV */
   romanNumeral?: Maybe<Scalars['String']['output']>;
   type: SubjectTypeEnum;
+  /** VIAF identifier of the creator */
+  viafid?: Maybe<Scalars['String']['output']>;
 };
 
 export type PhysicalUnitDescription = {
@@ -1267,6 +1301,28 @@ export type PublicationYear = {
   year?: Maybe<Scalars['Int']['output']>;
 };
 
+export type Publizon = {
+  __typename?: 'Publizon';
+  /** URL to the material on the public library's website, built from the agency's lookupUrl and the manifestation workId. Defaults to the logged-in user's municipality agency. */
+  agencyUrl?: Maybe<Scalars['String']['output']>;
+  /** The total duration of the resource in seconds, if available. */
+  durationInSeconds?: Maybe<Scalars['Int']['output']>;
+  /** The file size of the resource in bytes, if available. */
+  fileSizeInBytes?: Maybe<Scalars['Int']['output']>;
+  /** The file format of the Publizon resource (e.g., "epub", "mp3"). */
+  format?: Maybe<Scalars['String']['output']>;
+  /**
+   * URL of the sample provided by Publizon (Pubhub), typically a preview
+   * of the e-book or audiobook content.
+   */
+  sample: Scalars['String']['output'];
+};
+
+
+export type PublizonAgencyUrlArgs = {
+  agencyId?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   complexSearch: ComplexSearchResponse;
@@ -1285,8 +1341,6 @@ export type Query = {
   /** Access to various types of recommendations. */
   recommendations: Recommendations;
   refWorks: Scalars['String']['output'];
-  /** @deprecated Use 'Recommendations.subjects' instead expires: 01/03-2025 */
-  relatedSubjects?: Maybe<Array<Scalars['String']['output']>>;
   ris: Scalars['String']['output'];
   search: SearchResponse;
   series?: Maybe<Series>;
@@ -1346,12 +1400,6 @@ export type QueryRecommendArgs = {
 
 export type QueryRefWorksArgs = {
   pids: Array<Scalars['String']['input']>;
-};
-
-
-export type QueryRelatedSubjectsArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  q: Array<Scalars['String']['input']>;
 };
 
 
@@ -1853,13 +1901,6 @@ export type SuggestionTypeEnum =
   | 'SUBJECT'
   | 'TITLE';
 
-export type TableOfContent = {
-  __typename?: 'TableOfContent';
-  content?: Maybe<Scalars['String']['output']>;
-  heading?: Maybe<Scalars['String']['output']>;
-  listOfContent?: Maybe<Array<TableOfContent>>;
-};
-
 export type TimePeriod = SubjectInterface & {
   __typename?: 'TimePeriod';
   display: Scalars['String']['output'];
@@ -1998,8 +2039,6 @@ export type Work = {
   mainLanguages: Array<Language>;
   /** Details about the manifestations of this work */
   manifestations: Manifestations;
-  /** Field for presenting bibliographic records in MARC format */
-  marc?: Maybe<MarcRecord>;
   /** The type of material of the manifestation based on bibliotek.dk types */
   materialTypes: Array<MaterialType>;
   /** Relations to other manifestations */
@@ -2069,51 +2108,159 @@ export type ManifestationCoverFragment = { __typename?: 'Manifestation', pid: st
 
 export type ManifestationIdentifiersFragment = { __typename?: 'Manifestation', pid: string, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }> };
 
-export type ManifestationAccessFragment = { __typename?: 'Manifestation', accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<{ __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean } | { __typename: 'DigitalArticleService', issn: string } | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean } | { __typename: 'InfomediaService', id: string } | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }> };
+export type ManifestationAccessFragment = { __typename?: 'Manifestation', accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<
+    | { __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean }
+    | { __typename: 'DigitalArticleService', issn: string }
+    | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean }
+    | { __typename: 'InfomediaService', id: string }
+    | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }
+    | { __typename: 'Publizon' }
+  > };
 
 export type ManifestationTitlesFragment = { __typename?: 'Manifestation', titles: { __typename?: 'ManifestationTitles', identifyingAddition?: string | null, full: Array<string> } };
 
 export type ManifestationLanguagesFragment = { __typename?: 'Manifestation', languages?: { __typename?: 'Languages', main?: Array<{ __typename?: 'Language', display: string, isoCode: string }> | null } | null };
 
-export type ManifestationDescriptionFragment = { __typename?: 'Manifestation', audience?: { __typename?: 'Audience', ages: Array<{ __typename?: 'Range', display: string }> } | null, series: Array<{ __typename?: 'Series', numberInSeries?: string | null, title: string }>, subjects: { __typename?: 'SubjectContainer', all: Array<{ __typename?: 'Corporation', display: string } | { __typename?: 'Mood', display: string } | { __typename?: 'NarrativeTechnique', display: string } | { __typename?: 'Person', display: string } | { __typename?: 'Setting', display: string } | { __typename?: 'SubjectText', display: string } | { __typename?: 'SubjectWithRating', display: string } | { __typename?: 'TimePeriod', display: string }> } };
+export type ManifestationDescriptionFragment = { __typename?: 'Manifestation', audience?: { __typename?: 'Audience', ages: Array<{ __typename?: 'Range', display: string }> } | null, series: Array<{ __typename?: 'Series', numberInSeries?: string | null, title: string }>, subjects: { __typename?: 'SubjectContainer', all: Array<
+      | { __typename?: 'Corporation', display: string }
+      | { __typename?: 'Mood', display: string }
+      | { __typename?: 'NarrativeTechnique', display: string }
+      | { __typename?: 'Person', display: string }
+      | { __typename?: 'Setting', display: string }
+      | { __typename?: 'SubjectText', display: string }
+      | { __typename?: 'SubjectWithRating', display: string }
+      | { __typename?: 'TimePeriod', display: string }
+    > } };
 
-export type ManifestationDetailsFragment = { __typename?: 'Manifestation', genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<{ __typename?: 'Corporation', display: string } | { __typename?: 'Person', display: string }> };
+export type ManifestationDetailsFragment = { __typename?: 'Manifestation', genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<
+    | { __typename?: 'Corporation', display: string }
+    | { __typename?: 'Person', display: string }
+  > };
 
-export type ManifestationMaterialTypesFragment = { __typename?: 'Manifestation', materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string } }> };
+export type ManifestationMaterialTypesFragment = { __typename?: 'Manifestation', materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string }, materialTypeSpecific: { __typename?: 'SpecificMaterialType', code: string, display: string } }> };
 
-export type ManifestationSearchPageTeaserFragment = { __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<{ __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean } | { __typename: 'DigitalArticleService', issn: string } | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean } | { __typename: 'InfomediaService', id: string } | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<{ __typename?: 'Corporation', display: string } | { __typename?: 'Person', display: string }> };
+export type ManifestationSearchPageTeaserFragment = { __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<
+    | { __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean }
+    | { __typename: 'DigitalArticleService', issn: string }
+    | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean }
+    | { __typename: 'InfomediaService', id: string }
+    | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }
+    | { __typename: 'Publizon' }
+  >, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string }, materialTypeSpecific: { __typename?: 'SpecificMaterialType', code: string, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<
+    | { __typename?: 'Corporation', display: string }
+    | { __typename?: 'Person', display: string }
+  > };
 
-export type ManifestationWorkPageFragment = { __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<{ __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean } | { __typename: 'DigitalArticleService', issn: string } | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean } | { __typename: 'InfomediaService', id: string } | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }>, titles: { __typename?: 'ManifestationTitles', identifyingAddition?: string | null, full: Array<string> }, languages?: { __typename?: 'Languages', main?: Array<{ __typename?: 'Language', display: string, isoCode: string }> | null } | null, audience?: { __typename?: 'Audience', ages: Array<{ __typename?: 'Range', display: string }> } | null, series: Array<{ __typename?: 'Series', numberInSeries?: string | null, title: string }>, subjects: { __typename?: 'SubjectContainer', all: Array<{ __typename?: 'Corporation', display: string } | { __typename?: 'Mood', display: string } | { __typename?: 'NarrativeTechnique', display: string } | { __typename?: 'Person', display: string } | { __typename?: 'Setting', display: string } | { __typename?: 'SubjectText', display: string } | { __typename?: 'SubjectWithRating', display: string } | { __typename?: 'TimePeriod', display: string }> }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<{ __typename?: 'Corporation', display: string } | { __typename?: 'Person', display: string }> };
+export type ManifestationWorkPageFragment = { __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string }, materialTypeSpecific: { __typename?: 'SpecificMaterialType', code: string, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<
+    | { __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean }
+    | { __typename: 'DigitalArticleService', issn: string }
+    | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean }
+    | { __typename: 'InfomediaService', id: string }
+    | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }
+    | { __typename: 'Publizon' }
+  >, titles: { __typename?: 'ManifestationTitles', identifyingAddition?: string | null, full: Array<string> }, languages?: { __typename?: 'Languages', main?: Array<{ __typename?: 'Language', display: string, isoCode: string }> | null } | null, audience?: { __typename?: 'Audience', ages: Array<{ __typename?: 'Range', display: string }> } | null, series: Array<{ __typename?: 'Series', numberInSeries?: string | null, title: string }>, subjects: { __typename?: 'SubjectContainer', all: Array<
+      | { __typename?: 'Corporation', display: string }
+      | { __typename?: 'Mood', display: string }
+      | { __typename?: 'NarrativeTechnique', display: string }
+      | { __typename?: 'Person', display: string }
+      | { __typename?: 'Setting', display: string }
+      | { __typename?: 'SubjectText', display: string }
+      | { __typename?: 'SubjectWithRating', display: string }
+      | { __typename?: 'TimePeriod', display: string }
+    > }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<
+    | { __typename?: 'Corporation', display: string }
+    | { __typename?: 'Person', display: string }
+  > };
 
-export type WorkAccessFragment = { __typename?: 'Work', workId: string, manifestations: { __typename?: 'Manifestations', all: Array<{ __typename?: 'Manifestation', accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<{ __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean } | { __typename: 'DigitalArticleService', issn: string } | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean } | { __typename: 'InfomediaService', id: string } | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }> }> } };
+export type WorkAccessFragment = { __typename?: 'Work', workId: string, manifestations: { __typename?: 'Manifestations', all: Array<{ __typename?: 'Manifestation', accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<
+        | { __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean }
+        | { __typename: 'DigitalArticleService', issn: string }
+        | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean }
+        | { __typename: 'InfomediaService', id: string }
+        | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }
+        | { __typename: 'Publizon' }
+      > }> } };
 
-export type WorkMaterialTypesFragment = { __typename?: 'Work', materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', display: string, code: GeneralMaterialTypeCodeEnum } }> };
+export type WorkMaterialTypesFragment = { __typename?: 'Work', materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', display: string, code: GeneralMaterialTypeCodeEnum }, materialTypeSpecific: { __typename?: 'SpecificMaterialType', code: string, display: string } }> };
 
 export type WorkTitlesFragment = { __typename?: 'Work', titles: { __typename?: 'WorkTitles', full: Array<string>, original?: Array<string> | null } };
 
-export type WorkCreatorsFragment = { __typename?: 'Work', creators: Array<{ __typename: 'Corporation', display: string } | { __typename: 'Person', display: string }> };
+export type WorkCreatorsFragment = { __typename?: 'Work', creators: Array<
+    | { __typename: 'Corporation', display: string }
+    | { __typename: 'Person', display: string }
+  > };
 
 export type WorkPublicationYearFragment = { __typename?: 'Work', workYear?: { __typename?: 'PublicationYear', display: string } | null };
 
 export type WorkDescriptionFragment = { __typename?: 'Work', abstract?: Array<string> | null };
 
-export type WorkTeaserSearchPageFragment = { __typename?: 'Work', workId: string, manifestations: { __typename?: 'Manifestations', all: Array<{ __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<{ __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean } | { __typename: 'DigitalArticleService', issn: string } | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean } | { __typename: 'InfomediaService', id: string } | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<{ __typename?: 'Corporation', display: string } | { __typename?: 'Person', display: string }> }>, bestRepresentation: { __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<{ __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean } | { __typename: 'DigitalArticleService', issn: string } | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean } | { __typename: 'InfomediaService', id: string } | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<{ __typename?: 'Corporation', display: string } | { __typename?: 'Person', display: string }> } }, titles: { __typename?: 'WorkTitles', full: Array<string>, original?: Array<string> | null }, creators: Array<{ __typename: 'Corporation', display: string } | { __typename: 'Person', display: string }>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', display: string, code: GeneralMaterialTypeCodeEnum } }>, workYear?: { __typename?: 'PublicationYear', display: string } | null };
+export type WorkTeaserSearchPageFragment = { __typename?: 'Work', workId: string, manifestations: { __typename?: 'Manifestations', all: Array<{ __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<
+        | { __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean }
+        | { __typename: 'DigitalArticleService', issn: string }
+        | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean }
+        | { __typename: 'InfomediaService', id: string }
+        | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }
+        | { __typename: 'Publizon' }
+      >, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string }, materialTypeSpecific: { __typename?: 'SpecificMaterialType', code: string, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<
+        | { __typename?: 'Corporation', display: string }
+        | { __typename?: 'Person', display: string }
+      > }>, bestRepresentation: { __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<
+        | { __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean }
+        | { __typename: 'DigitalArticleService', issn: string }
+        | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean }
+        | { __typename: 'InfomediaService', id: string }
+        | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }
+        | { __typename: 'Publizon' }
+      >, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string }, materialTypeSpecific: { __typename?: 'SpecificMaterialType', code: string, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<
+        | { __typename?: 'Corporation', display: string }
+        | { __typename?: 'Person', display: string }
+      > } }, titles: { __typename?: 'WorkTitles', full: Array<string>, original?: Array<string> | null }, creators: Array<
+    | { __typename: 'Corporation', display: string }
+    | { __typename: 'Person', display: string }
+  >, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', display: string, code: GeneralMaterialTypeCodeEnum }, materialTypeSpecific: { __typename?: 'SpecificMaterialType', code: string, display: string } }>, workYear?: { __typename?: 'PublicationYear', display: string } | null };
 
-export type WorkFullWorkPageFragment = { __typename?: 'Work', workId: string, abstract?: Array<string> | null, manifestations: { __typename?: 'Manifestations', all: Array<{ __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<{ __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean } | { __typename: 'DigitalArticleService', issn: string } | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean } | { __typename: 'InfomediaService', id: string } | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }>, titles: { __typename?: 'ManifestationTitles', identifyingAddition?: string | null, full: Array<string> }, languages?: { __typename?: 'Languages', main?: Array<{ __typename?: 'Language', display: string, isoCode: string }> | null } | null, audience?: { __typename?: 'Audience', ages: Array<{ __typename?: 'Range', display: string }> } | null, series: Array<{ __typename?: 'Series', numberInSeries?: string | null, title: string }>, subjects: { __typename?: 'SubjectContainer', all: Array<{ __typename?: 'Corporation', display: string } | { __typename?: 'Mood', display: string } | { __typename?: 'NarrativeTechnique', display: string } | { __typename?: 'Person', display: string } | { __typename?: 'Setting', display: string } | { __typename?: 'SubjectText', display: string } | { __typename?: 'SubjectWithRating', display: string } | { __typename?: 'TimePeriod', display: string }> }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<{ __typename?: 'Corporation', display: string } | { __typename?: 'Person', display: string }> }>, bestRepresentation: { __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<{ __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean } | { __typename: 'DigitalArticleService', issn: string } | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean } | { __typename: 'InfomediaService', id: string } | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }>, titles: { __typename?: 'ManifestationTitles', identifyingAddition?: string | null, full: Array<string> }, languages?: { __typename?: 'Languages', main?: Array<{ __typename?: 'Language', display: string, isoCode: string }> | null } | null, audience?: { __typename?: 'Audience', ages: Array<{ __typename?: 'Range', display: string }> } | null, series: Array<{ __typename?: 'Series', numberInSeries?: string | null, title: string }>, subjects: { __typename?: 'SubjectContainer', all: Array<{ __typename?: 'Corporation', display: string } | { __typename?: 'Mood', display: string } | { __typename?: 'NarrativeTechnique', display: string } | { __typename?: 'Person', display: string } | { __typename?: 'Setting', display: string } | { __typename?: 'SubjectText', display: string } | { __typename?: 'SubjectWithRating', display: string } | { __typename?: 'TimePeriod', display: string }> }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<{ __typename?: 'Corporation', display: string } | { __typename?: 'Person', display: string }> } }, titles: { __typename?: 'WorkTitles', full: Array<string>, original?: Array<string> | null }, creators: Array<{ __typename: 'Corporation', display: string } | { __typename: 'Person', display: string }>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', display: string, code: GeneralMaterialTypeCodeEnum } }>, workYear?: { __typename?: 'PublicationYear', display: string } | null };
-
-export type GetThumbnailCoversByPidsQueryVariables = Exact<{
-  pids: Array<Scalars['String']['input']> | Scalars['String']['input'];
-}>;
-
-
-export type GetThumbnailCoversByPidsQuery = { __typename?: 'Query', manifestations: Array<{ __typename?: 'Manifestation', pid: string, cover: { __typename?: 'Cover', thumbnail?: string | null } } | null> };
-
-export type GetCoversByPidsQueryVariables = Exact<{
-  pids: Array<Scalars['String']['input']> | Scalars['String']['input'];
-}>;
-
-
-export type GetCoversByPidsQuery = { __typename?: 'Query', manifestations: Array<{ __typename?: 'Manifestation', pid: string, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null } } | null> };
+export type WorkFullWorkPageFragment = { __typename?: 'Work', workId: string, abstract?: Array<string> | null, manifestations: { __typename?: 'Manifestations', all: Array<{ __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string }, materialTypeSpecific: { __typename?: 'SpecificMaterialType', code: string, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<
+        | { __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean }
+        | { __typename: 'DigitalArticleService', issn: string }
+        | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean }
+        | { __typename: 'InfomediaService', id: string }
+        | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }
+        | { __typename: 'Publizon' }
+      >, titles: { __typename?: 'ManifestationTitles', identifyingAddition?: string | null, full: Array<string> }, languages?: { __typename?: 'Languages', main?: Array<{ __typename?: 'Language', display: string, isoCode: string }> | null } | null, audience?: { __typename?: 'Audience', ages: Array<{ __typename?: 'Range', display: string }> } | null, series: Array<{ __typename?: 'Series', numberInSeries?: string | null, title: string }>, subjects: { __typename?: 'SubjectContainer', all: Array<
+          | { __typename?: 'Corporation', display: string }
+          | { __typename?: 'Mood', display: string }
+          | { __typename?: 'NarrativeTechnique', display: string }
+          | { __typename?: 'Person', display: string }
+          | { __typename?: 'Setting', display: string }
+          | { __typename?: 'SubjectText', display: string }
+          | { __typename?: 'SubjectWithRating', display: string }
+          | { __typename?: 'TimePeriod', display: string }
+        > }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<
+        | { __typename?: 'Corporation', display: string }
+        | { __typename?: 'Person', display: string }
+      > }>, bestRepresentation: { __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string }, materialTypeSpecific: { __typename?: 'SpecificMaterialType', code: string, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<
+        | { __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean }
+        | { __typename: 'DigitalArticleService', issn: string }
+        | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean }
+        | { __typename: 'InfomediaService', id: string }
+        | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }
+        | { __typename: 'Publizon' }
+      >, titles: { __typename?: 'ManifestationTitles', identifyingAddition?: string | null, full: Array<string> }, languages?: { __typename?: 'Languages', main?: Array<{ __typename?: 'Language', display: string, isoCode: string }> | null } | null, audience?: { __typename?: 'Audience', ages: Array<{ __typename?: 'Range', display: string }> } | null, series: Array<{ __typename?: 'Series', numberInSeries?: string | null, title: string }>, subjects: { __typename?: 'SubjectContainer', all: Array<
+          | { __typename?: 'Corporation', display: string }
+          | { __typename?: 'Mood', display: string }
+          | { __typename?: 'NarrativeTechnique', display: string }
+          | { __typename?: 'Person', display: string }
+          | { __typename?: 'Setting', display: string }
+          | { __typename?: 'SubjectText', display: string }
+          | { __typename?: 'SubjectWithRating', display: string }
+          | { __typename?: 'TimePeriod', display: string }
+        > }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<
+        | { __typename?: 'Corporation', display: string }
+        | { __typename?: 'Person', display: string }
+      > } }, titles: { __typename?: 'WorkTitles', full: Array<string>, original?: Array<string> | null }, creators: Array<
+    | { __typename: 'Corporation', display: string }
+    | { __typename: 'Person', display: string }
+  >, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', display: string, code: GeneralMaterialTypeCodeEnum }, materialTypeSpecific: { __typename?: 'SpecificMaterialType', code: string, display: string } }>, workYear?: { __typename?: 'PublicationYear', display: string } | null };
 
 export type SearchWithPaginationQueryVariables = Exact<{
   q: SearchQueryInput;
@@ -2123,7 +2270,30 @@ export type SearchWithPaginationQueryVariables = Exact<{
 }>;
 
 
-export type SearchWithPaginationQuery = { __typename?: 'Query', search: { __typename?: 'SearchResponse', hitcount: number, works: Array<{ __typename?: 'Work', workId: string, manifestations: { __typename?: 'Manifestations', all: Array<{ __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<{ __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean } | { __typename: 'DigitalArticleService', issn: string } | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean } | { __typename: 'InfomediaService', id: string } | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<{ __typename?: 'Corporation', display: string } | { __typename?: 'Person', display: string }> }>, bestRepresentation: { __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<{ __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean } | { __typename: 'DigitalArticleService', issn: string } | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean } | { __typename: 'InfomediaService', id: string } | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<{ __typename?: 'Corporation', display: string } | { __typename?: 'Person', display: string }> } }, titles: { __typename?: 'WorkTitles', full: Array<string>, original?: Array<string> | null }, creators: Array<{ __typename: 'Corporation', display: string } | { __typename: 'Person', display: string }>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', display: string, code: GeneralMaterialTypeCodeEnum } }>, workYear?: { __typename?: 'PublicationYear', display: string } | null }> } };
+export type SearchWithPaginationQuery = { __typename?: 'Query', search: { __typename?: 'SearchResponse', hitcount: number, works: Array<{ __typename?: 'Work', workId: string, manifestations: { __typename?: 'Manifestations', all: Array<{ __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<
+            | { __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean }
+            | { __typename: 'DigitalArticleService', issn: string }
+            | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean }
+            | { __typename: 'InfomediaService', id: string }
+            | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }
+            | { __typename: 'Publizon' }
+          >, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string }, materialTypeSpecific: { __typename?: 'SpecificMaterialType', code: string, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<
+            | { __typename?: 'Corporation', display: string }
+            | { __typename?: 'Person', display: string }
+          > }>, bestRepresentation: { __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<
+            | { __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean }
+            | { __typename: 'DigitalArticleService', issn: string }
+            | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean }
+            | { __typename: 'InfomediaService', id: string }
+            | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }
+            | { __typename: 'Publizon' }
+          >, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string }, materialTypeSpecific: { __typename?: 'SpecificMaterialType', code: string, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<
+            | { __typename?: 'Corporation', display: string }
+            | { __typename?: 'Person', display: string }
+          > } }, titles: { __typename?: 'WorkTitles', full: Array<string>, original?: Array<string> | null }, creators: Array<
+        | { __typename: 'Corporation', display: string }
+        | { __typename: 'Person', display: string }
+      >, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', display: string, code: GeneralMaterialTypeCodeEnum }, materialTypeSpecific: { __typename?: 'SpecificMaterialType', code: string, display: string } }>, workYear?: { __typename?: 'PublicationYear', display: string } | null }> } };
 
 export type SearchFacetsQueryVariables = Exact<{
   q: SearchQueryInput;
@@ -2143,14 +2313,78 @@ export type ComplexSearchForWorkTeaserQueryVariables = Exact<{
 }>;
 
 
-export type ComplexSearchForWorkTeaserQuery = { __typename?: 'Query', complexSearch: { __typename?: 'ComplexSearchResponse', hitcount: number, works: Array<{ __typename?: 'Work', workId: string, manifestations: { __typename?: 'Manifestations', all: Array<{ __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<{ __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean } | { __typename: 'DigitalArticleService', issn: string } | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean } | { __typename: 'InfomediaService', id: string } | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<{ __typename?: 'Corporation', display: string } | { __typename?: 'Person', display: string }> }>, bestRepresentation: { __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<{ __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean } | { __typename: 'DigitalArticleService', issn: string } | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean } | { __typename: 'InfomediaService', id: string } | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<{ __typename?: 'Corporation', display: string } | { __typename?: 'Person', display: string }> } }, titles: { __typename?: 'WorkTitles', full: Array<string>, original?: Array<string> | null }, creators: Array<{ __typename: 'Corporation', display: string } | { __typename: 'Person', display: string }>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', display: string, code: GeneralMaterialTypeCodeEnum } }>, workYear?: { __typename?: 'PublicationYear', display: string } | null }> } };
+export type ComplexSearchForWorkTeaserQuery = { __typename?: 'Query', complexSearch: { __typename?: 'ComplexSearchResponse', hitcount: number, works: Array<{ __typename?: 'Work', workId: string, manifestations: { __typename?: 'Manifestations', all: Array<{ __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<
+            | { __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean }
+            | { __typename: 'DigitalArticleService', issn: string }
+            | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean }
+            | { __typename: 'InfomediaService', id: string }
+            | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }
+            | { __typename: 'Publizon' }
+          >, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string }, materialTypeSpecific: { __typename?: 'SpecificMaterialType', code: string, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<
+            | { __typename?: 'Corporation', display: string }
+            | { __typename?: 'Person', display: string }
+          > }>, bestRepresentation: { __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<
+            | { __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean }
+            | { __typename: 'DigitalArticleService', issn: string }
+            | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean }
+            | { __typename: 'InfomediaService', id: string }
+            | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }
+            | { __typename: 'Publizon' }
+          >, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string }, materialTypeSpecific: { __typename?: 'SpecificMaterialType', code: string, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<
+            | { __typename?: 'Corporation', display: string }
+            | { __typename?: 'Person', display: string }
+          > } }, titles: { __typename?: 'WorkTitles', full: Array<string>, original?: Array<string> | null }, creators: Array<
+        | { __typename: 'Corporation', display: string }
+        | { __typename: 'Person', display: string }
+      >, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', display: string, code: GeneralMaterialTypeCodeEnum }, materialTypeSpecific: { __typename?: 'SpecificMaterialType', code: string, display: string } }>, workYear?: { __typename?: 'PublicationYear', display: string } | null }> } };
 
 export type GetMaterialQueryVariables = Exact<{
   wid: Scalars['String']['input'];
 }>;
 
 
-export type GetMaterialQuery = { __typename?: 'Query', work?: { __typename?: 'Work', workId: string, abstract?: Array<string> | null, manifestations: { __typename?: 'Manifestations', all: Array<{ __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<{ __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean } | { __typename: 'DigitalArticleService', issn: string } | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean } | { __typename: 'InfomediaService', id: string } | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }>, titles: { __typename?: 'ManifestationTitles', identifyingAddition?: string | null, full: Array<string> }, languages?: { __typename?: 'Languages', main?: Array<{ __typename?: 'Language', display: string, isoCode: string }> | null } | null, audience?: { __typename?: 'Audience', ages: Array<{ __typename?: 'Range', display: string }> } | null, series: Array<{ __typename?: 'Series', numberInSeries?: string | null, title: string }>, subjects: { __typename?: 'SubjectContainer', all: Array<{ __typename?: 'Corporation', display: string } | { __typename?: 'Mood', display: string } | { __typename?: 'NarrativeTechnique', display: string } | { __typename?: 'Person', display: string } | { __typename?: 'Setting', display: string } | { __typename?: 'SubjectText', display: string } | { __typename?: 'SubjectWithRating', display: string } | { __typename?: 'TimePeriod', display: string }> }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<{ __typename?: 'Corporation', display: string } | { __typename?: 'Person', display: string }> }>, bestRepresentation: { __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<{ __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean } | { __typename: 'DigitalArticleService', issn: string } | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean } | { __typename: 'InfomediaService', id: string } | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }>, titles: { __typename?: 'ManifestationTitles', identifyingAddition?: string | null, full: Array<string> }, languages?: { __typename?: 'Languages', main?: Array<{ __typename?: 'Language', display: string, isoCode: string }> | null } | null, audience?: { __typename?: 'Audience', ages: Array<{ __typename?: 'Range', display: string }> } | null, series: Array<{ __typename?: 'Series', numberInSeries?: string | null, title: string }>, subjects: { __typename?: 'SubjectContainer', all: Array<{ __typename?: 'Corporation', display: string } | { __typename?: 'Mood', display: string } | { __typename?: 'NarrativeTechnique', display: string } | { __typename?: 'Person', display: string } | { __typename?: 'Setting', display: string } | { __typename?: 'SubjectText', display: string } | { __typename?: 'SubjectWithRating', display: string } | { __typename?: 'TimePeriod', display: string }> }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<{ __typename?: 'Corporation', display: string } | { __typename?: 'Person', display: string }> } }, titles: { __typename?: 'WorkTitles', full: Array<string>, original?: Array<string> | null }, creators: Array<{ __typename: 'Corporation', display: string } | { __typename: 'Person', display: string }>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', display: string, code: GeneralMaterialTypeCodeEnum } }>, workYear?: { __typename?: 'PublicationYear', display: string } | null } | null };
+export type GetMaterialQuery = { __typename?: 'Query', work?: { __typename?: 'Work', workId: string, abstract?: Array<string> | null, manifestations: { __typename?: 'Manifestations', all: Array<{ __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string }, materialTypeSpecific: { __typename?: 'SpecificMaterialType', code: string, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<
+          | { __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean }
+          | { __typename: 'DigitalArticleService', issn: string }
+          | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean }
+          | { __typename: 'InfomediaService', id: string }
+          | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }
+          | { __typename: 'Publizon' }
+        >, titles: { __typename?: 'ManifestationTitles', identifyingAddition?: string | null, full: Array<string> }, languages?: { __typename?: 'Languages', main?: Array<{ __typename?: 'Language', display: string, isoCode: string }> | null } | null, audience?: { __typename?: 'Audience', ages: Array<{ __typename?: 'Range', display: string }> } | null, series: Array<{ __typename?: 'Series', numberInSeries?: string | null, title: string }>, subjects: { __typename?: 'SubjectContainer', all: Array<
+            | { __typename?: 'Corporation', display: string }
+            | { __typename?: 'Mood', display: string }
+            | { __typename?: 'NarrativeTechnique', display: string }
+            | { __typename?: 'Person', display: string }
+            | { __typename?: 'Setting', display: string }
+            | { __typename?: 'SubjectText', display: string }
+            | { __typename?: 'SubjectWithRating', display: string }
+            | { __typename?: 'TimePeriod', display: string }
+          > }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<
+          | { __typename?: 'Corporation', display: string }
+          | { __typename?: 'Person', display: string }
+        > }>, bestRepresentation: { __typename?: 'Manifestation', pid: string, genreAndForm: Array<string>, publisher: Array<string>, contributorsFromDescription: Array<string>, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', code: GeneralMaterialTypeCodeEnum, display: string }, materialTypeSpecific: { __typename?: 'SpecificMaterialType', code: string, display: string } }>, identifiers: Array<{ __typename?: 'Identifier', type: IdentifierTypeEnum, value: string }>, cover: { __typename?: 'Cover', thumbnail?: string | null, xSmall?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, small?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, medium?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null, large?: { __typename?: 'CoverDetails', url?: string | null, width?: number | null, height?: number | null } | null }, accessTypes: Array<{ __typename?: 'AccessType', code: AccessTypeCodeEnum, display: string }>, access: Array<
+          | { __typename: 'AccessUrl', origin: string, url: string, loginRequired: boolean }
+          | { __typename: 'DigitalArticleService', issn: string }
+          | { __typename: 'Ereol', origin: string, url: string, canAlwaysBeLoaned: boolean }
+          | { __typename: 'InfomediaService', id: string }
+          | { __typename: 'InterLibraryLoan', loanIsPossible: boolean }
+          | { __typename: 'Publizon' }
+        >, titles: { __typename?: 'ManifestationTitles', identifyingAddition?: string | null, full: Array<string> }, languages?: { __typename?: 'Languages', main?: Array<{ __typename?: 'Language', display: string, isoCode: string }> | null } | null, audience?: { __typename?: 'Audience', ages: Array<{ __typename?: 'Range', display: string }> } | null, series: Array<{ __typename?: 'Series', numberInSeries?: string | null, title: string }>, subjects: { __typename?: 'SubjectContainer', all: Array<
+            | { __typename?: 'Corporation', display: string }
+            | { __typename?: 'Mood', display: string }
+            | { __typename?: 'NarrativeTechnique', display: string }
+            | { __typename?: 'Person', display: string }
+            | { __typename?: 'Setting', display: string }
+            | { __typename?: 'SubjectText', display: string }
+            | { __typename?: 'SubjectWithRating', display: string }
+            | { __typename?: 'TimePeriod', display: string }
+          > }, physicalDescription?: { __typename?: 'PhysicalUnitDescription', summaryFull?: string | null } | null, dateFirstEdition?: { __typename?: 'PublicationYear', display: string } | null, edition?: { __typename?: 'Edition', contributors: Array<string>, edition?: string | null, summary: string, publicationYear?: { __typename?: 'PublicationYear', display: string, year?: number | null } | null } | null, contributors: Array<
+          | { __typename?: 'Corporation', display: string }
+          | { __typename?: 'Person', display: string }
+        > } }, titles: { __typename?: 'WorkTitles', full: Array<string>, original?: Array<string> | null }, creators: Array<
+      | { __typename: 'Corporation', display: string }
+      | { __typename: 'Person', display: string }
+    >, materialTypes: Array<{ __typename?: 'MaterialType', materialTypeGeneral: { __typename?: 'GeneralMaterialType', display: string, code: GeneralMaterialTypeCodeEnum }, materialTypeSpecific: { __typename?: 'SpecificMaterialType', code: string, display: string } }>, workYear?: { __typename?: 'PublicationYear', display: string } | null } | null };
 
 
 export const SearchFacetFragmentDoc = `
@@ -2226,6 +2460,10 @@ export const WorkMaterialTypesFragmentDoc = `
       display
       code
     }
+    materialTypeSpecific {
+      display
+      code
+    }
   }
 }
     `;
@@ -2240,6 +2478,10 @@ export const ManifestationMaterialTypesFragmentDoc = `
     fragment ManifestationMaterialTypes on Manifestation {
   materialTypes {
     materialTypeGeneral {
+      code
+      display
+    }
+    materialTypeSpecific {
       code
       display
     }
@@ -2425,126 +2667,6 @@ ${WorkMaterialTypesFragmentDoc}
 ${WorkPublicationYearFragmentDoc}
 ${WorkDescriptionFragmentDoc}
 ${ManifestationWorkPageFragmentDoc}`;
-export const GetThumbnailCoversByPidsDocument = `
-    query GetThumbnailCoversByPids($pids: [String!]!) {
-  manifestations(pid: $pids) {
-    pid
-    cover {
-      thumbnail
-    }
-  }
-}
-    `;
-
-export const useGetThumbnailCoversByPidsQuery = <
-      TData = GetThumbnailCoversByPidsQuery,
-      TError = unknown
-    >(
-      variables: GetThumbnailCoversByPidsQueryVariables,
-      options?: Omit<UseQueryOptions<GetThumbnailCoversByPidsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetThumbnailCoversByPidsQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<GetThumbnailCoversByPidsQuery, TError, TData>(
-      {
-    queryKey: ['GetThumbnailCoversByPids', variables],
-    queryFn: fetchData<GetThumbnailCoversByPidsQuery, GetThumbnailCoversByPidsQueryVariables>(GetThumbnailCoversByPidsDocument, variables),
-    ...options
-  }
-    )};
-
-useGetThumbnailCoversByPidsQuery.getKey = (variables: GetThumbnailCoversByPidsQueryVariables) => ['GetThumbnailCoversByPids', variables];
-
-export const useSuspenseGetThumbnailCoversByPidsQuery = <
-      TData = GetThumbnailCoversByPidsQuery,
-      TError = unknown
-    >(
-      variables: GetThumbnailCoversByPidsQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<GetThumbnailCoversByPidsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetThumbnailCoversByPidsQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseQuery<GetThumbnailCoversByPidsQuery, TError, TData>(
-      {
-    queryKey: ['GetThumbnailCoversByPidsSuspense', variables],
-    queryFn: fetchData<GetThumbnailCoversByPidsQuery, GetThumbnailCoversByPidsQueryVariables>(GetThumbnailCoversByPidsDocument, variables),
-    ...options
-  }
-    )};
-
-useSuspenseGetThumbnailCoversByPidsQuery.getKey = (variables: GetThumbnailCoversByPidsQueryVariables) => ['GetThumbnailCoversByPidsSuspense', variables];
-
-
-useGetThumbnailCoversByPidsQuery.fetcher = (variables: GetThumbnailCoversByPidsQueryVariables, options?: RequestInit['headers']) => fetchData<GetThumbnailCoversByPidsQuery, GetThumbnailCoversByPidsQueryVariables>(GetThumbnailCoversByPidsDocument, variables, options);
-
-export const GetCoversByPidsDocument = `
-    query GetCoversByPids($pids: [String!]!) {
-  manifestations(pid: $pids) {
-    pid
-    cover {
-      thumbnail
-      xSmall {
-        url
-        width
-        height
-      }
-      small {
-        url
-        width
-        height
-      }
-      medium {
-        url
-        width
-        height
-      }
-      large {
-        url
-        width
-        height
-      }
-    }
-  }
-}
-    `;
-
-export const useGetCoversByPidsQuery = <
-      TData = GetCoversByPidsQuery,
-      TError = unknown
-    >(
-      variables: GetCoversByPidsQueryVariables,
-      options?: Omit<UseQueryOptions<GetCoversByPidsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<GetCoversByPidsQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useQuery<GetCoversByPidsQuery, TError, TData>(
-      {
-    queryKey: ['GetCoversByPids', variables],
-    queryFn: fetchData<GetCoversByPidsQuery, GetCoversByPidsQueryVariables>(GetCoversByPidsDocument, variables),
-    ...options
-  }
-    )};
-
-useGetCoversByPidsQuery.getKey = (variables: GetCoversByPidsQueryVariables) => ['GetCoversByPids', variables];
-
-export const useSuspenseGetCoversByPidsQuery = <
-      TData = GetCoversByPidsQuery,
-      TError = unknown
-    >(
-      variables: GetCoversByPidsQueryVariables,
-      options?: Omit<UseSuspenseQueryOptions<GetCoversByPidsQuery, TError, TData>, 'queryKey'> & { queryKey?: UseSuspenseQueryOptions<GetCoversByPidsQuery, TError, TData>['queryKey'] }
-    ) => {
-    
-    return useSuspenseQuery<GetCoversByPidsQuery, TError, TData>(
-      {
-    queryKey: ['GetCoversByPidsSuspense', variables],
-    queryFn: fetchData<GetCoversByPidsQuery, GetCoversByPidsQueryVariables>(GetCoversByPidsDocument, variables),
-    ...options
-  }
-    )};
-
-useSuspenseGetCoversByPidsQuery.getKey = (variables: GetCoversByPidsQueryVariables) => ['GetCoversByPidsSuspense', variables];
-
-
-useGetCoversByPidsQuery.fetcher = (variables: GetCoversByPidsQueryVariables, options?: RequestInit['headers']) => fetchData<GetCoversByPidsQuery, GetCoversByPidsQueryVariables>(GetCoversByPidsDocument, variables, options);
-
 export const SearchWithPaginationDocument = `
     query searchWithPagination($q: SearchQueryInput!, $offset: Int!, $limit: PaginationLimitScalar!, $filters: SearchFiltersInput) {
   search(q: $q, filters: $filters) {
@@ -2743,8 +2865,6 @@ useGetMaterialQuery.fetcher = (variables: GetMaterialQueryVariables, options?: R
 
 export const operationNames = {
   Query: {
-    GetThumbnailCoversByPids: 'GetThumbnailCoversByPids' as const,
-    GetCoversByPids: 'GetCoversByPids' as const,
     searchWithPagination: 'searchWithPagination' as const,
     searchFacets: 'searchFacets' as const,
     complexSearchForWorkTeaser: 'complexSearchForWorkTeaser' as const,
