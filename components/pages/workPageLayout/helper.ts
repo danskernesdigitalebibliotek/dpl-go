@@ -103,8 +103,12 @@ export const sortManifestationsBySortPriority = (
 ): ManifestationWorkPageFragment[] | ManifestationSearchPageTeaserFragment[] => {
   const sortPriority = goConfig("materialtypes.sortpriority")
   return manifestations.sort((manifestationA, manifestationB) => {
-    const priorityA = sortPriority.indexOf(manifestationA.materialTypes[0].materialTypeSpecific.code)
-    const priorityB = sortPriority.indexOf(manifestationB.materialTypes[0].materialTypeSpecific.code)
+    const priorityA = sortPriority.indexOf(
+      manifestationA.materialTypes[0].materialTypeSpecific.code
+    )
+    const priorityB = sortPriority.indexOf(
+      manifestationB.materialTypes[0].materialTypeSpecific.code
+    )
     return priorityA - priorityB
   })
 }

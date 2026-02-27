@@ -11,24 +11,6 @@ import {
 
 import { TFilters } from "./types"
 
-const filtersHardcoded = {
-  materialTypesSpecific: [
-    "bog",
-    "e-bog",
-    "lydbog (online)",
-    "podcast",
-    // "billedbog",
-    // "billedbog (elektronisk)",
-    "billedbog (online)",
-    // "tegneserie",
-    // "tegneserie (elektronisk)",
-    "tegneserie (online)",
-    // "graphic novel",
-    // "graphic novel (elektronisk)",
-    "graphic novel (online)",
-  ],
-}
-
 export const performSearch = fromPromise(
   ({
     input: { q, filters, offset, limit, queryClient },
@@ -59,7 +41,7 @@ export const getFacets = fromPromise(
       q: { all: q },
       facets: getFacetMachineNames(),
       facetLimit,
-      filters: { ...filters, ...filtersHardcoded },
+      filters: { ...filters },
     }
 
     return queryClient.fetchQuery({

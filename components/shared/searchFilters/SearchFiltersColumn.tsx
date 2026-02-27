@@ -11,7 +11,6 @@ import {
   sortByActiveFacets,
 } from "@/components/shared/searchFilters/helper"
 import { cyKeys } from "@/cypress/support/constants"
-import goConfig from "@/lib/config/goConfig"
 import { SearchFacetFragment } from "@/lib/graphql/generated/fbi/graphql"
 import { cn } from "@/lib/helpers/helper.cn"
 import { TFilters } from "@/lib/machines/search/types"
@@ -22,12 +21,50 @@ type SearchFiltersColumnProps = {
   isLast: boolean
 }
 
-// Derive allowed facet display values from the sort priority config
-const sortPriority: string[] = goConfig("materialtypes.sortpriority")
-const translations: Record<string, string> = goConfig("materialtypes.translations")
-const allowedFacetValues = sortPriority
-  .map(code => translations[code]?.toLowerCase())
-  .filter(Boolean)
+const materialTypeFacetsTranslations: Record<string, string> = {
+  bog: "Bog",
+  "e-bog": "E-bog",
+  "graphic novel": "Graphic novel",
+  "graphic novel (elektronisk)": "E-Graphic novel",
+  "graphic novel (online)": "E-Graphic novel",
+  tegneserie: "Tegneserie",
+  "tegneserie (elektronisk)": "E-Tegneserie",
+  "tegneserie (online)": "E-Tegneserie",
+  billedbog: "Billedbog",
+  "billedbog (elektronisk)": "E-Billedbog",
+  "billedbog (online)": "E-Billedbog",
+  "lydbog (online)": "E-Lydbog",
+  podcast: "Podcast",
+}
+
+type FacetValue = SearchFacetFragment["values"][number]
+
+const sortByPriority =
+  (priority: string[]) =>
+  (a: FacetValue, b: FacetValue): number =>
+    priority.indexOf(a.term) - priority.indexOf(b.term)
+
+const sortAlphabetically = (a: FacetValue, b: FacetValue): number =>
+  a.term.localeCompare(b.term, "da", { numeric: true })
+
+const facetSortStrategies: Partial<Record<string, (a: FacetValue, b: FacetValue) => number>> = {
+  materialTypesSpecific: sortByPriority([
+    "bog",
+    "e-bog",
+    "lydbog (online)",
+    "podcast",
+    "billedbog",
+    "billedbog (elektronisk)",
+    "billedbog (online)",
+    "tegneserie",
+    "tegneserie (elektronisk)",
+    "tegneserie (online)",
+    "graphic novel",
+    "graphic novel (elektronisk)",
+    "graphic novel (online)",
+  ]),
+  age: sortAlphabetically,
+}
 
 const SearchFiltersColumn = ({ facet, isLast }: SearchFiltersColumnProps) => {
   const actor = useSearchMachineActor()
@@ -39,11 +76,10 @@ const SearchFiltersColumn = ({ facet, isLast }: SearchFiltersColumnProps) => {
   const toggleFilter = createToggleFilterCallback(actor)
   const facetData = actor.getSnapshot().context.facetData
 
-  // Filter and sort facet values by sortpriority if the facet is materialTypesSpecific
-  if (facet.name === "materialTypesSpecific") {
-    facet.values = facet.values
-      .filter(value => allowedFacetValues.includes(value.term))
-      .sort((a, b) => allowedFacetValues.indexOf(a.term) - allowedFacetValues.indexOf(b.term))
+  // Sort facet values using the facet-specific sort strategy if one exists
+  const sortStrategy = facetSortStrategies[facet.name]
+  if (sortStrategy) {
+    facet.values = [...facet.values].sort(sortStrategy)
   }
 
   // We show the selected values first in the list
@@ -101,7 +137,9 @@ const SearchFiltersColumn = ({ facet, isLast }: SearchFiltersColumnProps) => {
                 })}
                 withAnimation
                 data-cy={cyKeys["filter-button"]}>
-                {value.term}
+                {facet.name === "materialTypesSpecific"
+                  ? materialTypeFacetsTranslations[value.term]
+                  : value.term}
               </BadgeButton>
             ))}
           </div>
