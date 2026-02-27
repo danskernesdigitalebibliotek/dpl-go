@@ -78,7 +78,7 @@ const WorkPageHeader = ({ manifestations, work, selectedManifestation }: WorkPag
   const manifestationKey = selectedManifestation?.pid
 
   const isSelectedManifestationPodcast =
-    selectedManifestationMaterialTypeCode === "PODCASTS" || false
+    selectedManifestationMaterialTypeCode === "PODCAST"
 
   const isSelectedManifestationCostFree = !!publizonData?.product?.costFree
 

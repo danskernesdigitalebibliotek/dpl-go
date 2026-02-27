@@ -4,10 +4,8 @@ import { differenceInDays } from "date-fns"
 import { useEffect } from "react"
 
 import {
+  getManifestationCategory,
   getManifestationMaterialTypeIcon,
-  isManifestationAudioBook,
-  isManifestationEbook,
-  isManifestationPodcast,
 } from "@/components/pages/workPageLayout/helper"
 import { Badge } from "@/components/shared/badge/Badge"
 import { CoverPicture, CoverPictureSkeleton } from "@/components/shared/coverPicture/CoverPicture"
@@ -47,9 +45,11 @@ const LoanCard = ({
   const today = new Date()
   const daysUntil = differenceInDays(targetDate, today)
 
-  const isCostFree =
-    dataProducts?.product?.costFree ||
-    isManifestationPodcast(manifestation as ManifestationWorkPageFragment)
+  const category = getManifestationCategory(
+    manifestation as ManifestationWorkPageFragment
+  )
+
+  const isCostFree = dataProducts?.product?.costFree || category === "podcast"
 
   useEffect(() => {
     // If products are not loaded yet, we don't want to set the loans
@@ -58,14 +58,14 @@ const LoanCard = ({
     }
     // TODO: Maybe we could move this logic to the parent component (?)
     if (!isCostFree) {
-      if (isManifestationAudioBook(manifestation as ManifestationWorkPageFragment)) {
+      if (category === "listening") {
         setAudioLoans(prev =>
           prev.includes(String(manifestationIsbn))
             ? prev
             : [...prev, manifestationIsbn || "unknown isbn"]
         )
       }
-      if (isManifestationEbook(manifestation as ManifestationWorkPageFragment)) {
+      if (category === "ebook") {
         setEbookLoans(prev =>
           prev.includes(String(manifestationIsbn))
             ? prev

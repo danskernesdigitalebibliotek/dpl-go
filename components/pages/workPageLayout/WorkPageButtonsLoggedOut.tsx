@@ -2,10 +2,8 @@ import { first } from "lodash"
 import React from "react"
 
 import {
-  isManifestationAudioBook,
-  isManifestationBook,
-  isManifestationEbook,
-  isManifestationPodcast,
+  getManifestationCategory,
+  getManifestationLabel,
 } from "@/components/pages/workPageLayout/helper"
 import SmartLink from "@/components/shared/smartLink/SmartLink"
 import { ManifestationWorkPageFragment } from "@/lib/graphql/generated/fbi/graphql"
@@ -31,10 +29,18 @@ const WorkPageButtonsLoggedOut = ({
   const { openSheet } = sheetStore.trigger
   const { openModal } = modalStore.trigger
 
-  if (isManifestationBook(selectedManifestation))
-    return <WorkPageInfoBox text="Dette er en fysisk bog. Den kan lånes på dit lokale bibliotek" />
+  const category = getManifestationCategory(selectedManifestation)
+  const label = getManifestationLabel(selectedManifestation)
 
-  if (isManifestationEbook(selectedManifestation)) {
+  if (category === "reading") {
+    return (
+      <WorkPageInfoBox
+        text={`Dette er en fysisk ${label}. Den kan lånes på dit lokale bibliotek`}
+      />
+    )
+  }
+
+  if (category === "ebook") {
     const previewUrl = resolveUrl({
       routeParams: { work: "work", ":wid": workId, read: "read" },
       queryParams: { id: identifier || "" },
@@ -42,13 +48,13 @@ const WorkPageButtonsLoggedOut = ({
 
     return (
       <WorkPageButtons>
-        <WorkPageButton ariaLabel="Prøv e-bog" asChild disabled={!identifier}>
+        <WorkPageButton ariaLabel={`Prøv ${label}`} asChild disabled={!identifier}>
           <SmartLink linkType="external" href={previewUrl}>
-            Prøv e-bog
+            Prøv {label}
           </SmartLink>
         </WorkPageButton>
         <WorkPageButton
-          ariaLabel={"Lån e-bog"}
+          ariaLabel={`Lån ${label}`}
           theme={"primary"}
           disabled={!identifier}
           onClick={() => {
@@ -56,17 +62,17 @@ const WorkPageButtonsLoggedOut = ({
               sheetType: "LoginSheet",
             })
           }}>
-          Lån e-bog
+          Lån {label}
         </WorkPageButton>
       </WorkPageButtons>
     )
   }
 
-  if (isManifestationAudioBook(selectedManifestation)) {
+  if (category === "listening" || category === "podcast") {
     return (
       <WorkPageButtons>
         <WorkPageButton
-          ariaLabel="Prøv lydbog"
+          ariaLabel={`Prøv ${label}`}
           disabled={!identifier}
           onClick={() =>
             openModal({
@@ -74,10 +80,10 @@ const WorkPageButtonsLoggedOut = ({
               props: { manifestation: selectedManifestation },
             })
           }>
-          Prøv lydbog
+          Prøv {label}
         </WorkPageButton>
         <WorkPageButton
-          ariaLabel="Lån lydbog"
+          ariaLabel={`Lån ${label}`}
           theme={"primary"}
           disabled={!identifier}
           onClick={() => {
@@ -85,36 +91,7 @@ const WorkPageButtonsLoggedOut = ({
               sheetType: "LoginSheet",
             })
           }}>
-          Lån lydbog
-        </WorkPageButton>
-      </WorkPageButtons>
-    )
-  }
-
-  if (isManifestationPodcast(selectedManifestation)) {
-    return (
-      <WorkPageButtons>
-        <WorkPageButton
-          ariaLabel="Prøv podcast"
-          disabled={!identifier}
-          onClick={() =>
-            openModal({
-              modalType: "PlayerPreviewModal",
-              props: { manifestation: selectedManifestation },
-            })
-          }>
-          Prøv podcast
-        </WorkPageButton>
-        <WorkPageButton
-          ariaLabel="Lån podcast"
-          theme={"primary"}
-          disabled={!identifier}
-          onClick={() => {
-            openSheet({
-              sheetType: "LoginSheet",
-            })
-          }}>
-          Lån podcast
+          Lån {label}
         </WorkPageButton>
       </WorkPageButtons>
     )

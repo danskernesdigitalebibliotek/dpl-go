@@ -24,7 +24,7 @@ const MaterialTypeIconWrapper = ({
           : "bg-background-overlay",
         className
       )}>
-      <div className="flex h-full w-full items-center justify-center">
+      <div className="flex h-full w-full items-center justify-center p-1.5">
         <Icon className="h-full w-full" name={iconName} />
       </div>
     </div>

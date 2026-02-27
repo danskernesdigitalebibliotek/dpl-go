@@ -16,19 +16,20 @@ export const getManifestationMaterialType = (
 }
 
 const allowedMaterialTypes = [
+  "BOOK",
+  "EBOOK",
+  "BOOK_ELECTRONIC",
   "GRAPHIC_NOVEL",
   "GRAPHIC_NOVEL_ELECTRONIC",
   "GRAPHIC_NOVEL_ONLINE",
   "COMIC",
   "COMIC_ELECTRONIC",
   "COMIC_ONLINE",
-  "BOOK",
-  "BOOK_ELECTRONIC",
   "PICTURE_BOOK",
   "PICTURE_BOOK_ELECTRONIC",
   "PICTURE_BOOK_ONLINE",
   "AUDIO_BOOK_ONLINE",
-  "EBOOK",
+  "PODCAST",
 ]
 export const hasManifestationAllowedMaterialTypes = (
   manifestation: ManifestationWorkPageFragment | ManifestationSearchPageTeaserFragment
@@ -119,7 +120,7 @@ export const getEbookManifestationOrFallbackManifestation = (
   manifestations: ManifestationWorkPageFragment[] | ManifestationSearchPageTeaserFragment[]
 ): ManifestationWorkPageFragment | ManifestationSearchPageTeaserFragment => {
   const ebookManifestation = manifestations.find(manifestation =>
-    isManifestationEbook(manifestation)
+    isManifestationInCategory(manifestation, "ebook")
   )
 
   if (ebookManifestation) {
@@ -148,19 +149,45 @@ export const getBestRepresentationOrFallbackManifestation = (
   return filteredBestRepresentation[0]
 }
 
-export const getManifestationMaterialTypeSpecific = (
+const iconNameToCategory: Record<string, string> = {
+  book: "reading",
+  comic: "reading",
+  pictureBook: "reading",
+  ebook: "ebook",
+  comicOnline: "ebook",
+  pictureBookOnline: "ebook",
+  audioBook: "listening",
+  audioBookOnline: "listening",
+  podcast: "podcast",
+}
+
+export const getManifestationCategory = (
   manifestation: ManifestationWorkPageFragment | ManifestationSearchPageTeaserFragment
-): "e-bog" | "lydbog" | "podcast" | null => {
-  if (isManifestationEbook(manifestation)) {
-    return "e-bog"
-  }
-  if (isManifestationAudioBook(manifestation)) {
-    return "lydbog"
-  }
-  if (isManifestationPodcast(manifestation)) {
-    return "podcast"
+): keyof TMaterialTypeCategories | null => {
+  if (!manifestation) return null
+  const code = manifestation.materialTypes[0]?.materialTypeSpecific.code
+  const icons = goConfig("materialtypes.icons")
+  for (const [iconName, materialTypes] of Object.entries(icons)) {
+    if ((materialTypes as string[]).includes(code)) {
+      return (iconNameToCategory[iconName] as keyof TMaterialTypeCategories) ?? null
+    }
   }
   return null
+}
+
+export const isManifestationInCategory = (
+  manifestation: ManifestationWorkPageFragment | ManifestationSearchPageTeaserFragment,
+  category: keyof TMaterialTypeCategories
+): boolean => {
+  if (!manifestation) return false
+  return getManifestationCategory(manifestation) === category
+}
+
+export const getManifestationLabel = (
+  manifestation: ManifestationWorkPageFragment | ManifestationSearchPageTeaserFragment
+): string => {
+  const code = manifestation.materialTypes[0]?.materialTypeSpecific.code
+  return translateMaterialTypesStringForRender(code)?.toLowerCase() || ""
 }
 
 export const getManifestationByMaterialType = (
@@ -170,41 +197,6 @@ export const getManifestationByMaterialType = (
   return work.manifestations.all.find(manifestation =>
     manifestation.materialTypes.some(type => type.materialTypeSpecific.display === materialType)
   )
-}
-
-const isManifestationOfMaterialType = (
-  manifestation: ManifestationWorkPageFragment | ManifestationSearchPageTeaserFragment,
-  materialType: string
-) => {
-  return manifestation.materialTypes.some(type => type.materialTypeSpecific.code === materialType)
-}
-
-export const isManifestationBook = (
-  manifestation: ManifestationWorkPageFragment | ManifestationSearchPageTeaserFragment
-) => {
-  if (!manifestation) return false
-  return isManifestationOfMaterialType(manifestation, "BOOK")
-}
-
-export const isManifestationEbook = (
-  manifestation: ManifestationWorkPageFragment | ManifestationSearchPageTeaserFragment
-) => {
-  if (!manifestation) return false
-  return isManifestationOfMaterialType(manifestation, "EBOOK")
-}
-
-export const isManifestationAudioBook = (
-  manifestation: ManifestationWorkPageFragment | ManifestationSearchPageTeaserFragment
-) => {
-  if (!manifestation) return false
-  return isManifestationOfMaterialType(manifestation, "AUDIO_BOOK_ONLINE")
-}
-
-export const isManifestationPodcast = (
-  manifestation: ManifestationWorkPageFragment | ManifestationSearchPageTeaserFragment
-) => {
-  if (!manifestation) return false
-  return isManifestationOfMaterialType(manifestation, "PODCAST")
 }
 
 export const getManifestationLanguageIsoCode = (manifestation: ManifestationWorkPageFragment) => {
@@ -227,26 +219,29 @@ export const translateMaterialTypesStringForRender = (code: string): string => {
   return goConfig("materialtypes.translations")[code]
 }
 
+const iconNameToIconIdentifier: Record<string, string> = {
+  book: "book",
+  ebook: "ebook",
+  comic: "comic",
+  comicOnline: "e-comic",
+  pictureBook: "picturebook",
+  pictureBookOnline: "e-picturebook",
+  audioBook: "headphones",
+  audioBookOnline: "headphones",
+  podcast: "podcast",
+}
+
 export const getIconNameFromMaterialType = (materialType: string) => {
-  const code = materialType
-  if (goConfig("materialtypes.categories").reading.includes(code)) {
-    return "book"
+  const icons = goConfig("materialtypes.icons")
+
+  // Find the icon name that includes this material type
+  for (const [iconName, materialTypes] of Object.entries(icons)) {
+    if ((materialTypes as string[]).includes(materialType)) {
+      return iconNameToIconIdentifier[iconName]
+    }
   }
-  if (goConfig("materialtypes.categories").ebook.includes(code)) {
-    return "ebook"
-  }
-  if (goConfig("materialtypes.categories").listening.includes(code)) {
-    return "headphones"
-  }
-  if (goConfig("materialtypes.categories").gaming.includes(code)) {
-    return "controller"
-  }
-  if (goConfig("materialtypes.categories").video.includes(code)) {
-    return "video"
-  }
-  if (goConfig("materialtypes.categories").podcast.includes(code)) {
-    return "podcast"
-  }
+
+  return undefined
 }
 
 export const slideSelectOptionsFromMaterialTypes = (
@@ -278,34 +273,33 @@ export const canUserLoanMoreMaterials = (
     return false
   }
 
-  const materialType = getManifestationMaterialType(manifestation)
-  if (materialType.code === "AUDIO_BOOK_ONLINE") {
-    if (
+  const code = manifestation.materialTypes[0]?.materialTypeSpecific.code
+  const icons = goConfig("materialtypes.icons")
+
+  // Check if material is an audiobook
+  if ((icons.audioBookOnline as string[]).includes(code)) {
+    return !!(
       dataLibraryProfile?.maxConcurrentAudioLoansPerBorrower &&
-      dataLoans?.userData?.totalAudioLoans &&
+      dataLoans?.userData?.totalAudioLoans !== undefined &&
       dataLibraryProfile.maxConcurrentAudioLoansPerBorrower > dataLoans.userData.totalAudioLoans
-    ) {
-      return true
-    } else {
-      return false
-    }
+    )
   }
-  if (materialType.code === "EBOOK") {
-    if (
+
+  // Check if material is an ebook
+  if ((icons.ebook as string[]).includes(code)) {
+    return !!(
       dataLibraryProfile?.maxConcurrentEbookLoansPerBorrower &&
-      dataLoans?.userData?.totalEbookLoans &&
+      dataLoans?.userData?.totalEbookLoans !== undefined &&
       dataLibraryProfile.maxConcurrentEbookLoansPerBorrower > dataLoans.userData.totalEbookLoans
-    ) {
-      return true
-    } else {
-      return false
-    }
+    )
   }
+
   // Podcasts are always loanable, unless user has reached the limit of 30 costFree loans
-  if (materialType.code === "PODCAST") {
+  if ((icons.podcast as string[]).includes(code)) {
     return canUserLoanMoreCostFreeMaterials(dataLoans)
   }
-  // Default to false
+
+  // Physical materials and unknown types are not loanable online
   return false
 }
 

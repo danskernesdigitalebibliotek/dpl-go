@@ -3,18 +3,19 @@ import React, { useOptimistic, useTransition } from "react"
 
 import { getIconNameFromMaterialType } from "@/components/pages/workPageLayout/helper"
 import { cyKeys } from "@/cypress/support/constants"
+import { GeneralMaterialTypeCodeEnum } from "@/lib/graphql/generated/fbi/graphql"
 import { cn } from "@/lib/helpers/helper.cn"
 
 import Icon from "../icon/Icon"
 
 export type MaterialTypeSelectOption = {
-  code: string
+  code: GeneralMaterialTypeCodeEnum
   display: string
 }
 
 export type MaterialTypeSelectProps = {
   options: MaterialTypeSelectOption[]
-  selected: string
+  selected: GeneralMaterialTypeCodeEnum
   onOptionSelect: (option: MaterialTypeSelectOption) => void
 }
 
@@ -23,7 +24,7 @@ const MaterialTypeSelect = ({ options, selected, onOptionSelect }: MaterialTypeS
   const [, startTransition] = useTransition()
 
   return (
-    <div className="flex flex-row flex-wrap items-center justify-center gap-1">
+    <div className="flex flex-row flex-wrap items-center justify-center gap-2">
       {options.map(option => {
         const isSelected = option.code === optimisticSelected
         const iconName = getIconNameFromMaterialType(option.code)
@@ -58,7 +59,7 @@ const MaterialTypeSelect = ({ options, selected, onOptionSelect }: MaterialTypeS
               />
             )}
             <motion.span
-              className="relative z-10 flex flex-row items-center gap-2"
+              className="relative z-10 flex flex-row items-center gap-3"
               animate={{ scale: isSelected ? 1 : 0.96, opacity: isSelected ? 1 : 0.75 }}
               transition={{ type: "spring", stiffness: 400, damping: 25 }}>
               {!!iconName && (
@@ -66,7 +67,7 @@ const MaterialTypeSelect = ({ options, selected, onOptionSelect }: MaterialTypeS
                   className="flex"
                   animate={isSelected ? { rotate: [0, -12, 10, -6, 0] } : { rotate: 0 }}
                   transition={{ duration: 0.5, ease: "easeInOut" }}>
-                  <Icon className="m-[-7px] block h-7 w-7 shrink-0" name={iconName} />
+                  <Icon className="m-[-7px] block h-5 w-5 shrink-0" name={iconName} />
                 </motion.span>
               )}
               <span>{option.display}</span>

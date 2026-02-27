@@ -2,8 +2,8 @@ import { useQueryClient } from "@tanstack/react-query"
 import React, { useState } from "react"
 
 import {
+  getManifestationLabel,
   getManifestationMaterialTypeIcon,
-  getManifestationMaterialTypeSpecific,
 } from "@/components/pages/workPageLayout/helper"
 import { Button } from "@/components/shared/button/Button"
 import { CoverPicture } from "@/components/shared/coverPicture/CoverPicture"
@@ -63,7 +63,7 @@ const LoanMaterialModal = ({
   return (
     <ResponsiveDialog
       open={open}
-      title={`Lån ${getManifestationMaterialTypeSpecific(manifestation) || "materialet"}`}>
+      title={`Lån ${getManifestationLabel(manifestation) || "materialet"}`}>
       <div
         className="rounded-base relative flex aspect-1/1 h-36 w-full flex-col items-center
           justify-center lg:aspect-4/5">
@@ -77,7 +77,7 @@ const LoanMaterialModal = ({
       {/* Description */}
       <div className="mx-auto mt-10 mb-5 w-full max-w-prose space-y-4">
         <p className="text-typo-subtitle-md text-center">
-          {`Er du sikker på, at du vil låne materialet${` (${getManifestationMaterialTypeSpecific(manifestation)})?` || "?"}`}
+          {`Er du sikker på, at du vil låne materialet${` (${getManifestationLabel(manifestation)})?` || "?"}`}
         </p>
         {publizonError && (
           <div className="flex">

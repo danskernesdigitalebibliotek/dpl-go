@@ -1,12 +1,3 @@
-export type TMaterialTypeCategories = {
-  reading: string[]
-  listening: string[]
-  gaming: string[]
-  video: string[]
-  ebook: string[]
-  podcast: string[]
-}
-
 const materialTypes = {
   "materialtypes.sortpriority": [
     "BOOK",
@@ -42,21 +33,20 @@ const materialTypes = {
     PODCAST: "Podcast",
   } as { [key: string]: string },
 
-  "materialtypes.categories": {
-    reading: ["BOOK", "GRAPHIC_NOVEL", "COMIC", "PICTURE_BOOK"],
-    listening: ["AUDIO_BOOK_ONLINE"],
-    gaming: [] as string[],
-    video: [] as string[],
-    ebook: [
-      "EBOOK",
-      "BOOK_ELECTRONIC",
-      "GRAPHIC_NOVEL_ELECTRONIC",
-      "GRAPHIC_NOVEL_ONLINE",
-      "COMIC_ELECTRONIC",
+  "materialtypes.icons": {
+    book: ["BOOK"],
+    ebook: ["EBOOK", "BOOK_ELECTRONIC"],
+    comic: ["COMIC", "GRAPHIC_NOVEL"],
+    comicOnline: [
       "COMIC_ONLINE",
-      "PICTURE_BOOK_ELECTRONIC",
-      "PICTURE_BOOK_ONLINE",
+      "COMIC_ELECTRONIC",
+      "GRAPHIC_NOVEL_ONLINE",
+      "GRAPHIC_NOVEL_ELECTRONIC",
     ],
+    pictureBook: ["PICTURE_BOOK"],
+    pictureBookOnline: ["PICTURE_BOOK_ONLINE", "PICTURE_BOOK_ELECTRONIC"],
+    audioBook: ["AUDIO_BOOK"],
+    audioBookOnline: ["AUDIO_BOOK_ONLINE", "AUDIO_BOOK_ELECTRONIC"],
     podcast: ["PODCAST"],
   },
 }
