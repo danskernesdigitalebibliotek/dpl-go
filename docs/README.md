@@ -1,10 +1,10 @@
-# This repo will be archived soon!
+# This repo will be archived soon
 
 All new pull requests should be instead opened in the new mono-repo:
 
-https://github.com/danskernesdigitalebibliotek/dpl-web
+[danskernesdigitalebibliotek/dpl-web](https://github.com/danskernesdigitalebibliotek/dpl-web)
 
--------
+---
 
 ![GO logo](../public/icons/logo-white-readme.svg)
 
