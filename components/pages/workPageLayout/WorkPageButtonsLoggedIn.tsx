@@ -2,8 +2,11 @@ import { first } from "lodash"
 import React, { useMemo } from "react"
 
 import {
-  getManifestationCategory,
   getManifestationLabel,
+  isAudioMaterialType,
+  isEbookMaterialType,
+  isPhysicalMaterialType,
+  isPodcastMaterialType,
 } from "@/components/pages/workPageLayout/helper"
 import SmartLink from "@/components/shared/smartLink/SmartLink"
 import { ManifestationWorkPageFragment } from "@/lib/graphql/generated/fbi/graphql"
@@ -46,10 +49,10 @@ const WorkPageButtonsLoggedIn = ({
     )
   }
 
-  const category = getManifestationCategory(selectedManifestation)
+  const materialTypeCode = selectedManifestation?.materialTypes[0]?.materialTypeSpecific.code
   const label = getManifestationLabel(selectedManifestation)
 
-  if (category === "reading") {
+  if (isPhysicalMaterialType(materialTypeCode)) {
     return (
       <WorkPageInfoBox
         text={`Dette er en fysisk ${label}. Den kan lånes på dit lokale bibliotek`}
@@ -57,7 +60,7 @@ const WorkPageButtonsLoggedIn = ({
     )
   }
 
-  if (category === "ebook") {
+  if (isEbookMaterialType(materialTypeCode)) {
     const previewUrl = resolveUrl({
       routeParams: { work: "work", ":wid": workId, read: "read" },
       queryParams: { id: identifier || "" },
@@ -103,7 +106,7 @@ const WorkPageButtonsLoggedIn = ({
     )
   }
 
-  if (category === "listening" || category === "podcast") {
+  if (isAudioMaterialType(materialTypeCode) || isPodcastMaterialType(materialTypeCode)) {
     if (isLoaned) {
       return (
         <WorkPageButtons>

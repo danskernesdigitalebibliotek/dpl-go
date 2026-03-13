@@ -39,10 +39,6 @@ const search = {
     "775130",
   ],
   "search.facets": {
-    MATERIALTYPESGENERAL: {
-      filter: "materialTypesGeneral",
-      translation: "Type",
-    },
     MATERIALTYPESSPECIFIC: {
       filter: "materialTypesSpecific",
       translation: "Type",

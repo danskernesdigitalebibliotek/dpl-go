@@ -8,6 +8,7 @@ import {
   WorkFullWorkPageFragment,
 } from "@/lib/graphql/generated/fbi/graphql"
 import { LibraryProfile, LoanListResult } from "@/lib/rest/publizon/adapter/generated/model"
+import { MaterialTypeIconNamesType } from "@/lib/types/icons"
 
 export const getManifestationMaterialType = (
   manifestation: ManifestationWorkPageFragment | ManifestationSearchPageTeaserFragment
@@ -120,7 +121,7 @@ export const getEbookManifestationOrFallbackManifestation = (
   manifestations: ManifestationWorkPageFragment[] | ManifestationSearchPageTeaserFragment[]
 ): ManifestationWorkPageFragment | ManifestationSearchPageTeaserFragment => {
   const ebookManifestation = manifestations.find(manifestation =>
-    isManifestationInCategory(manifestation, "ebook")
+    isEbookMaterialType(manifestation.materialTypes[0]?.materialTypeSpecific.code)
   )
 
   if (ebookManifestation) {
@@ -149,39 +150,32 @@ export const getBestRepresentationOrFallbackManifestation = (
   return filteredBestRepresentation[0]
 }
 
-const iconNameToCategory: Record<string, string> = {
-  book: "reading",
-  comic: "reading",
-  pictureBook: "reading",
-  ebook: "ebook",
-  comicOnline: "ebook",
-  pictureBookOnline: "ebook",
-  audioBook: "listening",
-  audioBookOnline: "listening",
-  podcast: "podcast",
-}
+const physicalMaterialTypeCodes = ["BOOK", "COMIC", "GRAPHIC_NOVEL", "PICTURE_BOOK"]
 
-export const getManifestationCategory = (
-  manifestation: ManifestationWorkPageFragment | ManifestationSearchPageTeaserFragment
-): keyof TMaterialTypeCategories | null => {
-  if (!manifestation) return null
-  const code = manifestation.materialTypes[0]?.materialTypeSpecific.code
-  const icons = goConfig("materialtypes.icons")
-  for (const [iconName, materialTypes] of Object.entries(icons)) {
-    if ((materialTypes as string[]).includes(code)) {
-      return (iconNameToCategory[iconName] as keyof TMaterialTypeCategories) ?? null
-    }
-  }
-  return null
-}
+const ebookMaterialTypeCodes = [
+  "EBOOK",
+  "BOOK_ELECTRONIC",
+  "COMIC_ONLINE",
+  "COMIC_ELECTRONIC",
+  "GRAPHIC_NOVEL_ONLINE",
+  "GRAPHIC_NOVEL_ELECTRONIC",
+  "PICTURE_BOOK_ONLINE",
+  "PICTURE_BOOK_ELECTRONIC",
+]
 
-export const isManifestationInCategory = (
-  manifestation: ManifestationWorkPageFragment | ManifestationSearchPageTeaserFragment,
-  category: keyof TMaterialTypeCategories
-): boolean => {
-  if (!manifestation) return false
-  return getManifestationCategory(manifestation) === category
-}
+const audioMaterialTypeCodes = ["AUDIO_BOOK", "AUDIO_BOOK_ONLINE", "AUDIO_BOOK_ELECTRONIC"]
+
+const podcastMaterialTypeCodes = ["PODCAST"]
+
+export const isPhysicalMaterialType = (code: string): boolean =>
+  physicalMaterialTypeCodes.includes(code)
+
+export const isEbookMaterialType = (code: string): boolean => ebookMaterialTypeCodes.includes(code)
+
+export const isAudioMaterialType = (code: string): boolean => audioMaterialTypeCodes.includes(code)
+
+export const isPodcastMaterialType = (code: string): boolean =>
+  podcastMaterialTypeCodes.includes(code)
 
 export const getManifestationLabel = (
   manifestation: ManifestationWorkPageFragment | ManifestationSearchPageTeaserFragment
@@ -219,7 +213,7 @@ export const translateMaterialTypesStringForRender = (code: string): string => {
   return goConfig("materialtypes.translations")[code]
 }
 
-const iconNameToIconIdentifier: Record<string, string> = {
+const iconNameToIconIdentifier: Record<string, MaterialTypeIconNamesType> = {
   book: "book",
   ebook: "ebook",
   comic: "comic",
@@ -231,7 +225,9 @@ const iconNameToIconIdentifier: Record<string, string> = {
   podcast: "podcast",
 }
 
-export const getIconNameFromMaterialType = (materialType: string) => {
+export const getIconNameFromMaterialType = (
+  materialType: string
+): MaterialTypeIconNamesType | undefined => {
   const icons = goConfig("materialtypes.icons")
 
   // Find the icon name that includes this material type
@@ -257,11 +253,9 @@ export const slideSelectOptionsFromMaterialTypes = (
 
 export const getManifestationMaterialTypeIcon = (
   manifestation: ManifestationWorkPageFragment | ManifestationSearchPageTeaserFragment
-) => {
+): MaterialTypeIconNamesType | undefined => {
   const materialType = getManifestationMaterialType(manifestation)
-  // If we couldn't find the right material type, we show the icon for "question-mark"
-  // Note that this has to be the same as the name of the icon in the icon library.
-  return getIconNameFromMaterialType(materialType.code) || "question-mark"
+  return getIconNameFromMaterialType(materialType.code)
 }
 
 export const canUserLoanMoreMaterials = (

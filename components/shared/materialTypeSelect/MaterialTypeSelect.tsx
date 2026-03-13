@@ -3,19 +3,18 @@ import React, { useOptimistic, useTransition } from "react"
 
 import { getIconNameFromMaterialType } from "@/components/pages/workPageLayout/helper"
 import { cyKeys } from "@/cypress/support/constants"
-import { GeneralMaterialTypeCodeEnum } from "@/lib/graphql/generated/fbi/graphql"
 import { cn } from "@/lib/helpers/helper.cn"
 
 import Icon from "../icon/Icon"
 
 export type MaterialTypeSelectOption = {
-  code: GeneralMaterialTypeCodeEnum
+  code: string
   display: string
 }
 
 export type MaterialTypeSelectProps = {
   options: MaterialTypeSelectOption[]
-  selected: GeneralMaterialTypeCodeEnum
+  selected: string
   onOptionSelect: (option: MaterialTypeSelectOption) => void
 }
 
