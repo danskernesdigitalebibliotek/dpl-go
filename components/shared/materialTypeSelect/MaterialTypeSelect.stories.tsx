@@ -1,3 +1,4 @@
+import { fn } from "@storybook/test"
 import type { Meta, StoryObj } from "@storybook/nextjs"
 
 import { darkModeDecorator } from "@/.storybook/decorators"
@@ -17,7 +18,7 @@ const meta = {
       { code: "BOOK", display: "Bog" },
     ],
     selected: "EBOOK",
-    onOptionSelect: option => console.log("Selected:", option),
+    onOptionSelect: fn(),
   },
 } satisfies Meta<typeof MaterialTypeSelect>
 
