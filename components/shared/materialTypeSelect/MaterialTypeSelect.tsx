@@ -81,9 +81,9 @@ const MaterialTypeSelect = ({ options, selected, onOptionSelect }: MaterialTypeS
 export const MaterialTypeSelectSkeleton = () => {
   return (
     <div className="flex flex-row flex-wrap justify-center gap-2">
-      <div className="bg-background-skeleton h-[36px] w-24 animate-pulse rounded-full" />
-      <div className="bg-background-skeleton h-[36px] w-28 animate-pulse rounded-full" />
-      <div className="bg-background-skeleton h-[36px] w-20 animate-pulse rounded-full" />
+      <div className="bg-background-skeleton h-[25px] w-24 animate-pulse rounded-full" />
+      <div className="bg-background-skeleton h-[25px] w-28 animate-pulse rounded-full" />
+      <div className="bg-background-skeleton h-[25px] w-20 animate-pulse rounded-full" />
     </div>
   )
 }
